@@ -1068,7 +1068,7 @@ body:has(.selection-bar:not([hidden])) {
 
 .card-text-jp {
   font-family: 'Noto Sans JP', sans-serif;
-  font-size: 5rem;
+  font-size: clamp(2.5rem, 9vw, 5rem);
   font-weight: 700;
   background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
   -webkit-background-clip: text;
@@ -1569,4 +1569,30 @@ body:has(.selection-bar:not([hidden])) {
   color: #fff;
   border-color: transparent;
   box-shadow: 0 4px 12px rgba(124,58,237,.3);
+}
+
+@media (max-width: 480px) {
+  /* Flashcard & Practice Arena padding */
+  .flashcard-arena, .practice-arena { padding: 24px 16px; }
+  .flashcard { min-height: 240px; height: auto; }
+  
+  /* Text Sizes */
+  .card-text-romaji { font-size: 1.6rem; }
+  .card-text-vi { font-size: 1.2rem; }
+  
+  /* Mode buttons and Tab buttons */
+  .mode-btn { padding: 10px 20px; font-size: .9rem; }
+  .tab-btn { padding: 8px 18px; font-size: .85rem; }
+  .vsub-btn { padding: 6px 16px; font-size: .85rem; }
+  .btn-mark-learned { padding: 10px 20px; font-size: .85rem; }
+  
+  /* Practice Mode tweaks */
+  .p-mode-toggle { flex-wrap: wrap; justify-content: center; }
+  #p-input { padding: 12px 18px; font-size: 1rem; width: 100%; max-width: 100%; }
+  
+  /* Lesson Picker tweaks */
+  .lesson-picker-container { padding: 14px 12px; }
+  .lesson-picker-header { flex-direction: column; gap: 10px; align-items: stretch; }
+  .lesson-picker-actions { justify-content: space-between; }
+  .vocab-sub-bar { flex-wrap: wrap; }
 }

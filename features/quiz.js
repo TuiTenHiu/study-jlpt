@@ -44,6 +44,11 @@ export class Quiz {
 
   /* ── Public API ─────────────────────────────────────────────────────────── */
 
+  /** Change the active quiz type ('type' | 'mc'). */
+  setType(type) {
+    this._state.type = type;
+  }
+
   /** Change the active character set. Call before start(). */
   setMode(mode) {
     this._state.mode = mode;
@@ -95,6 +100,7 @@ export class Quiz {
   /** Return a clean initial state object. */
   _buildFreshState() {
     return {
+      type:         this._state?.type ?? 'type',
       mode:         this._state?.mode ?? 'mixed', // preserve mode between sessions
       dataset:      [],
       currentQ:     null,   // { char, romaji }
@@ -105,6 +111,7 @@ export class Quiz {
       wrongCount:   0,
       timeLeft:     SECONDS_PER_Q,
       answered:     false,
+      mcChoices:    [],     // for MC mode
     };
   }
 
@@ -146,6 +153,46 @@ export class Quiz {
     this.dom.qNum.textContent   = this._state.qNum;
     this.dom.qTotal.textContent = TOTAL_QUESTIONS;
     this.dom.score.textContent  = this._state.score;
+    
+    if (this.dom.mcQNum) {
+      this.dom.mcQNum.textContent   = this._state.qNum;
+      this.dom.mcQTotal.textContent = TOTAL_QUESTIONS;
+      this.dom.mcScore.textContent  = this._state.score;
+    }
+
+    if (this._state.type === 'mc') {
+      this._setFeedback('', '');
+      if (this.dom.mcFeedback) {
+        this.dom.mcFeedback.textContent = '';
+        this.dom.mcFeedback.className = 'quiz-feedback';
+      }
+      
+      this.dom.mcRomaji.textContent = pick.romaji;
+      
+      // Generate 3 wrong choices
+      const wrongs = [];
+      while (wrongs.length < 3) {
+        const w = dataset[Math.floor(Math.random() * dataset.length)];
+        if (w.char !== pick.char && !wrongs.find(x => x.char === w.char)) {
+          wrongs.push(w);
+        }
+      }
+      const choices = [pick, ...wrongs];
+      // Shuffle choices
+      for (let i = choices.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [choices[i], choices[j]] = [choices[j], choices[i]];
+      }
+      this._state.mcChoices = choices;
+      
+      this.dom.mcChoices.forEach((btn, idx) => {
+        btn.className = 'mc-choice';
+        btn.disabled = false;
+        btn.innerHTML = `<span class="mc-key-hint">${idx + 1}</span><div class="mc-char-text">${choices[idx].char}</div>`;
+      });
+      // No timer for MC mode
+      return;
+    }
 
     // Reset input field
     const inp         = this.dom.input;
@@ -228,6 +275,7 @@ export class Quiz {
     this.dom.statWrong.textContent   = wrongCount;
 
     this.dom.arena.hidden     = true;
+    if (this.dom.mcArena) this.dom.mcArena.hidden = true;
     this.dom.endScreen.hidden = false;
   }
 
@@ -289,13 +337,59 @@ export class Quiz {
   _showIdle() {
     this.dom.idleScreen.style.display = '';
     this.dom.arena.hidden             = true;
+    if (this.dom.mcArena) this.dom.mcArena.hidden = true;
     this.dom.endScreen.hidden         = true;
   }
 
   _showArena() {
     this.dom.idleScreen.style.display = 'none';
-    this.dom.arena.hidden             = false;
     this.dom.endScreen.hidden         = true;
+    
+    if (this._state.type === 'mc') {
+      this.dom.arena.hidden = true;
+      if (this.dom.mcArena) this.dom.mcArena.hidden = false;
+    } else {
+      this.dom.arena.hidden = false;
+      if (this.dom.mcArena) this.dom.mcArena.hidden = true;
+    }
+  }
+
+  /**
+   * Evaluate a Multiple Choice answer.
+   * @param {number} index  0-3 choice index
+   */
+  submitMC(index) {
+    if (this._state.answered || this._state.type !== 'mc') return;
+    this._state.answered = true;
+    
+    const choice = this._state.mcChoices[index];
+    const isCorrect = choice.char === this._state.currentQ.char;
+    const btn = this.dom.mcChoices[index];
+    
+    if (isCorrect) {
+      this._state.score++;
+      this._state.correctCount++;
+      btn.classList.add('correct');
+      if (this.dom.mcFeedback) {
+        this.dom.mcFeedback.textContent = '✅ Correct!';
+        this.dom.mcFeedback.className = 'quiz-feedback show correct';
+      }
+    } else {
+      this._state.wrongCount++;
+      btn.classList.add('wrong');
+      const correctIdx = this._state.mcChoices.findIndex(c => c.char === this._state.currentQ.char);
+      if (correctIdx >= 0) this.dom.mcChoices[correctIdx].classList.add('correct');
+      
+      if (this.dom.mcFeedback) {
+        this.dom.mcFeedback.textContent = `❌ Wrong! Answer: ${this._state.currentQ.char}`;
+        this.dom.mcFeedback.className = 'quiz-feedback show wrong';
+      }
+    }
+    
+    this.dom.mcChoices.forEach(b => b.disabled = true);
+    if (this.dom.mcScore) this.dom.mcScore.textContent = this._state.score;
+    
+    setTimeout(() => this._nextQuestion(), 1200);
   }
 
   /**

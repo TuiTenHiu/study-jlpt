@@ -76,6 +76,17 @@ const quizDom = {
   finalTotal:  el('final-total'),
   statCorrect: el('stat-correct'),
   statWrong:   el('stat-wrong'),
+  // MC Quiz specific DOM refs
+  mcArena:     el('mc-arena'),
+  mcScore:     el('mc-score'),
+  mcQNum:      el('mc-q-num'),
+  mcQTotal:    el('mc-q-total'),
+  mcRomaji:    el('mc-romaji'),
+  mcScript:    el('mc-script'),
+  mcChoices:   [
+    el('mc-choice-0'), el('mc-choice-1'), el('mc-choice-2'), el('mc-choice-3')
+  ],
+  mcFeedback:  el('mc-feedback'),
 };
 
 /* ── Flashcard DOM refs ─────────────────────────────────────────────────── */
@@ -562,6 +573,26 @@ function setQuizMode(mode) {
   });
 }
 
+/**
+ * Switch between Fast Type and Multiple Choice quiz.
+ * @param {'type'|'mc'} type
+ */
+function setQuizType(type) {
+  quiz.setType(type);
+  el('qt-type').classList.toggle('active', type === 'type');
+  el('qt-mc').classList.toggle('active', type === 'mc');
+
+  if (type === 'mc') {
+    el('idle-title').textContent = 'Multiple Choice Quiz';
+    el('idle-desc').textContent = 'Select the correct Japanese character for the given Romaji.';
+    el('idle-icon').textContent = '🎯';
+  } else {
+    el('idle-title').textContent = 'Fast Typing Quiz';
+    el('idle-desc').textContent = 'A random character appears — type the correct romaji before time runs out!';
+    el('idle-icon').textContent = '⚡';
+  }
+}
+
 /** Start a normal quiz session (uses selected quiz mode or full dataset). */
 function startQuiz() {
   quiz.setCustomPool(null); // clear any previous custom pool
@@ -648,6 +679,8 @@ Object.assign(window, {
   resetQuiz,
   clearSelection,
   submitAnswer: () => quiz.submit(),
+  setQuizType,
+  selectMCChoice: (idx) => quiz.submitMC(idx),
   // Lesson Picker globals
   toggleLesson,
   selectAllLessons,

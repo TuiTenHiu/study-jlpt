@@ -875,6 +875,11 @@ body:has(.selection-bar:not([hidden])) {
   background: linear-gradient(135deg, var(--primary-light), #fce7f3);
   opacity: 0;
   transition: opacity var(--transition);
+  z-index: 0;
+}
+.mc-choice > * {
+  position: relative;
+  z-index: 1;
 }
 
 .mc-choice:hover:not(:disabled) {

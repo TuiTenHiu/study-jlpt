@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Learn Japanese Alphabet</title>
+  <meta name="description" content="Learn Hiragana and Katakana with
+    interactive grids and a fast-typing quiz mode." />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+JP:wght@400;700&display=swap"
+    rel="stylesheet" />
+
+  <!-- PWA Manifest & Theme Color -->
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#7c3aed" />
+
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       HEADER
+  ════════════════════════════════════════════════════════════════ -->
+  <header>
+    <div class="jp-deco" aria-hidden="true">あ</div>
+    <div class="lang-switcher" role="radiogroup" aria-label="Select Language">
+      <button id="lang-btn-vi" class="lang-btn active" onclick="setLanguage('vi')" title="Tiếng Việt">VN</button>
+      <button id="lang-btn-en" class="lang-btn" onclick="setLanguage('en')" title="English">EN</button>
+      <button id="lang-btn-ja" class="lang-btn" onclick="setLanguage('ja')" title="日本語">JP</button>
+    </div>
+    <h1 data-i18n="app_title">Learn Japanese Alphabet</h1>
+    <p data-i18n="app_desc">Master Hiragana &amp; Katakana — the building blocks of Japanese</p>
+    <div class="badge-row">
+      <span class="badge" data-i18n="badge_hiragana">🈴 46 Hiragana</span>
+      <span class="badge" data-i18n="badge_katakana">🈯 46 Katakana</span>
+      <span class="badge" data-i18n="badge_quiz">⚡ Fast Quiz</span>
+    </div>
+  </header>
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       MAIN CONTENT
+  ════════════════════════════════════════════════════════════════ -->
+  <main>
+
+    <!-- Mode bar: Learn / Quiz switch -->
+    <div class="mode-bar" role="tablist" aria-label="App mode">
+      <button id="mode-learn" class="mode-btn active" onclick="switchMode('learn')" data-i18n="mode_learn">📖 Learn</button>
+      <button id="mode-vocab" class="mode-btn" onclick="switchMode('vocab')" data-i18n="mode_vocab">🎴 Vocabulary</button>
+      <button id="mode-quiz" class="mode-btn" onclick="switchMode('quiz')" data-i18n="mode_quiz">⚡ Quiz Mode</button>
+    </div>
+
+    <!-- ── LEARN PANEL ────────────────────────────────────────── -->
+    <div id="learn-panel">
+
+      <!-- Hiragana / Katakana tab bar + Selection Mode toggle -->
+      <div class="tab-bar" role="tablist" aria-label="Alphabet type">
+        <button id="tab-hiragana" class="tab-btn active" role="tab" aria-selected="true"
+          onclick="switchTab('hiragana')" data-i18n="tab_hiragana">ひ Hiragana</button>
+        <button id="tab-katakana" class="tab-btn" role="tab" aria-selected="false" onclick="switchTab('katakana')" data-i18n="tab_katakana">カ Katakana</button>
+        <button id="btn-select-mode" class="tab-btn select-mode-btn" onclick="toggleSelectionMode()"
+          title="Pick characters you want to practice" data-i18n="btn_select_mode">✏️ Select for Quiz</button>
+      </div>
+
+      <!-- Character grid panels (populated by main.js) -->
+      <div id="panel-hiragana" role="tabpanel" aria-labelledby="tab-hiragana"></div>
+      <div id="panel-katakana" role="tabpanel" aria-labelledby="tab-katakana" hidden></div>
+
+    </div><!-- /learn-panel -->
+
+    <!-- ── QUIZ PANEL ─────────────────────────────────────────── -->
+    <div id="quiz-panel">
+
+      <!-- Quiz type selector: Fast Type ↔ Multiple Choice -->
+      <div class="quiz-type-bar">
+        <button id="qt-type" class="qt-btn active" onclick="setQuizType('type')" data-i18n="qt_type">
+          ⚡ Fast Type
+        </button>
+        <button id="qt-mc" class="qt-btn" onclick="setQuizType('mc')" data-i18n="qt_mc">
+          🎯 Multiple Choice
+        </button>
+      </div>
+
+      <!-- Character set picker + Start button -->
+      <div class="quiz-controls">
+        <div class="quiz-mode-toggle" role="group" aria-label="Character set">
+          <button id="qm-mixed" class="active" onclick="setQuizMode('mixed')" data-i18n="qm_mixed">🔀 Mixed</button>
+          <button id="qm-hiragana" onclick="setQuizMode('hiragana')" data-i18n="tab_hiragana">ひ Hiragana</button>
+          <button id="qm-katakana" onclick="setQuizMode('katakana')" data-i18n="tab_katakana">カ Katakana</button>
+          <button id="qm-custom" onclick="setQuizMode('custom')" hidden data-i18n="qm_custom">📌 Custom (<span
+              id="qm-custom-count">0</span>)</button>
+        </div>
+        <button class="btn-start-quiz" id="btn-start" onclick="startQuiz()" data-i18n="btn_start_quiz">▶ Start Quiz</button>
+      </div>
+
+      <!-- Idle / welcome screen (content updated dynamically by setQuizType) -->
+      <div class="quiz-idle" id="quiz-idle">
+        <div class="idle-icon" id="idle-icon">⚡</div>
+        <h3 id="idle-title" data-i18n="idle_title">Fast Typing Quiz</h3>
+        <p id="idle-desc" data-i18n="idle_desc">
+          A random character appears — type the correct romaji before time runs out!
+        </p>
+        <button class="btn-start-quiz" onclick="startQuiz()" style="padding:14px 40px; font-size:1.05rem;" data-i18n="btn_start_quiz">
+          Start Quiz
+        </button>
+      </div>
+
+      <!-- Active quiz arena (hidden until startQuiz is called) -->
+      <div class="quiz-arena" id="quiz-arena" hidden>
+
+        <!-- Score + question counter + circular countdown -->
+        <div class="quiz-header-row">
+          <div class="quiz-score-box">
+            Score &nbsp;<span id="q-score">0</span>
+          </div>
+          <div class="quiz-q-count">
+            Q <span id="q-num">1</span>&nbsp;/&nbsp;<span id="q-total">20</span>
+          </div>
+          <div class="timer-wrap" role="timer" aria-label="Time remaining">
+            <svg class="timer-svg" width="64" height="64" viewBox="0 0 64 64">
+              <circle class="timer-bg" cx="32" cy="32" r="28" />
+              <circle class="timer-arc" id="timer-arc" cx="32" cy="32" r="28" />
+            </svg>
+            <span class="timer-number" id="timer-num">5</span>
+          </div>
+        </div>
+
+        <!-- Horizontal progress bar -->
+        <div class="timer-bar-wrap" aria-hidden="true">
+          <div class="timer-bar" id="timer-bar"></div>
+        </div>
+
+        <!-- Large Japanese character -->
+        <div class="quiz-char-wrap">
+          <div class="quiz-char" id="quiz-char" aria-live="polite">あ</div>
+        </div>
+
+        <!-- Romaji input + submit -->
+        <div class="quiz-input-row">
+          <input type="text" id="quiz-input" autocomplete="off" autocorrect="off" autocapitalize="off"
+            spellcheck="false" placeholder="Type romaji…" aria-label="Romaji answer input"
+            onkeydown="onInputKeydown(event)" />
+          <button class="btn-submit" id="btn-submit" onclick="submitAnswer()" data-i18n="btn_submit">Enter</button>
+        </div>
+
+        <!-- Correct / Wrong / Timeout feedback -->
+        <div class="quiz-feedback" id="quiz-feedback" aria-live="polite"></div>
+
+      </div><!-- /quiz-arena -->
+
+      <!-- ── MULTIPLE CHOICE ARENA ────────────────────────────── -->
+      <div class="mc-arena" id="mc-arena" hidden>
+
+        <!-- Score + question counter -->
+        <div class="mc-header">
+          <div class="quiz-score-box">
+            Score &nbsp;<span id="mc-score">0</span>
+          </div>
+          <div class="quiz-q-count">
+            Q <span id="mc-q-num">1</span>&nbsp;/&nbsp;<span id="mc-q-total">20</span>
+          </div>
+        </div>
+
+        <!-- Romaji question -->
+        <div class="mc-question-wrap">
+          <p class="mc-script-label" id="mc-script">Find the Hiragana for:</p>
+          <div class="mc-romaji-display" id="mc-romaji" aria-live="polite">na</div>
+        </div>
+
+        <!-- 2 × 2 choice grid -->
+        <!-- Keys 1–4 also select choices (wired in main.js) -->
+        <div class="mc-choices-grid">
+          <button class="mc-choice" id="mc-choice-0" onclick="selectMCChoice(0)" aria-label="Choice 1">
+            <span class="mc-key-hint">1</span>
+          </button>
+          <button class="mc-choice" id="mc-choice-1" onclick="selectMCChoice(1)" aria-label="Choice 2">
+            <span class="mc-key-hint">2</span>
+          </button>
+          <button class="mc-choice" id="mc-choice-2" onclick="selectMCChoice(2)" aria-label="Choice 3">
+            <span class="mc-key-hint">3</span>
+          </button>
+          <button class="mc-choice" id="mc-choice-3" onclick="selectMCChoice(3)" aria-label="Choice 4">
+            <span class="mc-key-hint">4</span>
+          </button>
+        </div>
+
+        <!-- Feedback -->
+        <div class="quiz-feedback" id="mc-feedback" aria-live="polite"></div>
+
+      </div><!-- /mc-arena -->
+
+      <!-- Results screen (hidden until quiz ends) -->
+      <div class="quiz-end" id="quiz-end" hidden>
+        <div class="end-icon" id="end-icon">🎉</div>
+        <h3>Quiz Complete!</h3>
+        <div class="final-score" id="final-score">0</div>
+        <div class="final-label">
+          out of <span id="final-total">20</span> questions
+        </div>
+        <div class="stat-row">
+          <div class="stat correct">
+            <div class="stat-num" id="stat-correct">0</div>
+            <div class="stat-lbl" data-i18n="stat_correct">Correct ✅</div>
+          </div>
+          <div class="stat wrong">
+            <div class="stat-num" id="stat-wrong">0</div>
+            <div class="stat-lbl" data-i18n="stat_wrong">Wrong ❌</div>
+          </div>
+        </div>
+        <button class="btn-play-again" onclick="resetQuiz()" data-i18n="btn_play_again">🔄 Play Again</button>
+      </div><!-- /quiz-end -->
+
+    </div><!-- /quiz-panel -->
+    
+    <!-- ── VOCABULARY PANEL ─────────────────────────────── -->
+    <div id="vocab-panel" hidden>
+      
+      <!-- Sub-mode switch -->
+      <div class="vocab-sub-bar">
+        <button id="vsub-flash" class="vsub-btn active" onclick="setVocabSubMode('flash')" data-i18n="vsub_flash">📖 Flashcards</button>
+        <button id="vsub-practice" class="vsub-btn" onclick="setVocabSubMode('practice')" data-i18n="vsub_practice">✍️ Practice</button>
+      </div>
+
+      <div class="vocab-header">
+        <div class="lesson-picker-container">
+          <div class="lesson-picker-header">
+            <label data-i18n="lesson_label">📚 Chọn bài học</label>
+            <div class="lesson-picker-actions">
+              <button class="lesson-action-btn" onclick="selectAllLessons()">Tất cả</button>
+              <button class="lesson-action-btn clear" onclick="clearAllLessons()">Xoá</button>
+            </div>
+          </div>
+          <div class="lesson-toggles-grid" id="lesson-toggles-grid">
+            <!-- Rendered by JS -->
+          </div>
+        </div>
+        <button id="btn-vocab-tool" class="btn-vocab-tool" onclick="shuffleVocab()" title="Shuffle words" data-i18n="btn_shuffle">🔀 Shuffle</button>
+      </div>
+
+      <!-- FLASHCARD SUB-MODE -->
+      <div id="vocab-flash-section">
+        <div class="flashcard-arena">
+          <div class="flashcard-wrapper" id="flashcard-wrapper">
+            <div class="flashcard" id="flashcard-el">
+              <div class="flashcard-inner">
+                <div class="flashcard-front">
+                  <div id="card-jp" class="card-text-jp"></div>
+                  <button class="btn-speak" id="btn-speak-front"
+                    onclick="event.stopPropagation(); speakCurrentCard()"
+                    title="Play pronunciation">🔊</button>
+                  <div class="flip-hint">Click to Reveal</div>
+                </div>
+                <div class="flashcard-back">
+                  <div id="card-romaji" class="card-text-romaji"></div>
+                  <div id="card-vi" class="card-text-vi"></div>
+                  <button class="btn-speak btn-speak-back" id="btn-speak-back"
+                    onclick="event.stopPropagation(); speakCurrentCard()"
+                    title="Play pronunciation">🔊</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="vocab-footer">
+            <div class="nav-controls">
+              <button class="btn-nav" onclick="prevVocab()" title="Previous card">←</button>
+              <div class="vocab-progress-wrap">
+                <span id="vocab-progress">Card 1 / 20</span>
+              </div>
+              <button class="btn-nav" onclick="nextVocab()" title="Next card">→</button>
+            </div>
+            <button id="btn-mark-learned" class="btn-mark-learned" onclick="toggleLearned()" data-i18n="btn_learned">
+              Mark as Learned
+            </button>
+          </div>
+        </div>
+      </div><!-- /vocab-flash-section -->
+
+      <!-- PRACTICE SUB-MODE -->
+      <div id="vocab-practice-section" hidden>
+        <div class="practice-arena" id="practice-arena">
+          <div class="practice-header">
+            <div class="quiz-score-box"><span data-i18n="p_score_label">Score</span> <span id="p-score">0</span></div>
+            <div class="p-mode-toggle" role="group">
+              <button id="p-mode-ja" class="p-mode-btn active" onclick="setPracticeMode('jp_to_all')" data-i18n="p_mode_ja">JP → ALL</button>
+              <button id="p-mode-vi" class="p-mode-btn" onclick="setPracticeMode('vi_to_jp')" data-i18n="p_mode_vi">VN → JP</button>
+            </div>
+            <div class="quiz-q-count"><span data-i18n="p_remaining_label">Left</span>: <span id="p-remaining">0</span></div>
+          </div>
+          
+          <div class="practice-question">
+            <div id="p-question" class="card-text-jp"></div>
+          </div>
+
+          <div class="practice-input-row">
+            <div class="input-with-clear">
+              <input type="text" id="p-input" autocomplete="off" autocorrect="off" autocapitalize="off"
+                spellcheck="false" placeholder="Type Romaji or Meaning..." onkeydown="onPracticeKeydown(event)" data-i18n-placeholder="p_hint">
+              <button id="p-clear" class="btn-clear" onclick="clearPracticeInput()" title="Clear input">✕</button>
+            </div>
+            <button class="btn-submit" id="p-submit" onclick="submitPractice()" data-i18n="btn_submit">Enter</button>
+          </div>
+
+          <!-- Virtual Keyboard (shown in vi_to_jp mode) -->
+          <div id="p-keyboard-container" class="p-keyboard-container" hidden>
+            <div class="p-keyboard-tabs">
+              <button id="p-kb-tab-hira" class="kb-tab-btn active" onclick="switchPracticeKeyboard('hira')" data-i18n="kb_hira">Hira</button>
+              <button id="p-kb-tab-kata" class="kb-tab-btn" onclick="switchPracticeKeyboard('kata')" data-i18n="kb_kata">Kata</button>
+            </div>
+            <div id="p-keyboard-grid" class="p-keyboard-grid"></div>
+          </div>
+          <div id="p-feedback" class="vocab-feedback"></div>
+        </div>
+
+        <div id="practice-end" class="quiz-end" hidden>
+          <div class="end-icon">🎓</div>
+          <h3 data-i18n="p_complete">Lesson Complete!</h3>
+          <div class="final-score" id="p-final-score">0</div>
+          <div class="stat-row">
+            <div class="stat correct">
+              <div class="stat-num" id="p-stat-correct">0</div>
+              <div class="stat-lbl" data-i18n="stat_correct">Correct ✅</div>
+            </div>
+            <div class="stat wrong">
+              <div class="stat-num" id="p-stat-wrong">0</div>
+              <div class="stat-lbl" data-i18n="vsub_practice">Repeated 🔁</div>
+            </div>
+          </div>
+          <button class="btn-play-again" onclick="restartPractice()" data-i18n="btn_restart">🔄 Restart Lesson</button>
+        </div>
+      </div><!-- /vocab-practice-section -->
+
+    </div><!-- /vocab-panel -->
+
+  </main>
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       FLOATING SELECTION BAR
+       Appears (fixed bottom) when ≥1 character is selected.
+  ════════════════════════════════════════════════════════════════ -->
+  <div class="selection-bar" id="selection-bar" hidden aria-live="polite">
+    <div class="sel-info">
+      <span class="sel-icon">📌</span>
+      <strong id="sel-count-num">0</strong>
+      <span>characters selected</span>
+    </div>
+    <div class="sel-actions">
+      <button class="btn-sel-clear" onclick="clearSelection()">✕ Clear all</button>
+      <button class="btn-sel-start" onclick="startQuizWithSelection()">⚡ Quiz with Selection</button>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       LEARN MODE — Character detail popup (modal)
+  ════════════════════════════════════════════════════════════════ -->
+  <div class="modal-overlay" id="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-char-display">
+    <div class="modal">
+      <button class="modal-close" id="modal-close-btn" aria-label="Close">&times;</button>
+      <span class="modal-type" id="modal-type-label"></span>
+      <div class="modal-char" id="modal-char-display"></div>
+      <div class="modal-romaji" id="modal-romaji-display"></div>
+      <p class="modal-hint">Press <kbd>Esc</kbd> or click outside to close</p>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       JavaScript entry point  (ES Module)
+       NOTE: ES modules require a local HTTP server.
+             Open with VS Code Live Server, or run:
+               python -m http.server 5500
+             then visit http://localhost:5500
+  ════════════════════════════════════════════════════════════════ -->
+  <script type="module" src="main.js"></script>
+  
+  <!-- PWA Service Worker Registration -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js').then((registration) => {
+          console.log('ServiceWorker registration successful with scope: ', registration.scope);
+        }).catch((err) => {
+          console.log('ServiceWorker registration failed: ', err);
+        });
+      });
+    }
+  </script>
+
+</body>
+
+</html>

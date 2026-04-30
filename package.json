@@ -1,0 +1,20 @@
+{
+  "name": "study-jlpt",
+  "version": "1.0.0",
+  "description": "Japanese Alphabet Learning App",
+  "type": "module",
+  "scripts": {
+    "start": "serve .",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:ui": "vitest --ui",
+    "coverage": "vitest run --coverage"
+  },
+  "devDependencies": {
+    "serve": "^14.2.6",
+    "vitest": "^3.1.1"
+  },
+  "dependencies": {
+    "google-tts-api": "^2.0.2"
+  }
+}

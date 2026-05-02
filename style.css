@@ -671,20 +671,7 @@ main { max-width: 1100px; margin: 0 auto; padding: 0 16px; }
 
 /* ── Floating Selection Action Bar ─────────────────────────────────────── */
 .selection-bar {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  z-index: 500;
-  background: var(--text);               /* dark, high contrast */
-  color: #fff;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  padding: 14px 28px;
-  box-shadow: 0 -4px 24px rgba(0,0,0,.22);
-  animation: slideUp .25s cubic-bezier(.34,1.56,.64,1);
+  display: none !important;
 }
 @keyframes slideUp {
   from { transform: translateY(100%); opacity: 0; }
@@ -729,9 +716,7 @@ main { max-width: 1100px; margin: 0 auto; padding: 0 16px; }
 .btn-sel-start:hover { transform: translateY(-1px); box-shadow: 0 5px 18px rgba(16,185,129,.5); }
 
 /* give main content breathing room when selection bar is visible */
-body:has(.selection-bar:not([hidden])) {
-  padding-bottom: 80px;
-}
+/* selection-bar disabled */
 
 /* ── 19. Multiple Choice Quiz ──────────────────────────────────────────── */
 

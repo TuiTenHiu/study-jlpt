@@ -240,6 +240,21 @@
             <!-- Rendered by JS -->
           </div>
         </div>
+
+        <!-- Vocab Limit Picker -->
+        <div class="limit-picker-container">
+          <div class="limit-picker-header">
+            <label for="vocab-limit-select">🎯 Số từ mỗi phiên</label>
+          </div>
+          <div class="limit-chips" id="limit-chips">
+            <button class="limit-chip" onclick="setVocabLimit('all')" data-limit="all">Tất cả</button>
+            <button class="limit-chip" onclick="setVocabLimit(10)" data-limit="10">10</button>
+            <button class="limit-chip active" onclick="setVocabLimit(20)" data-limit="20">20</button>
+            <button class="limit-chip" onclick="setVocabLimit(50)" data-limit="50">50</button>
+            <button class="limit-chip" onclick="setVocabLimit(100)" data-limit="100">100</button>
+          </div>
+        </div>
+
         <button id="btn-vocab-tool" class="btn-vocab-tool" onclick="shuffleVocab()" title="Shuffle words" data-i18n="btn_shuffle">🔀 Shuffle</button>
       </div>
 

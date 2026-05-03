@@ -29,8 +29,10 @@ export class Flashcard {
   }
 
   /** Load lessons from vocabData and reset state. */
-  loadLessons(lessonsArray) {
+  loadLessons(lessonsArray, limit) {
     this.currentLessons = lessonsArray || [];
+    this.limit = (limit === undefined) ? 'all' : limit;
+
     if (this.currentLessons.length === 0) {
       this.vocab = [];
       this.render();
@@ -38,15 +40,22 @@ export class Flashcard {
     }
 
     try {
-      this.vocab = [];
+      let allWords = [];
       this.currentLessons.forEach((num) => {
         const wordsForLesson = vocabData[num];
         if (wordsForLesson && wordsForLesson.length > 0) {
           // Attach lesson number to track learned state properly
           const words = wordsForLesson.map(w => ({ ...w, _lessonNum: num }));
-          this.vocab.push(...words);
+          allWords.push(...words);
         }
       });
+
+      // Shuffle the full pool, then apply limit
+      for (let i = allWords.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [allWords[i], allWords[j]] = [allWords[j], allWords[i]];
+      }
+      this.vocab = (this.limit === 'all') ? allWords : allWords.slice(0, this.limit);
 
       this.currentIndex = 0;
       this.isFlipped = false;
@@ -157,7 +166,7 @@ export class Flashcard {
   /** Reset UI when switching to this mode. */
   activate() {
     if (this.vocab.length === 0 && this.currentLessons && this.currentLessons.length > 0) {
-      this.loadLessons(this.currentLessons);
+      this.loadLessons(this.currentLessons, this.limit);
     } else {
       this.render();
     }

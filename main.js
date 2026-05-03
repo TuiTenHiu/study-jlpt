@@ -383,7 +383,7 @@ function switchMode(mode) {
   // Initialize vocab mode if needed
   if (mode === 'vocab') {
     if (activeVocabSubMode === 'flash') flashcard.activate();
-    else vocabPractice.loadLessons(selectedLessons);
+    else vocabPractice.loadLessons(selectedLessons, currentVocabLimit);
   }
 
   // Close any open modal when switching
@@ -415,7 +415,7 @@ function setVocabSubMode(sub) {
   el('vsub-practice').classList.toggle('active', sub === 'practice');
 
   if (sub === 'practice') {
-    vocabPractice.loadLessons(selectedLessons);
+    vocabPractice.loadLessons(selectedLessons, currentVocabLimit);
     el('btn-vocab-tool').hidden = true;
   } else {
     flashcard.activate();
@@ -426,6 +426,9 @@ function setVocabSubMode(sub) {
 /* ── Lesson Selection Logic ──────────────────────────────────────────────── */
 const AVAILABLE_LESSONS = 25;
 let selectedLessons = [1];
+
+/** Current vocab limit per session: a number or 'all' */
+let currentVocabLimit = 20;
 
 function renderLessonToggles() {
   const grid = el('lesson-toggles-grid');
@@ -463,11 +466,28 @@ function clearAllLessons() {
   triggerLessonLoad();
 }
 
+/**
+ * Set how many words to study per session.
+ * @param {number|'all'} limit
+ */
+function setVocabLimit(limit) {
+  currentVocabLimit = limit === 'all' ? 'all' : Number(limit);
+
+  // Sync chip UI
+  document.querySelectorAll('.limit-chip').forEach(chip => {
+    const chipVal = chip.dataset.limit;
+    const isActive = chipVal === String(limit);
+    chip.classList.toggle('active', isActive);
+  });
+
+  triggerLessonLoad();
+}
+
 function triggerLessonLoad() {
   if (activeVocabSubMode === 'flash') {
-    flashcard.loadLessons(selectedLessons);
+    flashcard.loadLessons(selectedLessons, currentVocabLimit);
   } else {
-    vocabPractice.loadLessons(selectedLessons);
+    vocabPractice.loadLessons(selectedLessons, currentVocabLimit);
   }
 }
 
@@ -684,6 +704,7 @@ Object.assign(window, {
   // Lesson Picker globals
   toggleLesson,
   selectAllLessons,
+  setVocabLimit,
   clearAllLessons,
   nextVocab: () => flashcard.next(),
   prevVocab: () => flashcard.prev(),

@@ -1589,3 +1589,66 @@ main { max-width: 1100px; margin: 0 auto; padding: 0 16px; }
   .lesson-picker-actions { justify-content: space-between; }
   .vocab-sub-bar { flex-wrap: wrap; }
 }
+
+/* ── 25. Vocab Limit Picker ──────────────────────────────────────────────── */
+.limit-picker-container {
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px 16px;
+  width: 100%;
+  max-width: 500px;
+  margin: 0 auto 20px auto;
+  box-shadow: 0 4px 12px rgba(0,0,0,.05);
+}
+
+.limit-picker-header {
+  margin-bottom: 10px;
+}
+
+.limit-picker-header label {
+  font-weight: 700;
+  color: var(--primary-dark);
+  font-size: 0.95rem;
+}
+
+.limit-chips {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.limit-chip {
+  flex: 1;
+  min-width: 48px;
+  padding: 8px 10px;
+  border: 1.5px solid var(--border);
+  background: var(--bg);
+  border-radius: 10px;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.88rem;
+  font-weight: 700;
+  cursor: pointer;
+  color: var(--text-muted);
+  transition: var(--transition);
+  text-align: center;
+}
+
+.limit-chip:hover:not(.active) {
+  border-color: var(--primary);
+  color: var(--primary);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(124,58,237,.12);
+}
+
+.limit-chip.active {
+  background: linear-gradient(135deg, var(--primary), var(--accent));
+  color: #fff;
+  border-color: transparent;
+  box-shadow: 0 4px 12px rgba(124,58,237,.3);
+  transform: translateY(-1px);
+}
+
+@media (max-width: 480px) {
+  .limit-chip { font-size: .8rem; padding: 6px 8px; }
+}

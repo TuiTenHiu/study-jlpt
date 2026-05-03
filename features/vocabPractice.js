@@ -29,8 +29,10 @@ export class VocabPractice {
   }
 
   /** Load lessons and start session. */
-  loadLessons(lessonsArray) {
+  loadLessons(lessonsArray, limit) {
     this.currentLessons = lessonsArray || [];
+    this.limit = (limit === undefined) ? 'all' : limit;
+
     if (this.currentLessons.length === 0) {
       this.vocabSource = [];
       this.dom.arena.hidden = true;
@@ -56,12 +58,13 @@ export class VocabPractice {
   startSession() {
     if (this.vocabSource.length === 0) return;
     
-    // Copy and shuffle initial pool
+    // Copy and shuffle full pool
     let pool = [...this.vocabSource];
     this._shuffle(pool);
     
-    // Limit to 50 random words per session to prevent exhaustion
-    this.queue = pool.slice(0, 50);
+    // Apply limit: take first N words or all if limit is 'all'
+    const limit = this.limit === undefined ? 'all' : this.limit;
+    this.queue = (limit === 'all') ? pool : pool.slice(0, limit);
     
     this.state = {
       currentWord: null,

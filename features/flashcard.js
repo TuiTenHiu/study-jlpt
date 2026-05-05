@@ -148,7 +148,17 @@ export class Flashcard {
     const isLearned = this.learnedWords.includes(key);
 
     // Update content
-    this.dom.front.textContent = word.jp;
+    if (word.image) {
+      this.dom.front.innerHTML = `
+        <div class="vocab-img-container">
+          <img src="images/vocab/${word.image}" alt="${word.jp}" class="vocab-img">
+          <div class="card-text-jp" style="margin-top:15px">${word.jp}</div>
+        </div>
+      `;
+    } else {
+      this.dom.front.textContent = word.jp;
+    }
+
     this.dom.backRomaji.textContent = word.romaji;
     this.dom.backVi.textContent = word.vi;
     this.dom.progress.textContent = `Card ${this.currentIndex + 1} / ${this.vocab.length}`;

@@ -120,6 +120,9 @@ export class VocabPractice {
       this._showFeedback('wrong', `❌ Incorrect! Answer: ${correctAnswer}`);
     }
 
+    // Play audio of the answered word immediately as reinforcement
+    playWord(word);
+
     this._updateStats();
 
     // Brief pause then next
@@ -127,7 +130,7 @@ export class VocabPractice {
       this._clearFeedback();
       this.state.isAnswering = false;
       this._nextWord();
-    }, 1600);
+    }, 1800);
   }
 
   _nextWord() {
@@ -138,18 +141,29 @@ export class VocabPractice {
 
     this.state.currentWord = this.queue[0];
     
-    if (this.state.mode === 'vi_to_jp') {
-      this.dom.question.textContent = this.state.currentWord.vi;
+    const word = this.state.currentWord;
+    const questionEl = this.dom.question;
+
+    if (word.image) {
+      questionEl.innerHTML = `
+        <div class="vocab-img-container">
+          <img src="images/vocab/${word.image}" alt="Question Image" class="vocab-img">
+          <div class="card-text-jp" style="margin-top:10px; font-size:1.2rem; opacity:0.7">
+            ${this.state.mode === 'vi_to_jp' ? word.vi : word.jp}
+          </div>
+        </div>
+      `;
     } else {
-      this.dom.question.textContent = this.state.currentWord.jp;
+      questionEl.textContent = this.state.mode === 'vi_to_jp' ? word.vi : word.jp;
     }
 
     this.dom.input.value = '';
     this.dom.input.focus();
     this._updateStats();
 
-    // Auto-play pronunciation
-    playWord(this.state.currentWord);
+    // Auto-play pronunciation of new word after a brief delay
+    // so it doesn't overlap with the previous word's feedback audio
+    setTimeout(() => playWord(this.state.currentWord), 400);
   }
 
   _endSession() {

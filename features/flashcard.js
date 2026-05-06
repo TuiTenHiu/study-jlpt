@@ -173,6 +173,19 @@ export class Flashcard {
     }
   }
 
+  /**
+   * Load a specific pre-selected array of words directly.
+   * Used when the user picks words from the "List & Select" view.
+   * @param {Array} wordsArray
+   */
+  setCustomVocab(wordsArray) {
+    this.vocab = [...wordsArray];
+    this.currentIndex = 0;
+    this.isFlipped = false;
+    this.render();
+    if (this.vocab.length > 0) this.speak();
+  }
+
   /** Reset UI when switching to this mode. */
   activate() {
     if (this.vocab.length === 0 && this.currentLessons && this.currentLessons.length > 0) {

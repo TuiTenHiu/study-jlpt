@@ -174,6 +174,17 @@ export class VocabPractice {
     this.dom.finalWrong.textContent = this.state.wrongCount;
   }
 
+  /**
+   * Load a specific pre-selected array of words directly.
+   * Used when the user picks words from the "List & Select" view.
+   * @param {Array} wordsArray
+   */
+  setCustomVocab(wordsArray) {
+    this.vocabSource = [...wordsArray];
+    this.limit = 'all'; // Use all selected words
+    this.startSession();
+  }
+
   setMode(mode) {
     this.state.mode = mode;
     if (this.state.sessionStarted) {

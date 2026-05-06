@@ -62,7 +62,7 @@ header {
   background: linear-gradient(135deg, var(--primary) 0%, #a855f7 50%, var(--accent) 100%);
   color: #fff;
   text-align: center;
-  padding: 56px 20px 48px;
+  padding: 48px 24px 42px;
   position: relative;
   overflow: hidden;
 }
@@ -111,7 +111,7 @@ header p { margin-top: 10px; font-size: 1.05rem; opacity: .85; position: relativ
 }
 
 /* ── 4. Main navigation (mode bar) ──────────────────────────────────────── */
-main { max-width: 1100px; margin: 0 auto; padding: 0 16px; }
+main { max-width: 1280px; width: 95%; margin: 0 auto; padding: 0 20px; }
 
 .mode-bar {
   display: flex;
@@ -198,9 +198,14 @@ main { max-width: 1100px; margin: 0 auto; padding: 0 16px; }
 .divider { height: 1px; background: var(--border); margin: 28px 0 22px; }
 
 /* ── 7. Learn mode — character grid & cards ──────────────────────────────── */
+#learn-panel {
+  max-width: 960px;
+  margin: 0 auto;
+}
+
 .char-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(82px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
   gap: 10px;
 }
 .char-card {
@@ -343,8 +348,8 @@ main { max-width: 1100px; margin: 0 auto; padding: 0 16px; }
 .modal-close:hover { background: var(--primary-light); color: var(--primary); }
 .modal-hint { margin-top: 22px; font-size: .8rem; color: var(--text-muted); }
 
-/* ── 9. Quiz mode — panel & controls ─────────────────────────────────────── */
-#quiz-panel         { display: none; }
+/* ── 9. Quiz mode — panel & controls ──────────────────────────────────── */
+#quiz-panel         { display: none; max-width: 800px; margin: 0 auto; }
 #quiz-panel.active  { display: block; }
 
 .quiz-controls {
@@ -944,16 +949,12 @@ main { max-width: 1100px; margin: 0 auto; padding: 0 16px; }
 
 /* ── 20. Vocabulary Mode ─────────────────────────────────────────────── */
 #vocab-panel {
-  max-width: 600px;
+  width: 100%;
+  max-width: 1240px;
   margin: 0 auto;
 }
 
-.vocab-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 24px;
-}
+
 
 .lesson-picker {
   display: flex;
@@ -982,7 +983,7 @@ main { max-width: 1100px; margin: 0 auto; padding: 0 16px; }
 }
 
 .btn-vocab-tool {
-  padding: 8px 18px;
+  padding: 10px 20px;
   background: var(--surface);
   border: 1.5px solid var(--border);
   border-radius: 100px;
@@ -991,6 +992,8 @@ main { max-width: 1100px; margin: 0 auto; padding: 0 16px; }
   cursor: pointer;
   transition: var(--transition);
   color: var(--text-muted);
+  align-self: center;
+  white-space: nowrap;
 }
 
 .btn-vocab-tool:hover {
@@ -1003,9 +1006,11 @@ main { max-width: 1100px; margin: 0 auto; padding: 0 16px; }
 .flashcard-arena {
   background: var(--surface);
   border-radius: 24px;
-  padding: 40px 32px;
+  padding: 48px 40px;
   box-shadow: var(--shadow-lg);
   text-align: center;
+  max-width: 720px;
+  margin: 0 auto;
 }
 
 .flashcard-wrapper {
@@ -1234,11 +1239,13 @@ main { max-width: 1100px; margin: 0 auto; padding: 0 16px; }
 .practice-arena {
   background: var(--surface);
   border-radius: 24px;
-  padding: 40px 32px;
+  padding: 48px 40px;
   box-shadow: var(--shadow-lg);
   text-align: center;
   position: relative;
   overflow: hidden;
+  max-width: 720px;
+  margin: 0 auto;
 }
 
 .practice-header {
@@ -1498,9 +1505,9 @@ main { max-width: 1100px; margin: 0 auto; padding: 0 16px; }
   border-radius: var(--radius);
   padding: 16px;
   width: 100%;
-  max-width: 500px;
-  margin: 0 auto 20px auto;
+  margin: 0 0 20px 0;
   box-shadow: 0 4px 12px rgba(0,0,0,.05);
+  flex: 1;
 }
 .lesson-picker-header {
   display: flex;
@@ -1597,9 +1604,9 @@ main { max-width: 1100px; margin: 0 auto; padding: 0 16px; }
   border-radius: var(--radius);
   padding: 14px 16px;
   width: 100%;
-  max-width: 500px;
-  margin: 0 auto 20px auto;
+  margin: 0 0 20px 0;
   box-shadow: 0 4px 12px rgba(0,0,0,.05);
+  flex: 1;
 }
 
 .limit-picker-header {
@@ -1685,4 +1692,277 @@ main { max-width: 1100px; margin: 0 auto; padding: 0 16px; }
 @media (max-width: 480px) {
   .vocab-img { max-height: 160px; }
   .flashcard-front .vocab-img { max-height: 180px; }
+}
+
+/* ── Vocabulary List & Select Mode ──────────────────────────────────────── */
+
+.vocab-list-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 20px;
+  background: var(--surface);
+  border-radius: var(--radius);
+  border: 1.5px solid var(--border);
+  margin-bottom: 18px;
+  flex-wrap: wrap;
+}
+
+.vocab-list-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.vocab-list-total-badge {
+  background: var(--primary-light);
+  color: var(--primary-dark);
+  font-size: .82rem;
+  font-weight: 700;
+  padding: 5px 14px;
+  border-radius: 100px;
+}
+
+.vocab-list-selected-badge {
+  background: linear-gradient(135deg, var(--success), #059669);
+  color: #fff;
+  font-size: .82rem;
+  font-weight: 700;
+  padding: 5px 14px;
+  border-radius: 100px;
+  animation: badgePop .25s cubic-bezier(.34,1.56,.64,1);
+}
+
+@keyframes badgePop {
+  from { transform: scale(0.7); opacity: 0; }
+  to   { transform: scale(1);   opacity: 1; }
+}
+
+.vocab-list-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.vocab-list-action-btn {
+  padding: 7px 16px;
+  border: 1.5px solid var(--border);
+  border-radius: 100px;
+  font-size: .82rem;
+  font-weight: 700;
+  font-family: 'Inter', sans-serif;
+  cursor: pointer;
+  transition: var(--transition);
+  background: var(--surface);
+  color: var(--text-muted);
+}
+.vocab-list-action-btn:hover {
+  background: var(--primary-light);
+  color: var(--primary);
+  border-color: var(--primary);
+}
+.vocab-list-action-btn.clear:hover {
+  background: var(--danger-light);
+  color: var(--danger);
+  border-color: var(--danger);
+}
+.vocab-list-action-btn.practice {
+  background: linear-gradient(135deg, var(--success), #059669);
+  color: #fff;
+  border-color: transparent;
+  box-shadow: 0 3px 12px rgba(16,185,129,.35);
+}
+.vocab-list-action-btn.practice:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 5px 18px rgba(16,185,129,.5);
+  background: linear-gradient(135deg, #059669, #047857);
+  color: #fff;
+  border-color: transparent;
+}
+
+.vocab-header {
+  display: flex;
+  gap: 16px;
+  align-items: stretch;
+  margin-bottom: 20px;
+}
+
+@media (max-width: 768px) {
+  .vocab-header { flex-direction: column; }
+}
+
+/* Grid of vocab words */
+.vocab-list-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 12px;
+}
+
+/* Individual word card */
+.vocab-list-item {
+  background: var(--surface);
+  border: 2px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px 16px;
+  cursor: pointer;
+  transition: var(--transition);
+  user-select: none;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.vocab-list-item::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, var(--primary-light), #fce7f3);
+  opacity: 0;
+  transition: var(--transition);
+}
+
+.vocab-list-item:hover::before { opacity: 1; }
+.vocab-list-item:hover {
+  border-color: var(--primary);
+  transform: translateY(-3px);
+  box-shadow: var(--shadow);
+}
+
+/* Selected state */
+.vocab-list-item.selected {
+  border-color: var(--success) !important;
+  box-shadow: 0 0 0 3px rgba(16,185,129,.25), 0 4px 16px rgba(16,185,129,.12);
+}
+.vocab-list-item.selected::before {
+  background: linear-gradient(135deg, #d1fae5, #a7f3d0) !important;
+  opacity: 1 !important;
+}
+.vocab-list-item.selected .vocab-list-jp { color: #064e3b; }
+.vocab-list-item.selected .vocab-list-vi { color: #065f46; }
+.vocab-list-item.selected .vocab-list-check { opacity: 1; transform: scale(1); }
+
+/* Content inside each card */
+.vocab-list-jp {
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--text);
+  position: relative;
+  line-height: 1.2;
+}
+.vocab-list-romaji {
+  font-size: .78rem;
+  font-weight: 600;
+  color: var(--primary);
+  position: relative;
+  letter-spacing: .02em;
+}
+.vocab-list-vi {
+  font-size: .85rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  position: relative;
+  margin-top: 3px;
+}
+
+/* Lesson number tag */
+.vocab-list-lesson-tag {
+  position: absolute;
+  top: 8px;
+  right: 10px;
+  font-size: .65rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  background: var(--bg);
+  border-radius: 100px;
+  padding: 2px 8px;
+  letter-spacing: .04em;
+}
+.vocab-list-item.selected .vocab-list-lesson-tag {
+  background: rgba(16,185,129,.15);
+  color: #059669;
+}
+
+/* Checkmark badge */
+.vocab-list-check {
+  position: absolute;
+  bottom: 8px;
+  right: 10px;
+  font-size: .7rem;
+  font-weight: 900;
+  color: #fff;
+  background: var(--success);
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transform: scale(0);
+  transition: opacity .15s ease, transform .2s cubic-bezier(.34,1.56,.64,1);
+}
+
+@media (max-width: 768px) {
+  /* Header & Navigation */
+  header { padding: 32px 16px 42px; } /* More bottom padding */
+  header h1 { font-size: 1.6rem; }
+  .mode-bar { margin-top: -15px; margin-bottom: 24px; gap: 6px; }
+  .mode-btn { padding: 10px 4px; font-size: 0.85rem; flex: 1; min-width: 0; text-align: center; }
+  .vocab-sub-bar { flex-wrap: nowrap; overflow-x: auto; padding-bottom: 8px; justify-content: flex-start; }
+  .vsub-btn { flex: 0 0 auto; }
+  main { padding: 0 10px; width: 100%; }
+  .lang-switcher { top: 8px; right: 8px; }
+  .lang-btn { padding: 4px 8px; font-size: 0.7rem; }
+
+  /* Alphabet Grid (Học tập) - Force 5 columns, shrink cards */
+  .char-grid { 
+    grid-template-columns: repeat(5, 1fr); 
+    gap: 6px; 
+  }
+  .char-card { padding: 10px 4px 8px; }
+  .char-jp { font-size: 1.6rem; }
+  .char-ro { font-size: 0.75rem; }
+
+  /* Vocab List (Danh sách) */
+  .vocab-list-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+  }
+  .vocab-list-item { padding: 10px 12px; }
+  .vocab-list-header { padding: 10px 14px; }
+  .vocab-list-jp { font-size: 1.15rem; }
+
+  /* Vocab Header / Pickers */
+  .vocab-header { 
+    flex-direction: column; 
+    gap: 12px; 
+    align-items: stretch;
+  }
+  .lesson-picker-container, .limit-picker-container { 
+    width: 100%; 
+    margin: 0;
+  }
+  .lesson-toggles-grid {
+    grid-template-columns: repeat(5, 1fr); /* 5 columns max on mobile */
+    gap: 6px;
+  }
+  .limit-chips {
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .btn-vocab-tool { 
+    width: 100%; 
+    justify-content: center;
+  }
+  
+  /* Arenas */
+  .flashcard-arena, .practice-arena { 
+    padding: 24px 16px; 
+    max-width: 100%; 
+  }
 }

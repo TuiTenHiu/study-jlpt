@@ -19,6 +19,7 @@ import { Quiz } from './features/quiz.js';
 import { Flashcard } from './features/flashcard.js';
 import { VocabPractice } from './features/vocabPractice.js';
 import { translations } from './data/translations.js';
+import { vocabData } from './data/vocab.js';
 
 /* ════════════════════════════════════════════════════════════════════════════
    DOM REFERENCES — collected once at startup
@@ -104,6 +105,7 @@ const flashcardDom = {
 
 const vocabFlashSection    = el('vocab-flash-section');
 const vocabPracticeSection  = el('vocab-practice-section');
+const vocabListSection      = el('vocab-list-section');
 
 const practiceDom = {
   arena:        el('practice-arena'),
@@ -408,18 +410,31 @@ let activeVocabSubMode = 'flash';
 
 function setVocabSubMode(sub) {
   activeVocabSubMode = sub;
-  vocabFlashSection.hidden = sub !== 'flash';
+  vocabFlashSection.hidden    = sub !== 'flash';
   vocabPracticeSection.hidden = sub !== 'practice';
+  vocabListSection.hidden     = sub !== 'list';
 
   el('vsub-flash').classList.toggle('active', sub === 'flash');
   el('vsub-practice').classList.toggle('active', sub === 'practice');
+  el('vsub-list').classList.toggle('active', sub === 'list');
 
   if (sub === 'practice') {
-    vocabPractice.loadLessons(selectedLessons, currentVocabLimit);
+    if (selectedVocabPool.size > 0) {
+      vocabPractice.setCustomVocab(Array.from(selectedVocabPool.values()));
+    } else {
+      vocabPractice.loadLessons(selectedLessons, currentVocabLimit);
+    }
     el('btn-vocab-tool').hidden = true;
-  } else {
-    flashcard.activate();
+  } else if (sub === 'flash') {
+    if (selectedVocabPool.size > 0) {
+      flashcard.setCustomVocab(Array.from(selectedVocabPool.values()));
+    } else {
+      flashcard.activate();
+    }
     el('btn-vocab-tool').hidden = false;
+  } else if (sub === 'list') {
+    renderVocabList();
+    el('btn-vocab-tool').hidden = true;
   }
 }
 
@@ -484,14 +499,122 @@ function setVocabLimit(limit) {
 }
 
 function triggerLessonLoad() {
+  // Clear custom vocab selection when lesson changes
+  selectedVocabPool.clear();
+  updateVocabListUI();
+
   if (activeVocabSubMode === 'flash') {
     flashcard.loadLessons(selectedLessons, currentVocabLimit);
-  } else {
+  } else if (activeVocabSubMode === 'practice') {
     vocabPractice.loadLessons(selectedLessons, currentVocabLimit);
+  } else if (activeVocabSubMode === 'list') {
+    renderVocabList();
   }
 }
 
-/* ── Vocabulary Practice Mode Switching ──────────────────────────────────── */
+/* ── Vocabulary List & Select ────────────────────────────────────────────── */
+
+/** Words explicitly selected by the user from the list view. */
+const selectedVocabPool = new Map(); // key: `lessonNum_jp`, value: word object
+
+/** Cache of all lesson words (rebuilt when selectedLessons changes). */
+let _cachedAllWords = [];
+
+function rebuildWordCache() {
+  _cachedAllWords = [];
+  selectedLessons.forEach(num => {
+    const words = vocabData[num];
+    if (words && words.length > 0) {
+      words.forEach(w => _cachedAllWords.push({ ...w, _lessonNum: num }));
+    }
+  });
+}
+
+/** Render the vocab list grid. */
+function renderVocabList() {
+  rebuildWordCache();
+  const grid = el('vocab-list-grid');
+  grid.innerHTML = '';
+
+  _cachedAllWords.forEach((word) => {
+    const key = `${word._lessonNum}_${word.jp}`;
+    const isSelected = selectedVocabPool.has(key);
+
+    const item = document.createElement('div');
+    item.className = 'vocab-list-item' + (isSelected ? ' selected' : '');
+    item.dataset.key = key;
+    item.innerHTML = `
+      <span class="vocab-list-lesson-tag">Bài ${word._lessonNum}</span>
+      <div class="vocab-list-jp">${word.jp}</div>
+      <div class="vocab-list-romaji">${word.romaji}</div>
+      <div class="vocab-list-vi">${word.vi}</div>
+      <span class="vocab-list-check" aria-hidden="true">✓</span>
+    `;
+
+    item.addEventListener('click', () => toggleVocabItem(item, word, key));
+    grid.appendChild(item);
+  });
+
+  updateVocabListUI();
+}
+
+/** Toggle selection of a single vocab word. */
+function toggleVocabItem(itemEl, word, key) {
+  if (selectedVocabPool.has(key)) {
+    selectedVocabPool.delete(key);
+    itemEl.classList.remove('selected');
+  } else {
+    selectedVocabPool.set(key, word);
+    itemEl.classList.add('selected');
+  }
+  updateVocabListUI();
+}
+
+/** Select all words currently shown. */
+function selectAllVocab() {
+  rebuildWordCache();
+  _cachedAllWords.forEach(word => {
+    const key = `${word._lessonNum}_${word.jp}`;
+    selectedVocabPool.set(key, word);
+  });
+  // Update DOM
+  document.querySelectorAll('.vocab-list-item').forEach(el => el.classList.add('selected'));
+  updateVocabListUI();
+}
+
+/** Clear all vocab selections. */
+function clearVocabSelection() {
+  selectedVocabPool.clear();
+  document.querySelectorAll('.vocab-list-item').forEach(el => el.classList.remove('selected'));
+  updateVocabListUI();
+}
+
+/** Sync the badge counters and action buttons. */
+function updateVocabListUI() {
+  const total = _cachedAllWords.length;
+  const selected = selectedVocabPool.size;
+
+  const totalBadge    = document.getElementById('vocab-list-total-badge');
+  const selectedBadge = document.getElementById('vocab-list-selected-badge');
+  const practiceBtn   = document.getElementById('btn-practice-selected');
+
+  if (totalBadge)    totalBadge.textContent = `${total} từ`;
+  if (selectedBadge) {
+    selectedBadge.hidden = selected === 0;
+    selectedBadge.textContent = `${selected} đang chọn`;
+  }
+  if (practiceBtn) practiceBtn.hidden = selected === 0;
+}
+
+/** Switch to flashcards/practice with only selected words. */
+function practiceSelectedVocab() {
+  if (selectedVocabPool.size === 0) return;
+  const pool = Array.from(selectedVocabPool.values());
+  // Go to Practice sub-mode with selected words
+  setVocabSubMode('practice');
+  vocabPractice.setCustomVocab(pool);
+}
+
 
 function setPracticeMode(mode) {
   vocabPractice.setMode(mode);
@@ -724,6 +847,10 @@ Object.assign(window, {
   speakCurrentCard: () => flashcard.speak(),
   // Multi-language
   setLanguage,
+  // Vocab list & select
+  selectAllVocab,
+  clearVocabSelection,
+  practiceSelectedVocab,
 });
 
 /* ════════════════════════════════════════════════════════════════════════════

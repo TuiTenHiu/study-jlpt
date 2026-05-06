@@ -225,6 +225,7 @@
       <div class="vocab-sub-bar">
         <button id="vsub-flash" class="vsub-btn active" onclick="setVocabSubMode('flash')" data-i18n="vsub_flash">📖 Flashcards</button>
         <button id="vsub-practice" class="vsub-btn" onclick="setVocabSubMode('practice')" data-i18n="vsub_practice">✍️ Practice</button>
+        <button id="vsub-list" class="vsub-btn" onclick="setVocabSubMode('list')">📄 Danh sách</button>
       </div>
 
       <div class="vocab-header">
@@ -350,6 +351,26 @@
           <button class="btn-play-again" onclick="restartPractice()" data-i18n="btn_restart">🔄 Restart Lesson</button>
         </div>
       </div><!-- /vocab-practice-section -->
+
+      <!-- LIST & SELECT SUB-MODE -->
+      <div id="vocab-list-section" hidden>
+        <div class="vocab-list-header">
+          <div class="vocab-list-info">
+            <span id="vocab-list-total-badge" class="vocab-list-total-badge">0 từ</span>
+            <span id="vocab-list-selected-badge" class="vocab-list-selected-badge" hidden>0 đang chọn</span>
+          </div>
+          <div class="vocab-list-actions">
+            <button class="vocab-list-action-btn" onclick="selectAllVocab()">Chọn tất cả</button>
+            <button class="vocab-list-action-btn clear" onclick="clearVocabSelection()">Bỏ chọn</button>
+            <button class="vocab-list-action-btn practice" id="btn-practice-selected" onclick="practiceSelectedVocab()" hidden>
+              ▶ Luyện tập
+            </button>
+          </div>
+        </div>
+        <div class="vocab-list-grid" id="vocab-list-grid">
+          <!-- Rendered by JS -->
+        </div>
+      </div><!-- /vocab-list-section -->
 
     </div><!-- /vocab-panel -->
 

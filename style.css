@@ -1443,14 +1443,30 @@ main { max-width: 1280px; width: 95%; margin: 0 auto; padding: 0 20px; }
 }
 
 .p-keyboard-grid {
-  display: grid;
-  grid-template-columns: repeat(11, 1fr);
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 12px;
+  /* hide scrollbar standard but keep it usable */
+  -webkit-overflow-scrolling: touch;
+}
+.p-keyboard-grid::-webkit-scrollbar {
+  height: 6px;
+}
+.p-keyboard-grid::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 10px;
+}
+.kb-col {
+  display: flex;
+  flex-direction: column;
   gap: 5px;
-  max-width: 100%;
-  margin: 0 auto;
 }
 .kb-char-btn {
-  aspect-ratio: 1;
+  width: 48px;
+  height: 48px;
+  flex-shrink: 0;
   border: 1.5px solid var(--border);
   background: var(--surface);
   border-radius: 8px;
@@ -1478,23 +1494,10 @@ main { max-width: 1280px; width: 95%; margin: 0 auto; padding: 0 20px; }
   opacity: 0.1;
   pointer-events: none;
 }
-.kb-special-row {
-  grid-column: 1 / -1;
-  display: flex;
-  justify-content: center;
-  gap: 8px;
-  margin-top: 8px;
-}
-.kb-special-btn {
-  flex: 1;
-  padding: 10px;
-  font-size: 1.2rem;
-  border-radius: 10px;
-}
+/* removed special row styling since it's just a column now */
 
 @media (max-width: 480px) {
-  .p-keyboard-grid { grid-template-columns: repeat(5, 1fr); gap: 5px; }
-  .kb-char-btn { font-size: 1.2rem; border-radius: 8px; }
+  .kb-char-btn { width: 44px; height: 44px; font-size: 1.1rem; border-radius: 8px; }
   .practice-header { flex-direction: column; gap: 15px; align-items: center; }
 }
 

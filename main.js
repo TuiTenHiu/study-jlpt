@@ -642,63 +642,43 @@ function renderPracticeKeyboard(type) {
   
   const rows = type === 'hira' ? HIRAGANA_ROWS : KATAKANA_ROWS;
   
-  // Basic Kana are the first 11 rows in data/kana.js
-  const basicRows = rows.slice(0, 11);
-  const others = rows.slice(11);
-
-  // Re-structure basic kana to be horizontal (Consonants as columns)
-  // Max 5 vowels, so 5 rows in the horizontal layout
-  for (let vowelIdx = 0; vowelIdx < 5; vowelIdx++) {
-    basicRows.forEach(row => {
-      const item = row.chars[vowelIdx];
-      if (item) {
-        const btn = document.createElement('button');
-        btn.className = 'kb-char-btn';
-        btn.textContent = item.char;
-        btn.onclick = () => vocabPractice.insertChar(item.char);
-        grid.appendChild(btn);
-      } else {
-        // Empty cell for the grid
-        const empty = document.createElement('div');
-        empty.className = 'kb-char-btn empty';
-        grid.appendChild(empty);
-      }
-    });
-  }
-
-  // Add the rest (Dakuten, Yoon) normally below
-  const divider = document.createElement('div');
-  divider.style.gridColumn = '1 / -1';
-  divider.style.height = '1px';
-  divider.style.background = 'var(--border)';
-  divider.style.margin = '10px 0';
-  grid.appendChild(divider);
-
-  others.forEach(row => {
+  // Create columns for each row in the kana data
+  rows.forEach(row => {
+    const col = document.createElement('div');
+    col.className = 'kb-col';
+    
     row.chars.forEach(item => {
       if (item) {
         const btn = document.createElement('button');
         btn.className = 'kb-char-btn';
         btn.textContent = item.char;
+        if (item.char.length > 1) {
+          btn.style.fontSize = '0.9rem';
+        }
         btn.onclick = () => vocabPractice.insertChar(item.char);
-        grid.appendChild(btn);
+        col.appendChild(btn);
+      } else {
+        const empty = document.createElement('div');
+        empty.className = 'kb-char-btn empty';
+        col.appendChild(empty);
       }
     });
+    grid.appendChild(col);
   });
 
-  // Add special characters row
-  const specRow = document.createElement('div');
-  specRow.className = 'kb-special-row';
+  // Special characters column
+  const specCol = document.createElement('div');
+  specCol.className = 'kb-col';
   
   ['～', 'ー'].forEach(s => {
     const sBtn = document.createElement('button');
     sBtn.className = 'kb-char-btn kb-special-btn';
     sBtn.textContent = s;
     sBtn.onclick = () => vocabPractice.insertChar(s);
-    specRow.appendChild(sBtn);
+    specCol.appendChild(sBtn);
   });
   
-  grid.appendChild(specRow);
+  grid.appendChild(specCol);
 }
 
 function clearPracticeInput() {

@@ -627,6 +627,11 @@ function setPracticeMode(mode) {
   
   if (mode === 'vi_to_jp') {
     renderPracticeKeyboard('hira');
+    // Disable native keyboard popup on mobile when using virtual keyboard
+    el('p-input').setAttribute('inputmode', 'none');
+  } else {
+    // Re-enable native keyboard for text typing
+    el('p-input').removeAttribute('inputmode');
   }
 }
 

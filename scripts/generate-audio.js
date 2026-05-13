@@ -5,7 +5,7 @@ import { fileURLToPath } from 'url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT_DIR = path.resolve(__dirname, '..');
-const VOCAB_DIR = path.join(ROOT_DIR, 'data', 'vocab');
+const VOCAB_FILE = path.join(ROOT_DIR, 'data', 'vocab.js');
 const AUDIO_DIR = path.join(ROOT_DIR, 'audio');
 
 async function generate() {
@@ -14,27 +14,23 @@ async function generate() {
   // Ensure audio directory exists
   await fs.mkdir(AUDIO_DIR, { recursive: true });
 
-  const files = await fs.readdir(VOCAB_DIR);
-  const lessonFiles = files.filter(f => f.startsWith('lesson') && f.endsWith('.js')).sort();
+  const fileUrl = new URL(`file://${path.resolve(VOCAB_FILE)}`).href;
+  const { vocabData } = await import(fileUrl);
+  
+  // The user requested audio for lessons 1 to 6
+  const lessonsToProcess = ['1', '2', '3', '4', '5', '6'];
 
-  for (const file of lessonFiles) {
-    const filePath = path.join(VOCAB_DIR, file);
-    const fileUrl = new URL(`file://${path.resolve(filePath)}`).href;
+  for (const lesson of lessonsToProcess) {
+    if (!vocabData[lesson]) continue;
     
-    console.log(`\n📂 Processing ${file}...`);
+    console.log(`\n📂 Processing Lesson ${lesson}...`);
+    const vocabList = vocabData[lesson];
 
-    // Dynamic import to read current data
-    const { vocab } = await import(fileUrl);
-    const updatedVocab = [];
-
-    for (const item of vocab) {
+    for (const item of vocabList) {
       // Create a clean filename from romaji
       const safeRomaji = item.romaji.toLowerCase().replace(/[^a-z0-9]/g, '_');
       const fileName = `${safeRomaji}.mp3`;
       const audioPath = path.join(AUDIO_DIR, fileName);
-
-      // Add audio field to item
-      item.audio = fileName;
 
       try {
         // Check if file already exists
@@ -44,6 +40,8 @@ async function generate() {
         // Generate audio if missing
         console.log(`  - 🎙️  Generating audio for "${item.jp}"...`);
         try {
+          // Wait briefly to avoid rate limiting
+          await new Promise(r => setTimeout(r, 300));
           const base64 = await tts.getAudioBase64(item.jp, {
             lang: 'ja',
             slow: false,
@@ -54,16 +52,10 @@ async function generate() {
           console.error(`  - ❌ Failed to generate audio for "${item.jp}":`, err.message);
         }
       }
-      updatedVocab.push(item);
     }
-
-    // Write back the updated data to the .js file
-    const content = `export const vocab = ${JSON.stringify(updatedVocab, null, 2)};\n`;
-    await fs.writeFile(filePath, content, 'utf8');
-    console.log(`✨ Updated data file: ${file}`);
   }
 
-  console.log('\n✅ Audio generation and data update complete!');
+  console.log('\n✅ Audio generation complete!');
 }
 
 generate().catch(err => {

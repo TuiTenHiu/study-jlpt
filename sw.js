@@ -1,4 +1,4 @@
-const CACHE_NAME = 'study-jlpt-v1';
+const CACHE_NAME = 'study-jlpt-v2';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
@@ -9,7 +9,9 @@ const ASSETS_TO_CACHE = [
   './data/kana.js',
   './data/vocab.js',
   './features/flashcard.js',
-  './features/vocabPractice.js'
+  './features/vocabPractice.js',
+  './features/grammar.js',
+  './data/grammar.js'
 ];
 
 // Install event: cache basic static assets

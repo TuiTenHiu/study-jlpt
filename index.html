@@ -53,6 +53,7 @@
     <div class="mode-bar" role="tablist" aria-label="App mode">
       <button id="mode-learn" class="mode-btn active" onclick="switchMode('learn')" data-i18n="mode_learn">📖 Learn</button>
       <button id="mode-vocab" class="mode-btn" onclick="switchMode('vocab')" data-i18n="mode_vocab">🎴 Vocabulary</button>
+      <button id="mode-grammar" class="mode-btn" onclick="switchMode('grammar')" data-i18n="mode_grammar">📖 Grammar</button>
       <button id="mode-quiz" class="mode-btn" onclick="switchMode('quiz')" data-i18n="mode_quiz">⚡ Quiz Mode</button>
     </div>
 
@@ -373,6 +374,24 @@
       </div><!-- /vocab-list-section -->
 
     </div><!-- /vocab-panel -->
+
+    <!-- ── GRAMMAR PANEL ─────────────────────────────────── -->
+    <div id="grammar-panel" hidden>
+      <div class="grammar-header">
+        <div class="lesson-picker-container">
+          <div class="lesson-picker-header">
+            <label data-i18n="lesson_label">📚 Chọn bài học</label>
+          </div>
+          <div class="lesson-toggles-grid" id="grammar-lesson-toggles">
+            <!-- Rendered by JS -->
+          </div>
+        </div>
+      </div>
+
+      <div id="grammar-list-container" class="grammar-list-container">
+        <!-- Rendered by features/grammar.js -->
+      </div>
+    </div><!-- /grammar-panel -->
 
   </main>
 

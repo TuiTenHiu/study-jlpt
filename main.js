@@ -18,8 +18,10 @@ import { HIRAGANA_ROWS, KATAKANA_ROWS } from './data/kana.js';
 import { Quiz } from './features/quiz.js';
 import { Flashcard } from './features/flashcard.js';
 import { VocabPractice } from './features/vocabPractice.js';
+import { Grammar } from './features/grammar.js';
 import { translations } from './data/translations.js';
 import { vocabData } from './data/vocab.js';
+import { grammarData } from './data/grammar.js';
 
 /* ════════════════════════════════════════════════════════════════════════════
    DOM REFERENCES — collected once at startup
@@ -35,9 +37,11 @@ function el(id) {
 /* ── Mode bar ─────────────────────────────────────────────────────────────── */
 const modeLearnBtn  = el('mode-learn');
 const modeQuizBtn   = el('mode-quiz');
+const modeGrammarBtn = el('mode-grammar');
 const learnPanel    = el('learn-panel');
 const quizPanel     = el('quiz-panel');
 const vocabPanel    = el('vocab-panel');
+const grammarPanel  = el('grammar-panel');
 
 /* ── Learn mode ───────────────────────────────────────────────────────────── */
 const tabHiraganaBtn = el('tab-hiragana');
@@ -378,14 +382,27 @@ function switchMode(mode) {
 
   const modeVocabBtn = document.getElementById('mode-vocab');
   if (modeVocabBtn) modeVocabBtn.classList.toggle('active', mode === 'vocab');
+  
+  if (modeGrammarBtn) modeGrammarBtn.classList.toggle('active', mode === 'grammar');
 
   // Pause the quiz timer if the user leaves quiz mode
-  if (mode === 'learn' || mode === 'vocab') quiz.destroy();
+  if (mode !== 'quiz') quiz.destroy();
+
+  // Initialize panels
+  learnPanel.style.display = mode === 'learn' ? '' : 'none';
+  quizPanel.classList.toggle('active', mode === 'quiz');
+  vocabPanel.hidden = mode !== 'vocab';
+  grammarPanel.hidden = mode !== 'grammar';
 
   // Initialize vocab mode if needed
   if (mode === 'vocab') {
     if (activeVocabSubMode === 'flash') flashcard.activate();
     else vocabPractice.loadLessons(selectedLessons, currentVocabLimit);
+  }
+  
+  // Initialize grammar mode if needed
+  if (mode === 'grammar') {
+    grammar.loadLesson(currentGrammarLesson);
   }
 
   // Close any open modal when switching
@@ -404,6 +421,9 @@ const flashcard = new Flashcard(flashcardDom);
 
 /** Instantiate Vocab Practice system. */
 const vocabPractice = new VocabPractice(practiceDom);
+
+/** Instantiate Grammar system. */
+const grammar = new Grammar({ container: el('grammar-list-container') });
 
 /* ── Vocabulary Sub-mode Switching ───────────────────────────────────────── */
 let activeVocabSubMode = 'flash';
@@ -510,6 +530,28 @@ function triggerLessonLoad() {
   } else if (activeVocabSubMode === 'list') {
     renderVocabList();
   }
+}
+
+/* ── Grammar Lesson Selection Logic ───────────────────────────────────────── */
+let currentGrammarLesson = 1;
+
+function renderGrammarToggles() {
+  const grid = el('grammar-lesson-toggles');
+  if (!grid) return;
+  grid.innerHTML = '';
+  for (let i = 1; i <= AVAILABLE_LESSONS; i++) {
+    const btn = document.createElement('button');
+    btn.className = 'lesson-toggle-btn' + (currentGrammarLesson === i ? ' active' : '');
+    btn.textContent = i;
+    btn.onclick = () => switchGrammarLesson(i);
+    grid.appendChild(btn);
+  }
+}
+
+function switchGrammarLesson(num) {
+  currentGrammarLesson = num;
+  renderGrammarToggles();
+  grammar.loadLesson(num);
 }
 
 /* ── Vocabulary List & Select ────────────────────────────────────────────── */
@@ -836,6 +878,8 @@ Object.assign(window, {
   selectAllVocab,
   clearVocabSelection,
   practiceSelectedVocab,
+  // Grammar
+  switchGrammarLesson,
 });
 
 /* ════════════════════════════════════════════════════════════════════════════
@@ -844,6 +888,7 @@ Object.assign(window, {
 buildPanel('panel-hiragana', HIRAGANA_ROWS, 'Hiragana', 'ひらがな');
 buildPanel('panel-katakana', KATAKANA_ROWS, 'Katakana', 'カタカナ');
 renderLessonToggles();
+renderGrammarToggles();
 
 // Initialize language
 setLanguage(currentLang);

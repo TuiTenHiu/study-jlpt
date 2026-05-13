@@ -124,10 +124,10 @@ main { max-width: 1280px; width: 95%; margin: 0 auto; padding: 0 20px; }
   flex-wrap: wrap;
 }
 .mode-btn {
-  padding: 12px 30px;
+  padding: 16px 44px;
   border: none;
   border-radius: 100px;
-  font-size: 1rem;
+  font-size: 1.2rem;
   font-weight: 700;
   font-family: 'Inter', sans-serif;
   cursor: pointer;
@@ -205,8 +205,8 @@ main { max-width: 1280px; width: 95%; margin: 0 auto; padding: 0 20px; }
 
 .char-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
-  gap: 10px;
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  gap: 12px;
 }
 .char-card {
   background: var(--surface);
@@ -1544,16 +1544,16 @@ main { max-width: 1280px; width: 95%; margin: 0 auto; padding: 0 20px; }
 
 .lesson-toggles-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(42px, 1fr));
-  gap: 8px;
+  grid-template-columns: repeat(auto-fill, minmax(50px, 1fr));
+  gap: 10px;
 }
 .lesson-toggle-btn {
   aspect-ratio: 1;
   border: 1.5px solid var(--border);
   background: var(--bg);
-  border-radius: 8px;
+  border-radius: 12px;
   font-family: 'Inter', sans-serif;
-  font-size: 1rem;
+  font-size: 1.2rem;
   font-weight: 700;
   cursor: pointer;
   color: var(--text-muted);
@@ -1969,3 +1969,199 @@ main { max-width: 1280px; width: 95%; margin: 0 auto; padding: 0 20px; }
     max-width: 100%; 
   }
 }
+
+/* ── 20. Grammar Panel ─────────────────────────────────────────────────── */
+#grammar-panel { max-width: 1100px; margin: 0 auto; }
+
+.grammar-header {
+  background: var(--surface);
+  border-radius: 20px;
+  padding: 30px;
+  margin-bottom: 30px;
+  box-shadow: var(--shadow);
+}
+
+.grammar-list-container {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  padding-bottom: 60px;
+}
+
+.grammar-card {
+  background: var(--surface);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  border: 1px solid var(--border);
+  border-left: 6px solid #18a3a3; /* Riki Teal */
+  transition: transform .3s ease, box-shadow .3s ease;
+  animation: fadeIn .5s ease both;
+  position: relative;
+}
+
+.grammar-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-lg);
+}
+
+.grammar-card-header {
+  background: #f0fdfa; /* Light teal background */
+  padding: 20px 30px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  border-bottom: 1px solid #ccf2f2;
+}
+
+.grammar-num {
+  background: #18a3a3;
+  color: #fff;
+  width: 44px;
+  height: 44px;
+  border-radius: 8px; /* Square-ish like Riki */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 1.2rem;
+  flex-shrink: 0;
+  transform: rotate(45deg);
+}
+
+.grammar-num span {
+  transform: rotate(-45deg);
+}
+
+.grammar-title {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: #115e5e;
+}
+
+.grammar-card-body {
+  padding: 32px;
+}
+
+.grammar-structure-box {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  padding: 20px 26px;
+  border-radius: 12px;
+  margin-bottom: 26px;
+}
+
+.grammar-structure-box .label {
+  display: inline-block;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #fff;
+  background: #18a3a3;
+  padding: 4px 12px;
+  border-radius: 4px;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+
+.grammar-structure-box .structure {
+  display: block;
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #18a3a3;
+}
+
+.grammar-explanation {
+  font-size: 1.2rem;
+  line-height: 1.8;
+  color: #334155;
+  margin-bottom: 32px;
+  padding-left: 10px;
+  border-left: 3px solid #e2e8f0;
+}
+
+.grammar-examples-header {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #18a3a3;
+  text-transform: uppercase;
+  margin-bottom: 18px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.grammar-examples-header::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: #ccf2f2;
+}
+
+.grammar-examples-list {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  background: #fffdf5; /* Very light yellow */
+  padding: 24px;
+  border-radius: 16px;
+  border: 1px solid #ffeb9c;
+}
+
+.grammar-example {
+  position: relative;
+  padding-left: 60px;
+}
+
+.ex-label {
+  position: absolute;
+  left: 0;
+  top: 0;
+  background: #ffd700; /* Riki Yellow */
+  color: #000;
+  font-size: 0.85rem;
+  font-weight: 800;
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+
+.ex-jp {
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: #1e293b;
+  margin-bottom: 6px;
+}
+
+.ex-roma {
+  font-size: 1rem;
+  color: #64748b;
+  margin-bottom: 8px;
+  font-style: italic;
+}
+
+.ex-vi {
+  font-size: 1.15rem;
+  color: #0f172a;
+  font-weight: 500;
+}
+
+.grammar-empty {
+  text-align: center;
+  padding: 80px 20px;
+  background: var(--surface);
+  border-radius: 24px;
+  box-shadow: var(--shadow);
+}
+
+.empty-icon { font-size: 5rem; margin-bottom: 24px; }
+
+@media (max-width: 640px) {
+  .grammar-card-header { padding: 18px 20px; }
+  .grammar-card-body { padding: 22px; }
+  .grammar-title { font-size: 1.3rem; }
+  .grammar-structure-box .structure { font-size: 1.25rem; }
+  .grammar-example { padding-left: 0; padding-top: 35px; }
+  .ex-label { top: 0; left: 0; }
+}
+

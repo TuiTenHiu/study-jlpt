@@ -41,8 +41,8 @@ describe('HIRAGANA_ROWS', () => {
     expect(Array.isArray(HIRAGANA_ROWS)).toBe(true);
   });
 
-  it('has 11 rows (voiced + combination rows)', () => {
-    expect(HIRAGANA_ROWS).toHaveLength(11);
+  it('has 22 rows (basic + voiced + combination rows)', () => {
+    expect(HIRAGANA_ROWS).toHaveLength(22);
   });
 
   it('every row has a non-empty label string', () => {
@@ -71,9 +71,8 @@ describe('HIRAGANA_ROWS', () => {
       });
     });
   });
-
   it('first row is G-row and contains がぎぐげご', () => {
-    const chars = HIRAGANA_ROWS[0].chars.map(e => e.char);
+    const chars = HIRAGANA_ROWS[11].chars.map(e => e.char);
     expect(chars).toContain('が');
     expect(chars).toContain('ぎ');
     expect(chars).toContain('ぐ');
@@ -146,7 +145,7 @@ describe('KATAKANA_ROWS', () => {
   });
 
   it('first row contains ガ ギ グ ゲ ゴ', () => {
-    const chars = KATAKANA_ROWS[0].chars.map(e => e.char);
+    const chars = KATAKANA_ROWS[11].chars.map(e => e.char);
     expect(chars).toContain('ガ');
     expect(chars).toContain('ギ');
     expect(chars).toContain('グ');

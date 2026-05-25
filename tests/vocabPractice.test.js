@@ -83,6 +83,7 @@ describe('VocabPractice', () => {
     expect(dom.arena.hidden).toBe(false);
     expect(dom.endScreen.hidden).toBe(true);
     expect(practice.state.currentWord).toBeDefined();
+    vi.advanceTimersByTime(400);
     expect(playWord).toHaveBeenCalled();
   });
 
@@ -137,7 +138,7 @@ describe('VocabPractice', () => {
     practice.startSession();
     practice.submit(practice.state.currentWord.romaji);
     
-    vi.advanceTimersByTime(1600);
+    vi.advanceTimersByTime(1800);
     
     expect(practice.state.isAnswering).toBe(false);
     expect(dom.input.value).toBe('');
@@ -149,7 +150,7 @@ describe('VocabPractice', () => {
     practice.startSession();
     
     practice.submit(sampleVocab[0].romaji);
-    vi.advanceTimersByTime(1600);
+    vi.advanceTimersByTime(1800);
 
     expect(dom.arena.hidden).toBe(true);
     expect(dom.endScreen.hidden).toBe(false);

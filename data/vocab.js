@@ -378,7 +378,7 @@ export const vocabData = {
     { "jp": "むずかしい", "romaji": "muzukashii", "vi": "khó", "audio": "muzukashii.mp3" },
     { "jp": "やさしい", "romaji": "yasashii", "vi": "dễ", "audio": "yasashii.mp3" },
     { "jp": "きびしい", "romaji": "kibishii", "vi": "nghiêm khắc", "audio": "kibishii.mp3" },
-    { "jp": "やさしい", "romaji": "yasashii", "vi": "dịu dàng, hiền từ", "audio": "yasashii.mp3" },
+    { "jp": "やさしい", "romaji": "yasashii", "vi": "hiền lành", "audio": "yasashii.mp3" },
     { "jp": "たかい", "romaji": "takai", "vi": "đắt", "audio": "takai.mp3" },
     { "jp": "やすい", "romaji": "yasui", "vi": "rẻ", "audio": "yasui.mp3" },
     { "jp": "ひくい", "romaji": "hikui", "vi": "thấp", "audio": "hikui.mp3" },

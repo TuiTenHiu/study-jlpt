@@ -19,6 +19,7 @@ import { Quiz } from './features/quiz.js';
 import { Flashcard } from './features/flashcard.js';
 import { VocabPractice } from './features/vocabPractice.js';
 import { Grammar } from './features/grammar.js';
+import { WordAssembly } from './features/wordAssembly.js';
 import { translations } from './data/translations.js';
 import { vocabData } from './data/vocab.js';
 import { grammarData } from './data/grammar.js';
@@ -110,6 +111,7 @@ const flashcardDom = {
 const vocabFlashSection    = el('vocab-flash-section');
 const vocabPracticeSection  = el('vocab-practice-section');
 const vocabListSection      = el('vocab-list-section');
+const vocabAssemblySection  = el('vocab-assembly-section');
 
 const practiceDom = {
   arena:        el('practice-arena'),
@@ -425,6 +427,23 @@ const vocabPractice = new VocabPractice(practiceDom);
 /** Instantiate Grammar system. */
 const grammar = new Grammar({ container: el('grammar-list-container') });
 
+/** Instantiate Word Assembly system. */
+const wordAssembly = new WordAssembly({
+  idleScreen:      el('wa-idle'),
+  arena:           el('wa-arena'),
+  endScreen:       el('wa-end'),
+  clueVi:          el('wa-clue-vi'),
+  clueRomaji:      el('wa-clue-romaji'),
+  answerStrip:     el('wa-answer-strip'),
+  tileBank:        el('wa-tile-bank'),
+  feedback:        el('wa-feedback'),
+  scoreEl:         el('wa-score'),
+  progressEl:      el('wa-progress'),
+  finalScoreEl:    el('wa-final-score'),
+  finalCorrectEl:  el('wa-final-correct'),
+  finalWrongEl:    el('wa-final-wrong'),
+});
+
 /* ── Vocabulary Sub-mode Switching ───────────────────────────────────────── */
 let activeVocabSubMode = 'flash';
 
@@ -433,10 +452,12 @@ function setVocabSubMode(sub) {
   vocabFlashSection.hidden    = sub !== 'flash';
   vocabPracticeSection.hidden = sub !== 'practice';
   vocabListSection.hidden     = sub !== 'list';
+  vocabAssemblySection.hidden = sub !== 'assembly';
 
   el('vsub-flash').classList.toggle('active', sub === 'flash');
   el('vsub-practice').classList.toggle('active', sub === 'practice');
   el('vsub-list').classList.toggle('active', sub === 'list');
+  el('vsub-assembly').classList.toggle('active', sub === 'assembly');
 
   if (sub === 'practice') {
     if (selectedVocabPool.size > 0) {
@@ -454,6 +475,16 @@ function setVocabSubMode(sub) {
     el('btn-vocab-tool').hidden = false;
   } else if (sub === 'list') {
     renderVocabList();
+    el('btn-vocab-tool').hidden = true;
+  } else if (sub === 'assembly') {
+    // Load words — use list selection if available, else use lesson/limit
+    if (selectedVocabPool.size > 0) {
+      wordAssembly.setCustomVocab(Array.from(selectedVocabPool.values()));
+    } else {
+      wordAssembly.loadLessons(selectedLessons, currentVocabLimit);
+    }
+    wordAssembly.reset();
+    updateAssemblyIdleInfo();
     el('btn-vocab-tool').hidden = true;
   }
 }
@@ -529,7 +560,21 @@ function triggerLessonLoad() {
     vocabPractice.loadLessons(selectedLessons, currentVocabLimit);
   } else if (activeVocabSubMode === 'list') {
     renderVocabList();
+  } else if (activeVocabSubMode === 'assembly') {
+    wordAssembly.loadLessons(selectedLessons, currentVocabLimit);
+    wordAssembly.reset();
+    updateAssemblyIdleInfo();
   }
+}
+
+/** Update the word count displayed on the Word Assembly idle screen. */
+function updateAssemblyIdleInfo() {
+  const countEl = document.getElementById('wa-idle-count');
+  if (!countEl) return;
+  const count = wordAssembly.vocab.length;
+  countEl.textContent = count > 0 ? `${count} từ sẵn sàng` : 'Chưa có từ nào — hãy chọn bài học';
+  const startBtn = document.getElementById('wa-btn-start');
+  if (startBtn) startBtn.disabled = count === 0;
 }
 
 /* ── Grammar Lesson Selection Logic ───────────────────────────────────────── */
@@ -880,6 +925,15 @@ Object.assign(window, {
   practiceSelectedVocab,
   // Grammar
   switchGrammarLesson,
+  // Word Assembly
+  startWordAssembly:    () => wordAssembly.startSession(),
+  restartWordAssembly:  () => {
+    wordAssembly.loadLessons(selectedLessons, currentVocabLimit);
+    wordAssembly.reset();          // go back to idle screen
+    updateAssemblyIdleInfo();      // refresh word count badge
+  },
+  wordAssemblyHint:     () => wordAssembly.hint(),
+  wordAssemblySkip:     () => wordAssembly.skip(),
 });
 
 /* ════════════════════════════════════════════════════════════════════════════
@@ -889,6 +943,10 @@ buildPanel('panel-hiragana', HIRAGANA_ROWS, 'Hiragana', 'ひらがな');
 buildPanel('panel-katakana', KATAKANA_ROWS, 'Katakana', 'カタカナ');
 renderLessonToggles();
 renderGrammarToggles();
+
+// Pre-load default word assembly pool so idle screen shows word count
+wordAssembly.loadLessons(selectedLessons, currentVocabLimit);
+updateAssemblyIdleInfo();
 
 // Initialize language
 setLanguage(currentLang);

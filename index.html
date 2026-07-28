@@ -227,6 +227,7 @@
         <button id="vsub-flash" class="vsub-btn active" onclick="setVocabSubMode('flash')" data-i18n="vsub_flash">📖 Flashcards</button>
         <button id="vsub-practice" class="vsub-btn" onclick="setVocabSubMode('practice')" data-i18n="vsub_practice">✍️ Practice</button>
         <button id="vsub-list" class="vsub-btn" onclick="setVocabSubMode('list')">📄 Danh sách</button>
+        <button id="vsub-assembly" class="vsub-btn" onclick="setVocabSubMode('assembly')">🧩 Ghép từ</button>
       </div>
 
       <div class="vocab-header">
@@ -372,6 +373,77 @@
           <!-- Rendered by JS -->
         </div>
       </div><!-- /vocab-list-section -->
+
+      <!-- WORD ASSEMBLY SUB-MODE -->
+      <div id="vocab-assembly-section" hidden>
+
+        <!-- Idle screen -->
+        <div id="wa-idle" class="wa-idle">
+          <div class="wa-idle-icon">🧩</div>
+          <h3>Ghép từ vựng</h3>
+          <p>Chạm vào từng mảnh chữ để ghép thành từ đúng.</p>
+          <div class="wa-idle-meta">
+            <span class="wa-idle-count" id="wa-idle-count">20 từ sẵn sàng</span>
+            <span class="wa-idle-hint">Chọn bài &amp; số từ ở trên · hoặc dùng <strong>Danh sách</strong> để chọn từng từ</span>
+          </div>
+          <button class="btn-start-quiz" id="wa-btn-start" onclick="startWordAssembly()">▶ Bắt đầu</button>
+        </div>
+
+        <!-- Active arena -->
+        <div id="wa-arena" hidden>
+
+          <!-- Progress bar top -->
+          <div class="wa-top-bar">
+            <span class="wa-progress-text" id="wa-progress">1 / 20</span>
+            <span class="wa-score-text">Điểm: <strong id="wa-score">0</strong></span>
+          </div>
+
+          <!-- Main split card: clue + answer strip -->
+          <div class="wa-card">
+            <!-- Top: clue -->
+            <div class="wa-card-top">
+              <div class="wa-clue-vi" id="wa-clue-vi">—</div>
+              <div class="wa-clue-romaji" id="wa-clue-romaji" hidden>—</div>
+            </div>
+            <!-- Divider -->
+            <div class="wa-card-divider"></div>
+            <!-- Bottom: answer strip -->
+            <div class="wa-card-bottom">
+              <div class="wa-answer-strip" id="wa-answer-strip"></div>
+              <div class="wa-feedback" id="wa-feedback"></div>
+            </div>
+          </div>
+
+          <!-- Action bar: hint icon left, skip text right -->
+          <div class="wa-action-bar">
+            <button class="wa-icon-btn" id="wa-btn-hint" onclick="wordAssemblyHint()" title="Gợi ý">⚡</button>
+            <button class="wa-skip-btn" onclick="wordAssemblySkip()">Bỏ qua</button>
+          </div>
+
+          <!-- Tile bank: horizontal scrollable row -->
+          <div class="wa-tile-bank" id="wa-tile-bank"></div>
+
+        </div><!-- /wa-arena -->
+
+        <!-- End screen -->
+        <div id="wa-end" class="quiz-end" hidden>
+          <div class="end-icon wa-end-icon">🏆</div>
+          <h3>Hoàn thành!</h3>
+          <div class="final-score" id="wa-final-score">0 / 0</div>
+          <div class="stat-row">
+            <div class="stat correct">
+              <div class="stat-num" id="wa-final-correct">0</div>
+              <div class="stat-lbl">Đúng ✅</div>
+            </div>
+            <div class="stat wrong">
+              <div class="stat-num" id="wa-final-wrong">0</div>
+              <div class="stat-lbl">Sai ❌</div>
+            </div>
+          </div>
+          <button class="btn-play-again" onclick="restartWordAssembly()">🔄 Chơi lại</button>
+        </div>
+
+      </div><!-- /vocab-assembly-section -->
 
     </div><!-- /vocab-panel -->
 

@@ -1,4 +1,4 @@
-const CACHE_NAME = 'study-jlpt-v2';
+const CACHE_NAME = 'study-jlpt-v3';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
@@ -6,6 +6,9 @@ const ASSETS_TO_CACHE = [
   './main.js',
   './manifest.json',
   './icon.svg',
+  './icon-192.png',
+  './icon-512.png',
+  './apple-touch-icon.png',
   './data/kana.js',
   './data/vocab.js',
   './features/flashcard.js',

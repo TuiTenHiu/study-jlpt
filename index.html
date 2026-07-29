@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
   <title>Learn Japanese Alphabet</title>
   <meta name="description" content="Learn Hiragana and Katakana with
     interactive grids and a fast-typing quiz mode." />
@@ -18,6 +18,15 @@
   <!-- PWA Manifest & Theme Color -->
   <link rel="manifest" href="manifest.json" />
   <meta name="theme-color" content="#7c3aed" />
+
+  <!-- iOS PWA: icon + fullscreen + status bar -->
+  <link rel="apple-touch-icon" href="apple-touch-icon.png" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="StudyJLPT" />
+
+  <!-- Android PWA: shortcut icon fallback -->
+  <link rel="shortcut icon" href="icon-192.png" type="image/png" />
 
   <!-- Stylesheet -->
   <link rel="stylesheet" href="style.css" />
@@ -516,6 +525,32 @@
         });
       });
     }
+
+    // ── Disable zoom ────────────────────────────────────────────────
+    // 1. Block Ctrl+scroll (desktop browsers)
+    document.addEventListener('wheel', (e) => {
+      if (e.ctrlKey) e.preventDefault();
+    }, { passive: false });
+
+    // 2. Block Ctrl++ / Ctrl+- / Ctrl+0 keyboard shortcuts
+    document.addEventListener('keydown', (e) => {
+      if (e.ctrlKey && (e.key === '+' || e.key === '-' || e.key === '=' || e.key === '0')) {
+        e.preventDefault();
+      }
+    });
+
+    // 3. Block touch pinch-zoom gestures (Safari / older Android)
+    document.addEventListener('gesturestart',  (e) => e.preventDefault());
+    document.addEventListener('gesturechange', (e) => e.preventDefault());
+    document.addEventListener('gestureend',    (e) => e.preventDefault());
+
+    // 4. Block double-tap zoom on touch devices
+    let _lastTap = 0;
+    document.addEventListener('touchend', (e) => {
+      const now = Date.now();
+      if (now - _lastTap < 300) e.preventDefault();
+      _lastTap = now;
+    }, { passive: false });
   </script>
 
 </body>

@@ -2475,3 +2475,152 @@ main { max-width: 1280px; width: 95%; margin: 0 auto; padding: 0 20px; }
   .wa-tile       { width: 46px; height: 46px; font-size: 1.15rem; }
   .wa-tile-bank  { gap: 7px; }
 }
+
+
+/* ══════════════════════════════════════════════════════════════════════════
+   iOS / Safari Responsive Fixes
+   ══════════════════════════════════════════════════════════════════════════ */
+
+/* ── 1. Safe area insets — iPhone notch & home bar ─────────────────────── */
+body {
+  /* Use dvh (dynamic viewport height) so iOS address bar is accounted for */
+  min-height: 100dvh;
+  /* Padding for notch / home indicator */
+  padding-left:   env(safe-area-inset-left);
+  padding-right:  env(safe-area-inset-right);
+  padding-bottom: max(60px, calc(env(safe-area-inset-bottom) + 16px));
+}
+
+header {
+  padding-top: max(48px, calc(env(safe-area-inset-top) + 32px));
+}
+
+/* ── 2. Prevent iOS input auto-zoom (font-size must be ≥ 16px) ─────────── */
+/* Any input smaller than 16px causes Safari to zoom in — override globally */
+input[type="text"],
+input[type="search"],
+input[type="email"],
+select,
+textarea {
+  font-size: max(16px, 1em) !important;
+  /* Remove iOS inner shadow on inputs */
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+/* ── 3. Remove 300ms tap delay on all interactive elements ─────────────── */
+a, button, input, select, textarea, label,
+[role="button"], [tabindex] {
+  touch-action: manipulation;
+}
+
+/* ── 4. Prevent momentum scroll bounce on the whole page ───────────────── */
+html {
+  /* Smooth momentum scroll on iOS (already default, but make explicit) */
+  -webkit-overflow-scrolling: touch;
+  overflow-x: hidden;
+}
+
+/* ── 5. Fix flashcard 3D flip on iOS Safari ────────────────────────────── */
+.flashcard {
+  -webkit-transform-style: preserve-3d;
+  transform-style: preserve-3d;
+}
+.flashcard.flipped {
+  -webkit-transform: rotateY(180deg);
+  transform: rotateY(180deg);
+}
+.flashcard-front,
+.flashcard-back {
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  /* Fixes rendering bug in older iOS where back face bleeds through */
+  -webkit-transform: translate3d(0, 0, 0);
+}
+.flashcard-back {
+  -webkit-transform: rotateY(180deg) translate3d(0, 0, 0);
+  transform: rotateY(180deg);
+}
+
+/* ── 6. Prevent long-press image / link context menu on touch ──────────── */
+img, a {
+  -webkit-touch-callout: none;
+}
+
+/* ── 7. Horizontal scroll on vocab-sub-bar & p-keyboard — iOS momentum ─── */
+.vocab-sub-bar,
+.p-keyboard-grid {
+  -webkit-overflow-scrolling: touch;
+  scroll-snap-type: x proximity;
+}
+
+/* ── 8. iPhone SE / small screens (≤ 375px wide) ───────────────────────── */
+@media (max-width: 375px) {
+  /* Header */
+  header          { padding: max(40px, calc(env(safe-area-inset-top) + 24px)) 12px 32px; }
+  header h1       { font-size: 1.4rem; }
+  header p        { font-size: .88rem; }
+
+  /* Navigation */
+  .mode-btn       { padding: 9px 6px; font-size: .78rem; }
+  .vsub-btn       { padding: 6px 12px; font-size: .8rem; }
+
+  /* Alphabet grid */
+  .char-grid      { grid-template-columns: repeat(5, 1fr); gap: 5px; }
+  .char-card      { padding: 8px 2px 6px; }
+  .char-jp        { font-size: 1.4rem; }
+  .char-romaji    { font-size: .6rem; }
+
+  /* Flashcard */
+  .flashcard-arena    { padding: 18px 10px; }
+  .flashcard          { min-height: 200px; }
+  .card-text-jp       { font-size: clamp(2rem, 8vw, 3rem); }
+  .card-text-romaji   { font-size: 1.4rem; }
+  .card-text-vi       { font-size: 1rem; }
+  .btn-nav            { width: 40px; height: 40px; font-size: 1rem; }
+
+  /* Practice */
+  .practice-arena     { padding: 18px 10px; }
+  #p-input            { font-size: 16px; padding: 10px 14px; }
+
+  /* Quiz arena */
+  .quiz-arena         { padding: 20px 12px 18px; }
+  #quiz-input         { padding: 12px 14px; font-size: 16px; }
+  .quiz-char          { font-size: clamp(4rem, 18vw, 6rem); }
+
+  /* Word assembly */
+  #vocab-assembly-section { padding: 10px 8px 20px; }
+  .wa-tile            { width: 42px; height: 42px; font-size: 1rem; }
+  .wa-slot            { min-width: 34px; height: 38px; font-size: 1rem; }
+  .wa-tile-bank       { gap: 5px; }
+  .wa-card-top        { padding: 18px 12px 14px; min-height: 80px; }
+
+  /* Grammar */
+  .grammar-card-header { padding: 14px 14px; gap: 12px; }
+  .grammar-card-body   { padding: 16px; }
+  .grammar-title       { font-size: 1.1rem; }
+  .ex-jp               { font-size: 1.15rem; }
+
+  /* Vocab list */
+  .vocab-list-grid    { grid-template-columns: 1fr 1fr; gap: 6px; }
+  .vocab-list-jp      { font-size: 1rem; }
+  .vocab-list-item    { padding: 8px 10px; }
+
+  /* Lesson picker */
+  .lesson-toggles-grid { grid-template-columns: repeat(4, 1fr); gap: 5px; }
+}
+
+/* ── 9. iPhone landscape fix ────────────────────────────────────────────── */
+@media (max-height: 500px) and (orientation: landscape) {
+  header          { padding: 20px 24px; }
+  header h1       { font-size: 1.3rem; }
+  header p, .badge-row { display: none; }
+  .mode-bar       { margin-top: -10px; margin-bottom: 16px; }
+  .quiz-arena     { padding: 16px 24px; }
+  .flashcard-arena { padding: 14px 24px; }
+  .flashcard      { min-height: 160px; }
+  .quiz-char-wrap { min-height: 80px; }
+  .quiz-char      { font-size: clamp(3.5rem, 10vh, 5rem); }
+  .wa-card-top    { min-height: 60px; padding: 12px 16px; }
+}
+

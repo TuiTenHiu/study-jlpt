@@ -27,6 +27,14 @@ function shuffle(arr) {
 }
 
 /**
+ * Returns true if the string contains any kanji (CJK Unified Ideographs).
+ * Used to exclude kanji words/tiles from the Word Assembly game.
+ */
+function hasKanji(str) {
+  return /[\u4E00-\u9FFF\u3400-\u4DBF\uF900-\uFAFF]/.test(str);
+}
+
+/**
  * Split a Japanese word into syllable-like segments.
  * Treats each Unicode code-point as one tile (handles kanji, kana, katakana).
  * Combines small kana (っ ッ ゃゅょャュョ) with the preceding char.
@@ -57,10 +65,10 @@ function getDistractors(targetTiles, wordPool, count = 4) {
   const targetSet = new Set(targetTiles);
   const candidates = new Set();
 
-  // Collect tiles from other words
+  // Collect tiles from other words (skip any tile that contains kanji)
   for (const w of wordPool) {
     for (const t of splitJP(w.jp)) {
-      if (!targetSet.has(t)) candidates.add(t);
+      if (!targetSet.has(t) && !hasKanji(t)) candidates.add(t);
     }
     if (candidates.size >= count * 3) break;
   }
@@ -121,8 +129,8 @@ export class WordAssembly {
       }
     });
 
-    // Filter out very short or non-Japanese words (< 2 chars)
-    all = all.filter(w => w.jp && [...w.jp].length >= 2);
+    // Filter out: words shorter than 2 chars OR containing kanji
+    all = all.filter(w => w.jp && [...w.jp].length >= 2 && !hasKanji(w.jp));
 
     shuffle(all);
     this.vocab = limit === 'all' ? all : all.slice(0, Number(limit));
@@ -130,7 +138,8 @@ export class WordAssembly {
 
   /** Set an arbitrary array of words (from "List & Select"). */
   setCustomVocab(wordsArray) {
-    this.vocab = wordsArray.filter(w => w.jp && [...w.jp].length >= 2);
+    // Exclude words shorter than 2 chars or containing kanji
+    this.vocab = wordsArray.filter(w => w.jp && [...w.jp].length >= 2 && !hasKanji(w.jp));
     shuffle(this.vocab);
   }
 

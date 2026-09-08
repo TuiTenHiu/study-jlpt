@@ -20,9 +20,15 @@ import { Flashcard } from './features/flashcard.js';
 import { VocabPractice } from './features/vocabPractice.js';
 import { Grammar } from './features/grammar.js';
 import { WordAssembly } from './features/wordAssembly.js';
+import { ConjugationLab } from './features/conjugationLab.js';
+import { ParticleQuiz } from './features/particleQuiz.js';
 import { translations } from './data/translations.js';
 import { vocabData } from './data/vocab.js';
 import { grammarData } from './data/grammar.js';
+import { allVerbs } from './data/conjugation.js';
+import { PARTICLE_LIST } from './data/particles.js';
+import { KanjiFlashcard } from './features/kanjiFlashcard.js';
+import { kanjiData } from './data/kanji.js';
 
 /* ════════════════════════════════════════════════════════════════════════════
    DOM REFERENCES — collected once at startup
@@ -43,6 +49,8 @@ const learnPanel    = el('learn-panel');
 const quizPanel     = el('quiz-panel');
 const vocabPanel    = el('vocab-panel');
 const grammarPanel  = el('grammar-panel');
+const conjugationPanel = el('conjugation-panel');
+const particlePanel = el('particle-panel');
 
 /* ── Learn mode ───────────────────────────────────────────────────────────── */
 const tabHiraganaBtn = el('tab-hiragana');
@@ -387,6 +395,9 @@ function switchMode(mode) {
   
   if (modeGrammarBtn) modeGrammarBtn.classList.toggle('active', mode === 'grammar');
 
+  const modeConjBtn = document.getElementById('mode-conjugation');
+  if (modeConjBtn) modeConjBtn.classList.toggle('active', mode === 'conjugation');
+
   // Pause the quiz timer if the user leaves quiz mode
   if (mode !== 'quiz') quiz.destroy();
 
@@ -395,6 +406,14 @@ function switchMode(mode) {
   quizPanel.classList.toggle('active', mode === 'quiz');
   vocabPanel.hidden = mode !== 'vocab';
   grammarPanel.hidden = mode !== 'grammar';
+  conjugationPanel.hidden = mode !== 'conjugation';
+  particlePanel.hidden = mode !== 'particle';
+  const kanjiPanel = document.getElementById('kanji-panel');
+  if (kanjiPanel) kanjiPanel.hidden = mode !== 'kanji';
+
+  // Toggle nav buttons
+  const modeKanjiBtn = document.getElementById('mode-kanji');
+  if (modeKanjiBtn) modeKanjiBtn.classList.toggle('active', mode === 'kanji');
 
   // Initialize vocab mode if needed
   if (mode === 'vocab') {
@@ -405,6 +424,11 @@ function switchMode(mode) {
   // Initialize grammar mode if needed
   if (mode === 'grammar') {
     grammar.loadLesson(currentGrammarLesson);
+  }
+
+  // Initialize conjugation mode if needed
+  if (mode === 'conjugation') {
+    loadConjugationVerbs();
   }
 
   // Close any open modal when switching
@@ -426,6 +450,27 @@ const vocabPractice = new VocabPractice(practiceDom);
 
 /** Instantiate Grammar system. */
 const grammar = new Grammar({ container: el('grammar-list-container') });
+
+/** Instantiate Conjugation Lab system. */
+const conjugationLab = new ConjugationLab({
+  idleScreen:       el('cl-idle'),
+  arena:            el('cl-arena'),
+  endScreen:        el('cl-end'),
+  verbDisplay:      el('cl-verb-display'),
+  verbMeaning:      el('cl-verb-meaning'),
+  targetForm:       el('cl-target-form'),
+  groupBadge:       el('cl-group-badge'),
+  stepsContainer:   el('cl-steps-container'),
+  optionsContainer: el('cl-options-container'),
+  feedbackEl:       el('cl-feedback'),
+  resultCard:       el('cl-result-card'),
+  nextBtn:          el('cl-next-btn'),
+  progressEl:       el('cl-progress'),
+  scoreEl:          el('cl-score'),
+  finalScoreEl:     el('cl-final-score'),
+  finalCorrectEl:   el('cl-final-correct'),
+  finalWrongEl:     el('cl-final-wrong'),
+});
 
 /** Instantiate Word Assembly system. */
 const wordAssembly = new WordAssembly({
@@ -925,6 +970,17 @@ Object.assign(window, {
   practiceSelectedVocab,
   // Grammar
   switchGrammarLesson,
+  // Conjugation Lab
+  setConjugationForm,
+  startConjugation:    () => conjugationLab.startSession(),
+  restartConjugation:  () => {
+    loadConjugationVerbs();
+    conjugationLab.reset();
+    updateClIdleInfo();
+  },
+  nextConjugation:     () => conjugationLab.next(),
+  skipConjugation:     () => conjugationLab.skip(),
+  setClLimit,
   // Word Assembly
   startWordAssembly:    () => wordAssembly.startSession(),
   restartWordAssembly:  () => {
@@ -948,5 +1004,199 @@ renderGrammarToggles();
 wordAssembly.loadLessons(selectedLessons, currentVocabLimit);
 updateAssemblyIdleInfo();
 
+/* ════════════════════════════════════════════════════════════════════════════
+   CONJUGATION LAB — Form management
+════════════════════════════════════════════════════════════════════════════ */
+
+let clCurrentLimit = 10;
+
+/** Set how many verbs per session in conjugation lab. */
+function setClLimit(limit) {
+  clCurrentLimit = limit === 'all' ? 'all' : Number(limit);
+  document.querySelectorAll('#cl-limit-chips .limit-chip').forEach(chip => {
+    const chipVal = chip.dataset.limit;
+    chip.classList.toggle('active', chipVal === String(limit));
+  });
+  loadConjugationVerbs();
+}
+
+/** Load verbs into the conjugation lab engine. */
+function loadConjugationVerbs() {
+  conjugationLab.loadVerbs(clCurrentLimit);
+  updateClIdleInfo();
+}
+
+/** Update the idle screen info badge. */
+function updateClIdleInfo() {
+  const countEl = document.getElementById('cl-idle-count');
+  if (!countEl) return;
+  const count = conjugationLab.verbs.length;
+  countEl.textContent = `${count} động từ ngẫu nhiên (Bài 1-25)`;
+  const startBtn = document.getElementById('cl-btn-start');
+  if (startBtn) startBtn.disabled = count === 0;
+}
+
+/** Set the conjugation target form (te/ta/nai/dict). */
+function setConjugationForm(formId) {
+  conjugationLab.setForm(formId);
+  document.getElementById('cl-form-te').classList.toggle('active', formId === 'te');
+  document.getElementById('cl-form-ta').classList.toggle('active', formId === 'ta');
+  document.getElementById('cl-form-nai').classList.toggle('active', formId === 'nai');
+  document.getElementById('cl-form-dict').classList.toggle('active', formId === 'dict');
+}
+
+// Initialize conjugation lab
+loadConjugationVerbs();
+
 // Initialize language
 setLanguage(currentLang);
+
+/* ════════════════════════════════════════════════════════════════════════════
+   PARTICLE QUIZ — khởi tạo và controls
+════════════════════════════════════════════════════════════════════════════ */
+
+const particleQuiz = new ParticleQuiz({
+  startScreen:   el('pq-start-screen'),
+  gameScreen:    el('pq-game-screen'),
+  endScreen:     el('pq-end-screen'),
+  progressBar:   el('pq-progress-bar'),
+  progressText:  el('pq-progress-text'),
+  scoreDisplay:  el('pq-score'),
+  questionText:  el('pq-question-text'),
+  translationText: el('pq-translation'),
+  diffBadge:     el('pq-diff-badge'),
+  lessonBadge:   el('pq-lesson-badge'),
+  choicesArea:   el('pq-choices-area'),
+  typingArea:    el('pq-typing-area'),
+  typingInput:   el('pq-typing-input'),
+  explanation:   el('pq-explanation'),
+  endScore:      el('pq-end-score'),
+  endCorrect:    el('pq-end-correct'),
+  endWrong:      el('pq-end-wrong'),
+  endPercent:    el('pq-end-percent'),
+  endMedal:      el('pq-end-medal'),
+  wrongListContainer: el('pq-wrong-list'),
+});
+
+// Lưu bộ lọc hiện tại của quiz
+let pqFilter = { lesson: 'all', difficulty: 'all' };
+let pqMode = 'multiple';
+
+/** Đổi chế độ trắc nghiệm / gõ tay */
+function setPQMode(mode) {
+  pqMode = mode;
+  particleQuiz.setMode(mode);
+  document.getElementById('pq-mode-mc').classList.toggle('active', mode === 'multiple');
+  document.getElementById('pq-mode-type').classList.toggle('active', mode === 'typing');
+}
+
+/** Lọc theo độ khó */
+function setPQDiff(diff) {
+  pqFilter.difficulty = diff;
+  ['all', '1', '2', '3'].forEach(d =>
+    document.getElementById(`pq-diff-${d === 'all' ? 'all' : d}`)?.classList.toggle('active', d === diff)
+  );
+}
+
+/** Lọc theo bài */
+function setPQLesson(lesson) {
+  pqFilter.lesson = lesson;
+  ['all', '1-7', '8-15', '16-25'].forEach(l => {
+    const id = l === 'all' ? 'pq-lesson-all' : `pq-lesson-${l}`;
+    document.getElementById(id)?.classList.toggle('active', l === lesson);
+  });
+}
+
+/** Bắt đầu game với filter hiện tại */
+function startParticleQuiz() {
+  import('./data/particles.js').then(({ particleQuestions }) => {
+    // Điều chỉnh filter bài (range -> mảng số)
+    const lessonFilter = pqFilter.lesson;
+    let lessonRange = null;
+    if (lessonFilter === '1-7')   lessonRange = { min: 1, max: 7 };
+    if (lessonFilter === '8-15')  lessonRange = { min: 8, max: 15 };
+    if (lessonFilter === '16-25') lessonRange = { min: 16, max: 25 };
+
+    // Lọc câu hỏi theo filter
+    particleQuiz.allQuestions = particleQuestions.filter(q => {
+      if (lessonRange && (q.lesson < lessonRange.min || q.lesson > lessonRange.max)) return false;
+      if (pqFilter.difficulty !== 'all' && q.difficulty !== Number(pqFilter.difficulty)) return false;
+      return true;
+    });
+
+    if (particleQuiz.allQuestions.length === 0) {
+      alert('Không có câu hỏi nào phù hợp bộ lọc này!');
+      return;
+    }
+
+    // Build particle quick-insert buttons (chế độ typing)
+    _buildParticleBtns();
+
+    particleQuiz.setMode(pqMode);
+    particleQuiz.startGame({});
+  });
+}
+
+function _buildParticleBtns() {
+  const container = el('pq-particle-btns');
+  container.innerHTML = '';
+  PARTICLE_LIST.forEach(p => {
+    const btn = document.createElement('button');
+    btn.className = 'pq-particle-insert-btn';
+    btn.textContent = p;
+    btn.addEventListener('click', () => particleQuiz.insertChar(p));
+    container.appendChild(btn);
+  });
+}
+
+function restartParticleQuiz() {
+  startParticleQuiz();
+}
+
+function backToPQStart() {
+  particleQuiz.goToStart();
+}
+
+function submitParticleTyping() {
+  particleQuiz.submitTyping();
+}
+
+function onPQInputKeydown(e) {
+  if (e.key === 'Enter') { e.preventDefault(); particleQuiz.submitTyping(); }
+}
+
+// Expose to HTML
+Object.assign(window, {
+  setPQMode,
+  setPQDiff,
+  setPQLesson,
+  startParticleQuiz,
+  restartParticleQuiz,
+  backToPQStart,
+  submitParticleTyping,
+  onPQInputKeydown,
+});
+
+/* ════════════════════════════════════════════════════════════════════════════
+   KANJI N5 FLASHCARD — Khởi tạo
+════════════════════════════════════════════════════════════════════════════ */
+const kanjiFlashcard = new KanjiFlashcard({
+  cardWrapper:       el('kanji-card-wrapper'),
+  kanjiFront:        el('kanji-front-text'),
+  kanjiBackMeaning:  el('kanji-back-meaning'),
+  kanjiBackOn:       el('kanji-back-on'),
+  kanjiBackKun:      el('kanji-back-kun'),
+  kanjiBackMnemonic: el('kanji-back-mnemonic'),
+  kanjiBackExamples: el('kanji-back-examples'),
+  progressText:      el('kanji-progress-text'),
+  btnPrev:           el('btn-kanji-prev'),
+  btnNext:           el('btn-kanji-next'),
+  btnShuffle:        el('btn-kanji-shuffle'),
+  // Stroke order modal
+  btnStrokeOrder:    el('btn-stroke-order'),
+  strokeModal:       el('stroke-order-modal'),
+  strokeModalTitle:  el('stroke-modal-title'),
+  strokeModalBody:   el('stroke-modal-body'),
+  btnStrokeClose:    el('btn-stroke-close'),
+  btnStrokeReplay:   el('btn-stroke-replay'),
+});

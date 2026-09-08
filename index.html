@@ -11,8 +11,11 @@
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <!-- Preload Noto Serif JP trước để font Kanji không bị flash khi load -->
+  <link rel="preload" as="style"
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Serif+JP:wght@400;600;700&family=Noto+Sans+JP:wght@400;700&display=swap" />
   <link
-    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+JP:wght@400;700&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Serif+JP:wght@400;600;700&family=Noto+Sans+JP:wght@400;700&display=swap"
     rel="stylesheet" />
 
   <!-- PWA Manifest & Theme Color -->
@@ -62,8 +65,11 @@
     <div class="mode-bar" role="tablist" aria-label="App mode">
       <button id="mode-learn" class="mode-btn active" onclick="switchMode('learn')" data-i18n="mode_learn">📖 Learn</button>
       <button id="mode-vocab" class="mode-btn" onclick="switchMode('vocab')" data-i18n="mode_vocab">🎴 Vocabulary</button>
+      <button id="mode-kanji" class="mode-btn" onclick="switchMode('kanji')">📝 Kanji N5</button>
       <button id="mode-grammar" class="mode-btn" onclick="switchMode('grammar')" data-i18n="mode_grammar">📖 Grammar</button>
+      <button id="mode-conjugation" class="mode-btn" onclick="switchMode('conjugation')">🧪 Chia thể</button>
       <button id="mode-quiz" class="mode-btn" onclick="switchMode('quiz')" data-i18n="mode_quiz">⚡ Quiz Mode</button>
+      <button id="mode-particle" class="mode-btn" onclick="switchMode('particle')">🎯 Trợ Từ</button>
     </div>
 
     <!-- ── LEARN PANEL ────────────────────────────────────────── -->
@@ -474,7 +480,286 @@
       </div>
     </div><!-- /grammar-panel -->
 
+    <!-- ── CONJUGATION LAB PANEL ───────────────────────────── -->
+    <div id="conjugation-panel" hidden>
+
+      <!-- Form toggle: て / た / ない / 辞書 -->
+      <div class="cl-form-bar">
+        <button id="cl-form-te" class="cl-form-btn active" onclick="setConjugationForm('te')">て形 Thể て</button>
+        <button id="cl-form-ta" class="cl-form-btn" onclick="setConjugationForm('ta')">た形 Thể た</button>
+        <button id="cl-form-nai" class="cl-form-btn" onclick="setConjugationForm('nai')">ない形 Thể ない</button>
+        <button id="cl-form-dict" class="cl-form-btn" onclick="setConjugationForm('dict')">辞書形 Thể từ điển</button>
+      </div>
+
+      <!-- Lesson picker -->
+      <div class="cl-lesson-section">
+        <!-- Word limit -->
+        <div class="limit-picker-container">
+          <div class="limit-picker-header">
+            <label>🎯 Số từ mỗi phiên</label>
+          </div>
+          <div class="limit-chips" id="cl-limit-chips">
+            <button class="limit-chip" onclick="setClLimit('all')" data-limit="all">Tất cả</button>
+            <button class="limit-chip active" onclick="setClLimit(10)" data-limit="10">10</button>
+            <button class="limit-chip" onclick="setClLimit(20)" data-limit="20">20</button>
+            <button class="limit-chip" onclick="setClLimit(50)" data-limit="50">50</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Idle screen -->
+      <div id="cl-idle" class="cl-idle">
+        <div class="cl-idle-icon">🧪</div>
+        <h3>Conjugation Lab</h3>
+        <p>Học chia thể động từ qua từng bước biến đổi.<br>Không phải kiểm tra — mà là hiểu quy trình!</p>
+        <div class="cl-idle-meta">
+          <span class="cl-idle-count" id="cl-idle-count">0 động từ ngẫu nhiên</span>
+          <span class="cl-idle-hint">Hệ thống chọn ngẫu nhiên các động từ từ bài 1 - 25</span>
+        </div>
+        <button class="btn-start-quiz" id="cl-btn-start" onclick="startConjugation()">▶ Bắt đầu</button>
+      </div>
+
+      <!-- Active arena -->
+      <div id="cl-arena" class="cl-arena" hidden>
+
+        <!-- Top bar: progress + score -->
+        <div class="cl-top-bar">
+          <span class="cl-progress-text" id="cl-progress">1 / 10</span>
+          <span class="cl-score-text">Điểm: <strong id="cl-score">0</strong></span>
+        </div>
+
+        <!-- Verb card -->
+        <div class="cl-verb-card">
+          <div class="cl-verb-header">
+            <span class="cl-target-form" id="cl-target-form">Thể て</span>
+            <span class="cl-group-badge" id="cl-group-badge">Nhóm 2</span>
+          </div>
+          <div class="cl-verb-display" id="cl-verb-display">たべます</div>
+          <div class="cl-verb-meaning" id="cl-verb-meaning">ăn</div>
+        </div>
+
+        <!-- Steps visualization -->
+        <div class="cl-steps-container" id="cl-steps-container"></div>
+
+        <!-- Multiple choice options -->
+        <div class="cl-options-container" id="cl-options-container"></div>
+
+        <!-- Feedback -->
+        <div class="cl-feedback" id="cl-feedback"></div>
+
+        <!-- Result card -->
+        <div class="cl-result-card" id="cl-result-card" hidden></div>
+
+        <!-- Action bar -->
+        <div class="cl-action-bar">
+          <button class="cl-skip-btn" onclick="skipConjugation()">Bỏ qua ⏭</button>
+          <button class="cl-next-btn" id="cl-next-btn" onclick="nextConjugation()" hidden>Tiếp theo →</button>
+        </div>
+
+      </div><!-- /cl-arena -->
+
+      <!-- End screen -->
+      <div id="cl-end" class="quiz-end" hidden>
+        <div class="end-icon cl-end-icon">🏆</div>
+        <h3>Hoàn thành!</h3>
+        <div class="final-score" id="cl-final-score">0 / 0</div>
+        <div class="stat-row">
+          <div class="stat correct">
+            <div class="stat-num" id="cl-final-correct">0</div>
+            <div class="stat-lbl">Đúng ✅</div>
+          </div>
+          <div class="stat wrong">
+            <div class="stat-num" id="cl-final-wrong">0</div>
+            <div class="stat-lbl">Sai ❌</div>
+          </div>
+        </div>
+        <button class="btn-play-again" onclick="restartConjugation()">🔄 Chơi lại</button>
+      </div>
+
+    </div><!-- /conjugation-panel -->
+
+    <!-- ── PARTICLE QUIZ PANEL ──────────────────────────────── -->
+    <div id="particle-panel" hidden>
+
+      <!-- START SCREEN -->
+      <div id="pq-start-screen" class="pq-start-screen">
+        <div class="pq-start-icon">🎯</div>
+        <h2 class="pq-start-title">Trắc Nghiệm Trợ Từ</h2>
+        <p class="pq-start-desc">Điền đúng trợ từ vào chỗ trống trong câu tiếng Nhật.<br>126 câu · 25 bài · 3 mức độ khó.</p>
+
+        <!-- Mode toggle -->
+        <div class="pq-option-group">
+          <label class="pq-option-label">📝 Chế độ trả lời</label>
+          <div class="pq-toggle-row">
+            <button id="pq-mode-mc" class="pq-toggle-btn active" onclick="setPQMode('multiple')">🔘 Trắc nghiệm</button>
+            <button id="pq-mode-type" class="pq-toggle-btn" onclick="setPQMode('typing')">⌨️ Điền trống</button>
+          </div>
+        </div>
+
+        <!-- Difficulty filter -->
+        <div class="pq-option-group">
+          <label class="pq-option-label">⭐ Độ khó</label>
+          <div class="pq-toggle-row">
+            <button id="pq-diff-all" class="pq-toggle-btn active" onclick="setPQDiff('all')">Tất cả</button>
+            <button id="pq-diff-1" class="pq-toggle-btn" onclick="setPQDiff('1')">⭐ Dễ</button>
+            <button id="pq-diff-2" class="pq-toggle-btn" onclick="setPQDiff('2')">⭐⭐ TB</button>
+            <button id="pq-diff-3" class="pq-toggle-btn" onclick="setPQDiff('3')">⭐⭐⭐ Khó</button>
+          </div>
+        </div>
+
+        <!-- Lesson filter -->
+        <div class="pq-option-group">
+          <label class="pq-option-label">📚 Bài học</label>
+          <div class="pq-toggle-row">
+            <button id="pq-lesson-all" class="pq-toggle-btn active" onclick="setPQLesson('all')">Tất cả</button>
+            <button id="pq-lesson-1-7" class="pq-toggle-btn" onclick="setPQLesson('1-7')">Bài 1–7</button>
+            <button id="pq-lesson-8-15" class="pq-toggle-btn" onclick="setPQLesson('8-15')">Bài 8–15</button>
+            <button id="pq-lesson-16-25" class="pq-toggle-btn" onclick="setPQLesson('16-25')">Bài 16–25</button>
+          </div>
+        </div>
+
+        <button class="btn-start-quiz pq-btn-start" onclick="startParticleQuiz()">▶ Bắt đầu</button>
+      </div>
+
+      <!-- GAME SCREEN -->
+      <div id="pq-game-screen" class="pq-game-screen" hidden>
+
+        <!-- Header: điểm + progress -->
+        <div class="pq-header">
+          <div class="pq-score-box">Điểm: <strong id="pq-score">0</strong></div>
+          <div class="pq-progress-wrap">
+            <div class="pq-progress-bar-bg">
+              <div class="pq-progress-bar" id="pq-progress-bar" style="width:0%"></div>
+            </div>
+            <span class="pq-progress-text" id="pq-progress-text">1 / 20</span>
+          </div>
+        </div>
+
+        <!-- Câu hỏi -->
+        <div class="pq-question-card">
+          <div class="pq-badges">
+            <span id="pq-lesson-badge" class="pq-lesson-badge">Bài 1</span>
+            <span id="pq-diff-badge" class="pq-diff-badge diff-1">⭐ Dễ</span>
+          </div>
+          <div id="pq-question-text" class="pq-question-text" aria-live="polite"></div>
+          <div id="pq-translation" class="pq-translation"></div>
+        </div>
+
+        <!-- Lựa chọn (multiple choice) -->
+        <div id="pq-choices-area" class="pq-choices-area"></div>
+
+        <!-- Gõ tay (typing) -->
+        <div id="pq-typing-area" class="pq-typing-area" hidden>
+          <div class="pq-particle-hint">Các trợ từ gợi ý: は・が・を・に・で・へ・と・も・の・から・まで</div>
+          <div class="pq-input-row">
+            <input type="text" id="pq-typing-input" class="pq-typing-input"
+              autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
+              placeholder="Nhập trợ từ..." onkeydown="onPQInputKeydown(event)">
+            <button class="btn-submit" onclick="submitParticleTyping()">Enter</button>
+          </div>
+          <!-- Quick-insert particle buttons -->
+          <div class="pq-particle-btns" id="pq-particle-btns"></div>
+        </div>
+
+        <!-- Giải thích -->
+        <div id="pq-explanation" class="pq-explanation" hidden></div>
+
+      </div><!-- /pq-game-screen -->
+
+      <!-- END SCREEN -->
+      <div id="pq-end-screen" class="pq-end-screen quiz-end" hidden>
+        <div class="end-icon" id="pq-end-medal">🏆</div>
+        <h3>Hoàn thành!</h3>
+        <div class="final-score" id="pq-end-score">0</div>
+        <div class="pq-end-label">điểm</div>
+        <div class="pq-end-pct" id="pq-end-percent">0%</div>
+        <div class="stat-row">
+          <div class="stat correct">
+            <div class="stat-num" id="pq-end-correct">0</div>
+            <div class="stat-lbl">Đúng ✅</div>
+          </div>
+          <div class="stat wrong">
+            <div class="stat-num" id="pq-end-wrong">0</div>
+            <div class="stat-lbl">Sai ❌</div>
+          </div>
+        </div>
+        <div id="pq-wrong-list" class="pq-wrong-list"></div>
+        <div class="pq-end-actions">
+          <button class="btn-play-again" onclick="restartParticleQuiz()">🔄 Chơi lại</button>
+          <button class="btn-play-again pq-btn-back" onclick="backToPQStart()">⚙️ Đổi bộ lọc</button>
+        </div>
+      </div><!-- /pq-end-screen -->
+
+    </div><!-- /particle-panel -->
+
+    <!-- ── KANJI N5 PANEL ───────────────────────────────────── -->
+    <div id="kanji-panel" hidden>
+      <div class="kanji-header">
+        <h2>Flashcard Kanji N5</h2>
+        <button id="btn-kanji-shuffle" class="btn-vocab-tool">🔀 Shuffle (Trộn)</button>
+      </div>
+
+      <div class="kanji-arena">
+        <div class="kanji-flashcard-wrapper" id="kanji-card-wrapper">
+          <div class="kanji-flashcard">
+            <!-- MẶT TRƯỚC -->
+            <div class="kanji-front">
+              <div id="kanji-front-text" class="kanji-hero-text">日</div>
+              <!-- Nút xem thứ tự nét -->
+              <button id="btn-stroke-order" class="btn-stroke-order" title="Xem cách viết">✍️</button>
+              <div class="flip-hint">Chạm để lật 🔄</div>
+            </div>
+
+            <!-- MẶT SAU -->
+            <div class="kanji-back">
+              <div id="kanji-back-meaning" class="kanji-meaning-title">Nhật (Mặt trời, Ngày)</div>
+              
+              <div class="kanji-reading-box">
+                <div id="kanji-back-on" class="kanji-on">ON: nichi, jitsu</div>
+                <div id="kanji-back-kun" class="kanji-kun">KUN: hi, -bi, -ka</div>
+              </div>
+
+              <div id="kanji-back-mnemonic" class="kanji-mnemonic">💡 Mẹo: Hình dáng giống ô cửa sổ có ánh mặt trời chiếu vào.</div>
+              
+              <div class="kanji-examples-box">
+                <h4>Ví dụ:</h4>
+                <ul id="kanji-back-examples" class="kanji-examples-list">
+                  <!-- Filled by JS -->
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Điều hướng -->
+        <div class="kanji-nav">
+          <button id="btn-kanji-prev" class="btn-nav">←</button>
+          <div class="kanji-progress">
+            <span id="kanji-progress-text">1 / 103</span>
+          </div>
+          <button id="btn-kanji-next" class="btn-nav">→</button>
+        </div>
+      </div>
+    </div><!-- /kanji-panel -->
+
+    <!-- ── STROKE ORDER MODAL ─────────────────────────────────────── -->
+    <div id="stroke-order-modal" class="stroke-modal-overlay" hidden>
+      <div class="stroke-modal-box">
+        <div class="stroke-modal-header">
+          <span id="stroke-modal-title" class="stroke-modal-kanji">日</span>
+          <span class="stroke-modal-label">Thứ tự nét</span>
+          <button id="btn-stroke-close" class="stroke-modal-close">✕</button>
+        </div>
+        <div id="stroke-modal-body" class="stroke-modal-body">
+          <!-- SVG animated được inject vào đây -->
+          <div class="stroke-loading">Đang tải...</div>
+        </div>
+        <button id="btn-stroke-replay" class="btn-stroke-replay">🔁 Xem lại</button>
+      </div>
+    </div>
+
   </main>
+
 
   <!-- ═══════════════════════════════════════════════════════════════
        FLOATING SELECTION BAR

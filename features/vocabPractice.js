@@ -116,7 +116,9 @@ export class VocabPractice {
       // Move to end of queue for repetition
       const failed = this.queue.shift();
       this.queue.push(failed);
-      const correctAnswer = this.state.mode === 'vi_to_jp' ? word.jp : `${word.romaji} / ${word.vi}`;
+      const correctAnswer = this.state.mode === 'vi_to_jp'
+        ? this._cleanJp(word.jp)
+        : `${word.romaji} / ${word.vi}`;
       this._showFeedback('wrong', `❌ Incorrect! Answer: ${correctAnswer}`);
     }
 
@@ -149,12 +151,12 @@ export class VocabPractice {
         <div class="vocab-img-container">
           <img src="images/vocab/${word.image}" alt="Question Image" class="vocab-img">
           <div class="card-text-jp" style="margin-top:10px; font-size:1.2rem; opacity:0.7">
-            ${this.state.mode === 'vi_to_jp' ? word.vi : word.jp}
+            ${this.state.mode === 'vi_to_jp' ? word.vi : this._cleanJp(word.jp)}
           </div>
         </div>
       `;
     } else {
-      questionEl.textContent = this.state.mode === 'vi_to_jp' ? word.vi : word.jp;
+      questionEl.textContent = this.state.mode === 'vi_to_jp' ? word.vi : this._cleanJp(word.jp);
     }
 
     this.dom.input.value = '';
@@ -229,5 +231,17 @@ export class VocabPractice {
       const j = Math.floor(Math.random() * (i + 1));
       [array[i], array[j]] = [array[j], array[i]];
     }
+  }
+
+  /**
+   * Làm sạch trường jp trước khi hiển thị:
+   * - Xóa nội dung trong [...]  VD: "muri[na]" → "muri", "[お]はなみ" → "はなみ"
+   * - Xóa nội dung trong [~...]  VD: "[~で] いかがですか" → "いかがですか"
+   * Lưu ý: KHÔNG dùng hàm này khi kiểm tra đáp án người dùng nhập.
+   */
+  _cleanJp(jp) {
+    return jp
+      .replace(/\[.*?\]/g, '') // Xóa tất cả [...]
+      .trim();
   }
 }

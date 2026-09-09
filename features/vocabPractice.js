@@ -86,7 +86,7 @@ export class VocabPractice {
     if (this.state.isAnswering || !this.state.currentWord) return;
     
     const word = this.state.currentWord;
-    const typed = answer.trim(); // Don't lowercase for Japanese characters
+    const typed = answer.trim();
     
     if (!typed) {
       this.dom.input.focus();
@@ -95,39 +95,37 @@ export class VocabPractice {
 
     this.state.isAnswering = true;
 
-    // Check against romaji OR Vietnamese meaning (in jp_to_all mode)
+    // Check against romaji OR bất kỳ nghĩa tiếng Việt nào (in jp_to_all mode)
     // OR check against Japanese word (in vi_to_jp mode)
     let isCorrect = false;
     if (this.state.mode === 'vi_to_jp') {
       isCorrect = typed === word.jp;
     } else {
-      isCorrect = typed.toLowerCase() === word.romaji.toLowerCase() || 
-                  typed.toLowerCase() === word.vi.toLowerCase();
+      // Chấp nhận romaji HOẶC bất kỳ nghĩa vi nào (tàu, thuyền → đều đúng)
+      const viMeanings = word.vi.split(',').map(s => s.trim().toLowerCase());
+      isCorrect = typed.toLowerCase() === word.romaji.toLowerCase() ||
+                  viMeanings.includes(typed.toLowerCase());
     }
 
     if (isCorrect) {
       this.state.score += 10;
       this.state.correctCount++;
-      // Remove from queue
       this.queue.shift();
       this._showFeedback('correct', '✅ Correct!');
     } else {
       this.state.wrongCount++;
-      // Move to end of queue for repetition
       const failed = this.queue.shift();
       this.queue.push(failed);
+      // Hiển thị đáp án đúng: chỉ nghĩa đầu tiên để gọn
       const correctAnswer = this.state.mode === 'vi_to_jp'
         ? this._cleanJp(word.jp)
-        : `${word.romaji} / ${word.vi}`;
+        : `${word.romaji} / ${this._cleanVi(word.vi)}`;
       this._showFeedback('wrong', `❌ Incorrect! Answer: ${correctAnswer}`);
     }
 
-    // Play audio of the answered word immediately as reinforcement
     playWord(word);
-
     this._updateStats();
 
-    // Brief pause then next
     setTimeout(() => {
       this._clearFeedback();
       this.state.isAnswering = false;
@@ -151,12 +149,14 @@ export class VocabPractice {
         <div class="vocab-img-container">
           <img src="images/vocab/${word.image}" alt="Question Image" class="vocab-img">
           <div class="card-text-jp" style="margin-top:10px; font-size:1.2rem; opacity:0.7">
-            ${this.state.mode === 'vi_to_jp' ? word.vi : this._cleanJp(word.jp)}
+            ${this.state.mode === 'vi_to_jp' ? this._cleanVi(word.vi) : this._cleanJp(word.jp)}
           </div>
         </div>
       `;
     } else {
-      questionEl.textContent = this.state.mode === 'vi_to_jp' ? word.vi : this._cleanJp(word.jp);
+      questionEl.textContent = this.state.mode === 'vi_to_jp'
+        ? this._cleanVi(word.vi)
+        : this._cleanJp(word.jp);
     }
 
     this.dom.input.value = '';
@@ -236,12 +236,18 @@ export class VocabPractice {
   /**
    * Làm sạch trường jp trước khi hiển thị:
    * - Xóa nội dung trong [...]  VD: "muri[na]" → "muri", "[お]はなみ" → "はなみ"
-   * - Xóa nội dung trong [~...]  VD: "[~で] いかがですか" → "いかがですか"
-   * Lưu ý: KHÔNG dùng hàm này khi kiểm tra đáp án người dùng nhập.
    */
   _cleanJp(jp) {
-    return jp
-      .replace(/\[.*?\]/g, '') // Xóa tất cả [...]
-      .trim();
+    return jp.replace(/\[.*?\]/g, '').trim();
+  }
+
+  /**
+   * Chỉ lấy nghĩa đầu tiên trước dấu phẩy để hiển thị gọn.
+   * VD: "tàu, thuyền" → "tàu"
+   *     "anh, chị, ông, bà" → "anh"
+   * Lưu ý: KHÔNG dùng hàm này khi kiểm tra đáp án (cần chấp nhận tất cả nghĩa).
+   */
+  _cleanVi(vi) {
+    return vi.split(',')[0].trim();
   }
 }

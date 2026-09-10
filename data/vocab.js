@@ -993,5 +993,39 @@ export const vocabData = {
     { "jp": "おせわに なりました", "romaji": "osewa ni narimashita", "vi": "Anh đã giúp đỡ tôi rất nhiều", "audio": "osewaninarimashita.mp3" },
     { "jp": "がんばります", "romaji": "ganbarimasu", "vi": "cố gắng", "audio": "ganbarimasu.mp3" },
     { "jp": "どうぞ おげんきで", "romaji": "douzo ogenki de", "vi": "Chúc anh mạnh khỏe", "audio": "douzoogenkide.mp3" }
-  ],
+  ]
 };
+
+// ============================================================================
+// AUTO-CATEGORIZATION: VIRTUAL LESSONS FOR VERBS AND ADJECTIVES
+// ============================================================================
+
+const isVerb = (w) => w.jp && (w.jp.endsWith('ます') || w.jp.includes('ます [') || (w.romaji && w.romaji.endsWith('masu')));
+
+const nonIAdjs = [
+  'せんせい', 'がくせい', '―さい', 'なんさい', 'とけい', 'おてあらい', 'みせてください', 
+  'ください', 'なんがい', '～かい', 'おととい', 'ばんごうあんない', 'やさい', 'しゅくだい', 
+  'いらっしゃい', 'どうぞ おあがりください', 'つま / かない', 'だいたい', '～だい', '～まい', 
+  '～かい', 'きょうだい', 'どのくらい', 'せかい', 'おかえりなさい', 'けいざい', 'かんぱい', 
+  'てんさい', 'しあい', 'きかい'
+];
+
+const isAdj = (w) => {
+  if (!w.jp) return false;
+  if (w.jp.includes('[な]') || w.jp.includes('[na]')) return true; // Na-adjectives
+  if (w.jp.endsWith('い') && !isVerb(w) && !nonIAdjs.includes(w.jp)) return true; // I-adjectives
+  return false;
+};
+
+vocabData['verbs'] = [];
+vocabData['adjs'] = [];
+
+for (let i = 1; i <= 25; i++) {
+  const words = vocabData[i];
+  if (Array.isArray(words)) {
+    words.forEach(w => {
+      if (isVerb(w)) vocabData['verbs'].push(w);
+      else if (isAdj(w)) vocabData['adjs'].push(w);
+    });
+  }
+}

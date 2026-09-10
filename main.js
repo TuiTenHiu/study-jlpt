@@ -552,6 +552,21 @@ function renderLessonToggles() {
     btn.onclick = () => toggleLesson(i);
     grid.appendChild(btn);
   }
+
+  // Add special buttons for Verbs and Adjectives
+  const verbsBtn = document.createElement('button');
+  verbsBtn.className = 'lesson-toggle-btn special' + (selectedLessons.includes('verbs') ? ' active' : '');
+  verbsBtn.textContent = 'ĐT'; // Động từ
+  verbsBtn.title = 'Tất cả Động từ';
+  verbsBtn.onclick = () => toggleLesson('verbs');
+  grid.appendChild(verbsBtn);
+
+  const adjsBtn = document.createElement('button');
+  adjsBtn.className = 'lesson-toggle-btn special' + (selectedLessons.includes('adjs') ? ' active' : '');
+  adjsBtn.textContent = 'TT'; // Tính từ
+  adjsBtn.title = 'Tất cả Tính từ';
+  adjsBtn.onclick = () => toggleLesson('adjs');
+  grid.appendChild(adjsBtn);
 }
 
 function toggleLesson(num) {
@@ -559,7 +574,13 @@ function toggleLesson(num) {
     selectedLessons = selectedLessons.filter(l => l !== num);
   } else {
     selectedLessons.push(num);
-    selectedLessons.sort((a, b) => a - b);
+    // Sort array: numbers first, then strings ('verbs', 'adjs')
+    const order = { 'verbs': 100, 'adjs': 101 };
+    selectedLessons.sort((a, b) => {
+      const valA = typeof a === 'number' ? a : order[a] || 999;
+      const valB = typeof b === 'number' ? b : order[b] || 999;
+      return valA - valB;
+    });
   }
   renderLessonToggles();
   triggerLessonLoad();
@@ -567,6 +588,7 @@ function toggleLesson(num) {
 
 function selectAllLessons() {
   selectedLessons = Array.from({length: AVAILABLE_LESSONS}, (_, i) => i + 1);
+  selectedLessons.push('verbs', 'adjs');
   renderLessonToggles();
   triggerLessonLoad();
 }
@@ -675,8 +697,12 @@ function renderVocabList() {
     const item = document.createElement('div');
     item.className = 'vocab-list-item' + (isSelected ? ' selected' : '');
     item.dataset.key = key;
+    let tagText = `Bài ${word._lessonNum}`;
+    if (word._lessonNum === 'verbs') tagText = 'Động từ';
+    if (word._lessonNum === 'adjs') tagText = 'Tính từ';
+    
     item.innerHTML = `
-      <span class="vocab-list-lesson-tag">Bài ${word._lessonNum}</span>
+      <span class="vocab-list-lesson-tag">${tagText}</span>
       <div class="vocab-list-jp">${word.jp}</div>
       <div class="vocab-list-romaji">${word.romaji}</div>
       <div class="vocab-list-vi">${word.vi}</div>

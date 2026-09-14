@@ -17,8 +17,7 @@ async function generate() {
   const fileUrl = new URL(`file://${path.resolve(VOCAB_FILE)}`).href;
   const { vocabData } = await import(fileUrl);
   
-  // The user requested audio for lessons 1 to 6
-  const lessonsToProcess = ['1', '2', '3', '4', '5', '6'];
+  const lessonsToProcess = Array.from({length: 50}, (_, i) => (i + 1).toString());
 
   for (const lesson of lessonsToProcess) {
     if (!vocabData[lesson]) continue;

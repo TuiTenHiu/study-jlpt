@@ -482,99 +482,102 @@
 
     <!-- ── CONJUGATION LAB PANEL ───────────────────────────── -->
     <div id="conjugation-panel" hidden>
-
-      <!-- Form toggle: て / た / ない / 辞書 -->
-      <div class="cl-form-bar">
-        <button id="cl-form-te" class="cl-form-btn active" onclick="setConjugationForm('te')">て形 Thể て</button>
-        <button id="cl-form-ta" class="cl-form-btn" onclick="setConjugationForm('ta')">た形 Thể た</button>
-        <button id="cl-form-nai" class="cl-form-btn" onclick="setConjugationForm('nai')">ない形 Thể ない</button>
-        <button id="cl-form-dict" class="cl-form-btn" onclick="setConjugationForm('dict')">辞書形 Thể từ điển</button>
+      
+      <!-- Sub-tabs for Conjugation panel -->
+      <div class="cl-tabs">
+        <button class="pq-toggle-btn active" id="cl-tab-lookup" onclick="switchClTab('lookup')">🔍 Tra cứu động từ</button>
+        <button class="pq-toggle-btn" id="cl-tab-table" onclick="switchClTab('table')">📋 Bảng động từ</button>
       </div>
 
-      <!-- Lesson picker -->
-      <div class="cl-lesson-section">
-        <!-- Word limit -->
-        <div class="limit-picker-container">
-          <div class="limit-picker-header">
-            <label>🎯 Số từ mỗi phiên</label>
+      <!-- LOOKUP VIEW -->
+      <div id="cl-lookup-view">
+        <!-- Form toggle: て / た / ない / 辞書 -->
+        <div class="cl-form-bar">
+          <button id="cl-form-te" class="cl-form-btn active" onclick="setConjugationForm('te')">て形 Thể て</button>
+          <button id="cl-form-ta" class="cl-form-btn" onclick="setConjugationForm('ta')">た形 Thể た</button>
+          <button id="cl-form-nai" class="cl-form-btn" onclick="setConjugationForm('nai')">ない形 Thể ない</button>
+          <button id="cl-form-dict" class="cl-form-btn" onclick="setConjugationForm('dict')">辞書形 Thể từ điển</button>
+        </div>
+
+        <div class="cl-input-section" style="padding: 20px; text-align: center;">
+          <p style="margin-bottom: 10px; font-weight: 500; color: var(--text-2);">Nhập động từ (thể ます) để xem cách chia</p>
+          <div style="display: flex; gap: 10px; justify-content: center; max-width: 400px; margin: 0 auto;">
+            <input type="text" id="cl-verb-input" placeholder="VD: たべます, いきます..." list="cl-verb-list" style="flex: 1; padding: 12px; border-radius: 8px; border: 2px solid var(--border); font-size: 1.1rem;">
+            <datalist id="cl-verb-list"></datalist>
+            <button class="btn-start-quiz" onclick="conjugateInputVerb()" style="margin: 0; padding: 12px 24px;">Chia thể</button>
           </div>
-          <div class="limit-chips" id="cl-limit-chips">
-            <button class="limit-chip" onclick="setClLimit('all')" data-limit="all">Tất cả</button>
-            <button class="limit-chip active" onclick="setClLimit(10)" data-limit="10">10</button>
-            <button class="limit-chip" onclick="setClLimit(20)" data-limit="20">20</button>
-            <button class="limit-chip" onclick="setClLimit(50)" data-limit="50">50</button>
+          <div id="cl-input-error" style="color: #ef4444; margin-top: 10px; display: none;">Không tìm thấy động từ này trong từ điển. Vui lòng nhập đúng động từ thể ます.</div>
+        </div>
+
+        <!-- Active arena (Result & Explanation) -->
+        <div id="cl-arena" class="cl-arena" hidden>
+
+          <!-- Verb card -->
+          <div class="cl-verb-card">
+            <div class="cl-verb-header">
+              <span class="cl-target-form" id="cl-target-form">Thể て</span>
+              <span class="cl-group-badge" id="cl-group-badge">Nhóm 2</span>
+            </div>
+            <div class="cl-verb-display" id="cl-verb-display">たべます</div>
+            <div class="cl-verb-meaning" id="cl-verb-meaning">ăn</div>
           </div>
-        </div>
-      </div>
 
-      <!-- Idle screen -->
-      <div id="cl-idle" class="cl-idle">
-        <div class="cl-idle-icon">🧪</div>
-        <h3>Conjugation Lab</h3>
-        <p>Học chia thể động từ qua từng bước biến đổi.<br>Không phải kiểm tra — mà là hiểu quy trình!</p>
-        <div class="cl-idle-meta">
-          <span class="cl-idle-count" id="cl-idle-count">0 động từ ngẫu nhiên</span>
-          <span class="cl-idle-hint">Hệ thống chọn ngẫu nhiên các động từ từ bài 1 - 25</span>
-        </div>
-        <button class="btn-start-quiz" id="cl-btn-start" onclick="startConjugation()">▶ Bắt đầu</button>
-      </div>
-
-      <!-- Active arena -->
-      <div id="cl-arena" class="cl-arena" hidden>
-
-        <!-- Top bar: progress + score -->
-        <div class="cl-top-bar">
-          <span class="cl-progress-text" id="cl-progress">1 / 10</span>
-          <span class="cl-score-text">Điểm: <strong id="cl-score">0</strong></span>
-        </div>
-
-        <!-- Verb card -->
-        <div class="cl-verb-card">
-          <div class="cl-verb-header">
-            <span class="cl-target-form" id="cl-target-form">Thể て</span>
-            <span class="cl-group-badge" id="cl-group-badge">Nhóm 2</span>
+          <div class="cl-result-card cl-result--revealed" id="cl-result-card" style="display: block; margin: 20px 0;">
+            <div class="cl-result-inner">
+              <div class="cl-result-emoji">💡</div>
+              <div class="cl-result-label">Kết quả</div>
+              <div class="cl-result-arrow" id="cl-result-arrow">→ Thể て</div>
+              <div class="cl-result-answer" id="cl-result-answer">たべて</div>
+            </div>
           </div>
-          <div class="cl-verb-display" id="cl-verb-display">たべます</div>
-          <div class="cl-verb-meaning" id="cl-verb-meaning">ăn</div>
-        </div>
 
-        <!-- Steps visualization -->
-        <div class="cl-steps-container" id="cl-steps-container"></div>
+          <h3 style="text-align: center; margin-top: 20px; color: var(--text-1);">Cách chia</h3>
+          <!-- Steps visualization -->
+          <div class="cl-steps-container" id="cl-steps-container" style="display: flex; flex-direction: column; gap: 10px;"></div>
 
-        <!-- Multiple choice options -->
-        <div class="cl-options-container" id="cl-options-container"></div>
+        </div><!-- /cl-arena -->
+      </div><!-- /cl-lookup-view -->
 
-        <!-- Feedback -->
-        <div class="cl-feedback" id="cl-feedback"></div>
-
-        <!-- Result card -->
-        <div class="cl-result-card" id="cl-result-card" hidden></div>
-
-        <!-- Action bar -->
-        <div class="cl-action-bar">
-          <button class="cl-skip-btn" onclick="skipConjugation()">Bỏ qua ⏭</button>
-          <button class="cl-next-btn" id="cl-next-btn" onclick="nextConjugation()" hidden>Tiếp theo →</button>
-        </div>
-
-      </div><!-- /cl-arena -->
-
-      <!-- End screen -->
-      <div id="cl-end" class="quiz-end" hidden>
-        <div class="end-icon cl-end-icon">🏆</div>
-        <h3>Hoàn thành!</h3>
-        <div class="final-score" id="cl-final-score">0 / 0</div>
-        <div class="stat-row">
-          <div class="stat correct">
-            <div class="stat-num" id="cl-final-correct">0</div>
-            <div class="stat-lbl">Đúng ✅</div>
+      <!-- TABLE VIEW -->
+      <div id="cl-table-view" hidden style="padding: 20px;">
+        <!-- Toolbar -->
+        <div class="cl-table-toolbar">
+          <div class="cl-table-filters">
+            <button class="pq-toggle-btn active" id="cl-filter-all" onclick="filterClTable('all')">Tất cả</button>
+            <button class="pq-toggle-btn" id="cl-filter-g1" onclick="filterClTable(1)">Nhóm 1</button>
+            <button class="pq-toggle-btn" id="cl-filter-g2" onclick="filterClTable(2)">Nhóm 2</button>
+            <button class="pq-toggle-btn" id="cl-filter-g3" onclick="filterClTable(3)">Nhóm 3</button>
           </div>
-          <div class="stat wrong">
-            <div class="stat-num" id="cl-final-wrong">0</div>
-            <div class="stat-lbl">Sai ❌</div>
+          <div class="cl-table-controls">
+            <select id="cl-level-filter" class="cl-level-select" onchange="filterClTableByLevel()">
+              <option value="all">Tất cả trình độ (N5+N4)</option>
+              <option value="n5">Chỉ N5 (Bài 4-25)</option>
+              <option value="n4">Chỉ N4 (Bài 26-50)</option>
+            </select>
+            <input type="text" id="cl-table-search" class="cl-search-input" placeholder="🔍 Tìm kiếm động từ..." oninput="searchClTable()">
           </div>
         </div>
-        <button class="btn-play-again" onclick="restartConjugation()">🔄 Chơi lại</button>
-      </div>
+
+        <div style="overflow-x: auto; background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px;">
+          <table class="cl-table" style="width: 100%; border-collapse: collapse; text-align: left;">
+            <thead>
+              <tr style="background: var(--bg-hover); border-bottom: 2px solid var(--border);">
+                <th style="padding: 12px; font-weight: 600; white-space: nowrap;">Bài</th>
+                <th style="padding: 12px; font-weight: 600; white-space: nowrap;">Thể ます</th>
+                <th style="padding: 12px; font-weight: 600; white-space: nowrap;">Nghĩa</th>
+                <th style="padding: 12px; font-weight: 600; white-space: nowrap;">Nhóm</th>
+                <th style="padding: 12px; font-weight: 600; white-space: nowrap; color: var(--primary);">て</th>
+                <th style="padding: 12px; font-weight: 600; white-space: nowrap; color: var(--primary);">た</th>
+                <th style="padding: 12px; font-weight: 600; white-space: nowrap; color: var(--primary);">ない</th>
+                <th style="padding: 12px; font-weight: 600; white-space: nowrap; color: var(--primary);">辞書</th>
+              </tr>
+            </thead>
+            <tbody id="cl-table-body">
+              <!-- Rendered via JS -->
+            </tbody>
+          </table>
+        </div>
+      </div><!-- /cl-table-view -->
 
     </div><!-- /conjugation-panel -->
 

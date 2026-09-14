@@ -25,7 +25,7 @@ import { ParticleQuiz } from './features/particleQuiz.js';
 import { translations } from './data/translations.js';
 import { vocabData } from './data/vocab.js';
 import { grammarData } from './data/grammar.js';
-import { allVerbs } from './data/conjugation.js';
+import { allVerbs, generateSteps } from './data/conjugation.js';
 import { PARTICLE_LIST } from './data/particles.js';
 import { KanjiFlashcard } from './features/kanjiFlashcard.js';
 import { kanjiData } from './data/kanji.js';
@@ -426,10 +426,7 @@ function switchMode(mode) {
     grammar.loadLesson(currentGrammarLesson);
   }
 
-  // Initialize conjugation mode if needed
-  if (mode === 'conjugation') {
-    loadConjugationVerbs();
-  }
+  // Conjugation mode requires no special initialization on switch anymore
 
   // Close any open modal when switching
   closeModal();
@@ -453,23 +450,12 @@ const grammar = new Grammar({ container: el('grammar-list-container') });
 
 /** Instantiate Conjugation Lab system. */
 const conjugationLab = new ConjugationLab({
-  idleScreen:       el('cl-idle'),
-  arena:            el('cl-arena'),
-  endScreen:        el('cl-end'),
-  verbDisplay:      el('cl-verb-display'),
-  verbMeaning:      el('cl-verb-meaning'),
-  targetForm:       el('cl-target-form'),
-  groupBadge:       el('cl-group-badge'),
-  stepsContainer:   el('cl-steps-container'),
-  optionsContainer: el('cl-options-container'),
-  feedbackEl:       el('cl-feedback'),
-  resultCard:       el('cl-result-card'),
-  nextBtn:          el('cl-next-btn'),
-  progressEl:       el('cl-progress'),
-  scoreEl:          el('cl-score'),
-  finalScoreEl:     el('cl-final-score'),
-  finalCorrectEl:   el('cl-final-correct'),
-  finalWrongEl:     el('cl-final-wrong'),
+  arena:            document.getElementById('cl-arena'),
+  verbDisplay:      document.getElementById('cl-verb-display'),
+  verbMeaning:      document.getElementById('cl-verb-meaning'),
+  targetForm:       document.getElementById('cl-target-form'),
+  groupBadge:       document.getElementById('cl-group-badge'),
+  stepsContainer:   document.getElementById('cl-steps-container'),
 });
 
 /** Instantiate Word Assembly system. */
@@ -535,7 +521,8 @@ function setVocabSubMode(sub) {
 }
 
 /* ── Lesson Selection Logic ──────────────────────────────────────────────── */
-const AVAILABLE_LESSONS = 25;
+const AVAILABLE_LESSONS = 50;
+const AVAILABLE_GRAMMAR_LESSONS = 50;
 let selectedLessons = [1];
 
 /** Current vocab limit per session: a number or 'all' */
@@ -545,28 +532,59 @@ function renderLessonToggles() {
   const grid = el('lesson-toggles-grid');
   if (!grid) return;
   grid.innerHTML = '';
-  for (let i = 1; i <= AVAILABLE_LESSONS; i++) {
+  // Remove the grid class from the container so it doesn't mess up our layout
+  grid.classList.remove('lesson-toggles-grid');
+  grid.classList.add('lesson-groups-container');
+  
+  // N5 Section
+  const n5Label = document.createElement('div');
+  n5Label.className = 'lesson-group-label';
+  n5Label.textContent = 'N5 (Bài 1 - 25)';
+  grid.appendChild(n5Label);
+  
+  const n5Grid = document.createElement('div');
+  n5Grid.className = 'lesson-toggles-grid'; // Use the original grid class for the actual buttons
+  for (let i = 1; i <= 25; i++) {
     const btn = document.createElement('button');
     btn.className = 'lesson-toggle-btn' + (selectedLessons.includes(i) ? ' active' : '');
     btn.textContent = i;
     btn.onclick = () => toggleLesson(i);
-    grid.appendChild(btn);
+    n5Grid.appendChild(btn);
   }
 
-  // Add special buttons for Verbs and Adjectives
   const verbsBtn = document.createElement('button');
   verbsBtn.className = 'lesson-toggle-btn special' + (selectedLessons.includes('verbs') ? ' active' : '');
-  verbsBtn.textContent = 'ĐT'; // Động từ
-  verbsBtn.title = 'Tất cả Động từ';
+  verbsBtn.textContent = 'ĐT';
+  verbsBtn.title = 'Tất cả Động từ (N5)';
   verbsBtn.onclick = () => toggleLesson('verbs');
-  grid.appendChild(verbsBtn);
+  n5Grid.appendChild(verbsBtn);
 
   const adjsBtn = document.createElement('button');
   adjsBtn.className = 'lesson-toggle-btn special' + (selectedLessons.includes('adjs') ? ' active' : '');
-  adjsBtn.textContent = 'TT'; // Tính từ
-  adjsBtn.title = 'Tất cả Tính từ';
+  adjsBtn.textContent = 'TT';
+  adjsBtn.title = 'Tất cả Tính từ (N5)';
   adjsBtn.onclick = () => toggleLesson('adjs');
-  grid.appendChild(adjsBtn);
+  n5Grid.appendChild(adjsBtn);
+
+  grid.appendChild(n5Grid);
+  
+  // N4 Section
+  const n4Label = document.createElement('div');
+  n4Label.className = 'lesson-group-label';
+  n4Label.textContent = 'N4 (Bài 26 - 50)';
+  n4Label.style.marginTop = '15px';
+  grid.appendChild(n4Label);
+  
+  const n4Grid = document.createElement('div');
+  n4Grid.className = 'lesson-toggles-grid';
+  for (let i = 26; i <= 50; i++) {
+    const btn = document.createElement('button');
+    btn.className = 'lesson-toggle-btn' + (selectedLessons.includes(i) ? ' active' : '');
+    btn.textContent = i;
+    btn.onclick = () => toggleLesson(i);
+    n4Grid.appendChild(btn);
+  }
+  grid.appendChild(n4Grid);
 }
 
 function toggleLesson(num) {
@@ -651,13 +669,43 @@ function renderGrammarToggles() {
   const grid = el('grammar-lesson-toggles');
   if (!grid) return;
   grid.innerHTML = '';
-  for (let i = 1; i <= AVAILABLE_LESSONS; i++) {
+  grid.classList.remove('lesson-toggles-grid');
+  grid.classList.add('lesson-groups-container');
+
+  // N5 Section
+  const n5Label = document.createElement('div');
+  n5Label.className = 'lesson-group-label';
+  n5Label.textContent = 'N5 (Bài 1 - 25)';
+  grid.appendChild(n5Label);
+  
+  const n5Grid = document.createElement('div');
+  n5Grid.className = 'lesson-toggles-grid';
+  for (let i = 1; i <= 25; i++) {
     const btn = document.createElement('button');
     btn.className = 'lesson-toggle-btn' + (currentGrammarLesson === i ? ' active' : '');
     btn.textContent = i;
     btn.onclick = () => switchGrammarLesson(i);
-    grid.appendChild(btn);
+    n5Grid.appendChild(btn);
   }
+  grid.appendChild(n5Grid);
+
+  // N4 Section
+  const n4Label = document.createElement('div');
+  n4Label.className = 'lesson-group-label';
+  n4Label.textContent = 'N4 (Bài 26 - 50)';
+  n4Label.style.marginTop = '15px';
+  grid.appendChild(n4Label);
+  
+  const n4Grid = document.createElement('div');
+  n4Grid.className = 'lesson-toggles-grid';
+  for (let i = 26; i <= 50; i++) {
+    const btn = document.createElement('button');
+    btn.className = 'lesson-toggle-btn' + (currentGrammarLesson === i ? ' active' : '');
+    btn.textContent = i;
+    btn.onclick = () => switchGrammarLesson(i);
+    n4Grid.appendChild(btn);
+  }
+  grid.appendChild(n4Grid);
 }
 
 function switchGrammarLesson(num) {
@@ -998,15 +1046,7 @@ Object.assign(window, {
   switchGrammarLesson,
   // Conjugation Lab
   setConjugationForm,
-  startConjugation:    () => conjugationLab.startSession(),
-  restartConjugation:  () => {
-    loadConjugationVerbs();
-    conjugationLab.reset();
-    updateClIdleInfo();
-  },
-  nextConjugation:     () => conjugationLab.next(),
-  skipConjugation:     () => conjugationLab.skip(),
-  setClLimit,
+  conjugateInputVerb,
   // Word Assembly
   startWordAssembly:    () => wordAssembly.startSession(),
   restartWordAssembly:  () => {
@@ -1034,32 +1074,41 @@ updateAssemblyIdleInfo();
    CONJUGATION LAB — Form management
 ════════════════════════════════════════════════════════════════════════════ */
 
-let clCurrentLimit = 10;
+/** Populate datalist for autocomplete */
+function initConjugationLab() {
+  const dataList = document.getElementById('cl-verb-list');
+  if (dataList) {
+    dataList.innerHTML = '';
+    // Optional: filter out duplicates if any
+    const uniqueVerbs = new Map();
+    allVerbs.forEach(v => uniqueVerbs.set(v.masu, v.vi));
+    
+    uniqueVerbs.forEach((meaning, masu) => {
+      const option = document.createElement('option');
+      option.value = masu;
+      option.textContent = meaning;
+      dataList.appendChild(option);
+    });
+  }
 
-/** Set how many verbs per session in conjugation lab. */
-function setClLimit(limit) {
-  clCurrentLimit = limit === 'all' ? 'all' : Number(limit);
-  document.querySelectorAll('#cl-limit-chips .limit-chip').forEach(chip => {
-    const chipVal = chip.dataset.limit;
-    chip.classList.toggle('active', chipVal === String(limit));
-  });
-  loadConjugationVerbs();
+  // Handle Enter key for the input
+  const inputEl = document.getElementById('cl-verb-input');
+  if (inputEl) {
+    inputEl.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        conjugateInputVerb();
+      }
+    });
+  }
 }
 
-/** Load verbs into the conjugation lab engine. */
-function loadConjugationVerbs() {
-  conjugationLab.loadVerbs(clCurrentLimit);
-  updateClIdleInfo();
-}
-
-/** Update the idle screen info badge. */
-function updateClIdleInfo() {
-  const countEl = document.getElementById('cl-idle-count');
-  if (!countEl) return;
-  const count = conjugationLab.verbs.length;
-  countEl.textContent = `${count} động từ ngẫu nhiên (Bài 1-25)`;
-  const startBtn = document.getElementById('cl-btn-start');
-  if (startBtn) startBtn.disabled = count === 0;
+/** Conjugate the user inputted verb */
+function conjugateInputVerb() {
+  const inputEl = document.getElementById('cl-verb-input');
+  if (!inputEl) return;
+  const verbText = inputEl.value.trim();
+  conjugationLab.conjugateDirect(verbText);
 }
 
 /** Set the conjugation target form (te/ta/nai/dict). */
@@ -1072,7 +1121,7 @@ function setConjugationForm(formId) {
 }
 
 // Initialize conjugation lab
-loadConjugationVerbs();
+initConjugationLab();
 
 // Initialize language
 setLanguage(currentLang);
@@ -1226,3 +1275,91 @@ const kanjiFlashcard = new KanjiFlashcard({
   btnStrokeClose:    el('btn-stroke-close'),
   btnStrokeReplay:   el('btn-stroke-replay'),
 });
+
+
+// ── CONJUGATION TABLE ────────────────────────────────────────────────────────
+window.clCurrentGroupFilter = 'all';
+window.clCurrentLevelFilter = 'all';
+window.clCurrentSearch = '';
+
+window.switchClTab = function(tab) {
+  document.getElementById('cl-tab-lookup').classList.toggle('active', tab === 'lookup');
+  document.getElementById('cl-tab-table').classList.toggle('active', tab === 'table');
+  document.getElementById('cl-lookup-view').hidden = (tab !== 'lookup');
+  document.getElementById('cl-table-view').hidden = (tab !== 'table');
+
+  if (tab === 'table') {
+    renderClTable();
+  }
+};
+
+window.filterClTable = function(group) {
+  window.clCurrentGroupFilter = group;
+  document.getElementById('cl-filter-all').classList.toggle('active', group === 'all');
+  document.getElementById('cl-filter-g1').classList.toggle('active', group === 1);
+  document.getElementById('cl-filter-g2').classList.toggle('active', group === 2);
+  document.getElementById('cl-filter-g3').classList.toggle('active', group === 3);
+  renderClTable();
+};
+
+window.filterClTableByLevel = function() {
+  window.clCurrentLevelFilter = document.getElementById('cl-level-filter').value;
+  renderClTable();
+};
+
+window.searchClTable = function() {
+  window.clCurrentSearch = document.getElementById('cl-table-search').value.toLowerCase().trim();
+  renderClTable();
+};
+
+window.renderClTable = function() {
+  const tbody = document.getElementById('cl-table-body');
+  if (!tbody) return;
+
+  // Filter verbs
+  let verbs = allVerbs;
+
+  if (window.clCurrentGroupFilter !== 'all') {
+    verbs = verbs.filter(v => v.group === window.clCurrentGroupFilter);
+  }
+
+  if (window.clCurrentLevelFilter === 'n5') {
+    verbs = verbs.filter(v => (v.lesson || 0) <= 25);
+  } else if (window.clCurrentLevelFilter === 'n4') {
+    verbs = verbs.filter(v => (v.lesson || 0) > 25);
+  }
+
+  if (window.clCurrentSearch) {
+    verbs = verbs.filter(v => 
+      v.masu.toLowerCase().includes(window.clCurrentSearch) || 
+      v.vi.toLowerCase().includes(window.clCurrentSearch)
+    );
+  }
+
+  // Render rows
+  let html = '';
+  verbs.forEach(v => {
+    // Generate conjugations
+    const te = generateSteps(v, 'te').finalAnswer;
+    const ta = generateSteps(v, 'ta').finalAnswer;
+    const nai = generateSteps(v, 'nai').finalAnswer;
+    const dict = generateSteps(v, 'dict').finalAnswer;
+
+    html += '<tr style="border-bottom: 1px solid var(--border);">';
+    html += '<td style="padding: 12px;">' + (v.lesson ? 'Bài ' + v.lesson : '-') + '</td>';
+    html += '<td style="padding: 12px; font-weight: 500;">' + v.masu + '</td>';
+    html += '<td style="padding: 12px; color: var(--text-2);">' + v.vi + '</td>';
+    html += '<td style="padding: 12px;"><span class="cl-group-badge cl-group-' + v.group + '">Nhóm ' + v.group + '</span></td>';
+    html += '<td style="padding: 12px; color: var(--primary); font-weight: 500;">' + te + '</td>';
+    html += '<td style="padding: 12px; color: var(--primary); font-weight: 500;">' + ta + '</td>';
+    html += '<td style="padding: 12px; color: var(--primary); font-weight: 500;">' + nai + '</td>';
+    html += '<td style="padding: 12px; color: var(--primary); font-weight: 500;">' + dict + '</td>';
+    html += '</tr>';
+  });
+
+  if (verbs.length === 0) {
+    html = '<tr><td colspan="8" style="padding: 20px; text-align: center; color: var(--text-2);">Không tìm thấy kết quả phù hợp.</td></tr>';
+  }
+
+  tbody.innerHTML = html;
+};

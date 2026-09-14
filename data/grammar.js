@@ -571,4 +571,930 @@ export const grammarData = {
       ]
     }
   ]
+,
+  26: [
+    {
+        "title": "~んです",
+        "structure": "Thể thông thường + んです",
+        "explanation": "Dùng để nhấn mạnh lý do, giải thích nguyên nhân hoặc hỏi thêm thông tin.",
+        "examples": [
+            {
+                "jp": "どうして 遅れたんですか。",
+                "romaji": "Doushite okuretan desu ka.",
+                "vi": "Tại sao bạn lại đến muộn vậy?"
+            }
+        ]
+    },
+    {
+        "title": "~んですが、~ていただけませんか",
+        "structure": "V (thể thông thường) + んですが、Vていただけませんか",
+        "explanation": "Dùng để nhờ vả một cách lịch sự.",
+        "examples": [
+            {
+                "jp": "日本語を書いたんですが、見ていただけませんか。",
+                "romaji": "Nihongo o kaitan desu ga, mite itadakemasen ka.",
+                "vi": "Tôi đã viết tiếng Nhật, bạn xem giúp tôi được không?"
+            }
+        ]
+    },
+    {
+        "title": "~んですが、~たらいいですか",
+        "structure": "V (thể thông thường) + んですが、Vたらいいですか",
+        "explanation": "Dùng để xin lời khuyên hoặc hướng dẫn.",
+        "examples": [
+            {
+                "jp": "カメラを買いたいんですが、どこで買ったらいいですか。",
+                "romaji": "Kamera o kaitain desu ga, doko de kattara ii desu ka.",
+                "vi": "Tôi muốn mua máy ảnh, mua ở đâu thì tốt?"
+            }
+        ]
+    }
+],
+  27: [
+    {
+        "title": "Thể khả năng (可能形)",
+        "structure": "Nhóm 1: đổi cột [i] sang [e] + ます\nNhóm 2: bỏ ます + られます\nNhóm 3: します -> できます, きます -> こられます",
+        "explanation": "Biểu thị khả năng làm một việc gì đó hoặc một việc có thể xảy ra.",
+        "examples": [
+            {
+                "jp": "私は 日本語が 話せます。",
+                "romaji": "Watashi wa nihongo ga hanasemasu.",
+                "vi": "Tôi có thể nói tiếng Nhật."
+            }
+        ]
+    },
+    {
+        "title": "見えます / 聞こえます",
+        "structure": "Danh từ + が + 見えます / 聞こえます",
+        "explanation": "Biểu thị việc nhìn thấy, nghe thấy một cách tự nhiên (không có chủ ý).",
+        "examples": [
+            {
+                "jp": "ここから 富士山が 見えます。",
+                "romaji": "Koko kara Fujisan ga miemasu.",
+                "vi": "Từ đây có thể nhìn thấy núi Phú Sĩ."
+            }
+        ]
+    },
+    {
+        "title": "~しか~ません",
+        "structure": "Danh từ + しか + Động từ phủ định",
+        "explanation": "Chỉ, ngoài ra không... (mang sắc thái không đủ, ít).",
+        "examples": [
+            {
+                "jp": "ローマ字しか 書けません。",
+                "romaji": "Romaji shika kakemasen.",
+                "vi": "Tôi chỉ có thể viết được Romaji."
+            }
+        ]
+    }
+],
+  28: [
+    {
+        "title": "~ながら",
+        "structure": "V(bỏ ます) + ながら + V2",
+        "explanation": "Thực hiện đồng thời hai hành động (hành động V2 là chính).",
+        "examples": [
+            {
+                "jp": "音楽を 聞きながら 食事します。",
+                "romaji": "Ongaku o kikinagara shokuji shimasu.",
+                "vi": "Vừa nghe nhạc vừa ăn cơm."
+            }
+        ]
+    },
+    {
+        "title": "~ています (Thói quen)",
+        "structure": "Vて + います",
+        "explanation": "Diễn tả một thói quen hoặc một hành động lặp đi lặp lại.",
+        "examples": [
+            {
+                "jp": "毎朝 ジョギングを しています。",
+                "romaji": "Maiasa jogingu o shite imasu.",
+                "vi": "Mỗi sáng tôi đều chạy bộ."
+            }
+        ]
+    },
+    {
+        "title": "~し、~し",
+        "structure": "Mệnh đề 1 (thể thông thường) + し、Mệnh đề 2 (thể thông thường) + し、~",
+        "explanation": "Liệt kê các lý do, nguyên nhân (thường có chung một kết luận).",
+        "examples": [
+            {
+                "jp": "熱も あるし、頭も 痛いし、今日は 会社を 休みます。",
+                "romaji": "Netsu mo aru shi, atama mo itai shi, kyou wa kaisha o yasumimasu.",
+                "vi": "Vừa bị sốt, vừa đau đầu, nên hôm nay tôi nghỉ làm."
+            }
+        ]
+    }
+],
+  29: [
+    {
+        "title": "Tự động từ + ています",
+        "structure": "Tự động từ (Vて) + います",
+        "explanation": "Diễn tả trạng thái kết quả của một hành động, sự việc hiện tại đang hiển hiện trước mắt.",
+        "examples": [
+            {
+                "jp": "窓が 閉まっています。",
+                "romaji": "Mado ga shimatte imasu.",
+                "vi": "Cửa sổ đang đóng."
+            }
+        ]
+    },
+    {
+        "title": "~てしまいました / ~てしまいます",
+        "structure": "Vて + しまいました / しまいます",
+        "explanation": "Diễn tả hành động đã hoàn thành trọn vẹn, hoặc biểu thị sự nuối tiếc, hối hận về một việc đã lỡ xảy ra.",
+        "examples": [
+            {
+                "jp": "パスポートを なくしてしまいました。",
+                "romaji": "Pasupooto o nakushite shimaimashita.",
+                "vi": "Tôi lỡ làm mất hộ chiếu rồi."
+            }
+        ]
+    }
+],
+  30: [
+    {
+        "title": "Tha động từ + てあります",
+        "structure": "Danh từ + が + Tha động từ (Vて) + あります",
+        "explanation": "Diễn tả trạng thái là kết quả của một hành động có chủ ý của ai đó.",
+        "examples": [
+            {
+                "jp": "カレンダーに 予定が 書いてあります。",
+                "romaji": "Karenda ni yotei ga kaite arimasu.",
+                "vi": "Lịch trình đã được viết trên tờ lịch."
+            }
+        ]
+    },
+    {
+        "title": "~ておきます",
+        "structure": "Vて + おきます",
+        "explanation": "Chuẩn bị trước cho một việc gì đó; xử lý sau một hành động; hoặc giữ nguyên trạng thái.",
+        "examples": [
+            {
+                "jp": "旅行の前に、切符を 買っておきます。",
+                "romaji": "Ryokou no mae ni, kippu o katte okimasu.",
+                "vi": "Trước khi đi du lịch, tôi mua vé sẵn."
+            }
+        ]
+    }
+],
+  31: [
+    {
+        "title": "Thể ý định (意向形)",
+        "structure": "Nhóm 1: [i] -> [o] + う\nNhóm 2: bỏ ます + よう\nNhóm 3: します -> しよう, きます -> こよう",
+        "explanation": "Dùng để rủ rê hoặc thể hiện ý định (thể thông thường của ~ましょう).",
+        "examples": [
+            {
+                "jp": "少し 休もう。",
+                "romaji": "Sukoshi yasumou.",
+                "vi": "Nghỉ một chút đi."
+            }
+        ]
+    },
+    {
+        "title": "~と思っています",
+        "structure": "V (Thể ý định) + と 思っています",
+        "explanation": "Diễn tả ý định đã có từ trước và vẫn tiếp diễn ở hiện tại.",
+        "examples": [
+            {
+                "jp": "週末は 海へ 行こうと 思っています。",
+                "romaji": "Shuumatsu wa umi e ikou to omotte imasu.",
+                "vi": "Cuối tuần tôi định đi biển."
+            }
+        ]
+    },
+    {
+        "title": "~つもりです",
+        "structure": "V (Từ điển) / Vない + つもりです",
+        "explanation": "Diễn tả một dự định, quyết định chắc chắn hơn so với ~と思っています.",
+        "examples": [
+            {
+                "jp": "国へ 帰っても、日本語を 勉強するつもりです。",
+                "romaji": "Kuni e kaette mo, nihongo o benkyou suru tsumori desu.",
+                "vi": "Dù về nước, tôi vẫn dự định học tiếng Nhật."
+            }
+        ]
+    },
+    {
+        "title": "~予定です",
+        "structure": "V (Từ điển) / Nの + 予定です",
+        "explanation": "Diễn tả một kế hoạch, lịch trình đã được định sẵn.",
+        "examples": [
+            {
+                "jp": "7月の終わりに ドイツへ 出張する予定です。",
+                "romaji": "Shichigatsu no owari ni Doitsu e shucchou suru yotei desu.",
+                "vi": "Theo kế hoạch thì cuối tháng 7 tôi sẽ đi công tác ở Đức."
+            }
+        ]
+    }
+],
+  32: [
+    {
+        "title": "~ほうがいいです",
+        "structure": "Vた / Vない + ほうがいいです",
+        "explanation": "Đưa ra lời khuyên (nên / không nên làm gì).",
+        "examples": [
+            {
+                "jp": "毎日 運動したほうがいいです。",
+                "romaji": "Mainichi undou shita hou ga ii desu.",
+                "vi": "Bạn nên tập thể dục mỗi ngày."
+            }
+        ]
+    },
+    {
+        "title": "~でしょう",
+        "structure": "Thể thông thường + でしょう",
+        "explanation": "Sự suy đoán của người nói (chắc là, có lẽ là).",
+        "examples": [
+            {
+                "jp": "明日は 雨が 降るでしょう。",
+                "romaji": "Ashita wa ame ga furu deshou.",
+                "vi": "Ngày mai có lẽ trời sẽ mưa."
+            }
+        ]
+    },
+    {
+        "title": "~かもしれません",
+        "structure": "Thể thông thường (bỏ だ) + かもしれません",
+        "explanation": "Diễn tả khả năng xảy ra của một sự việc (có thể là, biết đâu là). Khả năng thấp hơn でしょう.",
+        "examples": [
+            {
+                "jp": "午後から 雪が 降るかもしれません。",
+                "romaji": "Gogo kara yuki ga furu kamo shiremasen.",
+                "vi": "Biết đâu từ chiều tuyết sẽ rơi."
+            }
+        ]
+    }
+],
+  33: [
+    {
+        "title": "Thể mệnh lệnh và cấm đoán",
+        "structure": "Mệnh lệnh: Nhóm 1 [i]->[e], Nhóm 2 bỏ ます+ろ, します->しろ, きます->こい\nCấm đoán: V (Từ điển) + な",
+        "explanation": "Dùng để ra lệnh hoặc cấm đoán gay gắt (thường dùng trong thể thao, nguy hiểm, nam giới nói với nhau).",
+        "examples": [
+            {
+                "jp": "早く 寝ろ。",
+                "romaji": "Hayaku nero.",
+                "vi": "Ngủ sớm đi."
+            },
+            {
+                "jp": "ここで 休むな。",
+                "romaji": "Koko de yasumu na.",
+                "vi": "Không được nghỉ ở đây."
+            }
+        ]
+    },
+    {
+        "title": "~と書いてあります / ~と読みます",
+        "structure": "N / Mệnh đề + と 書いてあります / 読みます",
+        "explanation": "Có viết là... / Đọc là...",
+        "examples": [
+            {
+                "jp": "あそこに 「止まれ」と 書いてあります。",
+                "romaji": "Asoko ni 'tomare' to kaite arimasu.",
+                "vi": "Chỗ kia có viết là 'Dừng lại'."
+            }
+        ]
+    },
+    {
+        "title": "~という意味です",
+        "structure": "X は Y（thể thông thường）+ という意味です",
+        "explanation": "Dùng để giải thích ý nghĩa (X có nghĩa là Y).",
+        "examples": [
+            {
+                "jp": "「立入禁止」は 入るなと いう意味です。",
+                "romaji": "'Tachiiri kinshi' wa hairu na to iu imi desu.",
+                "vi": "'Cấm vào' có nghĩa là không được vào."
+            }
+        ]
+    },
+    {
+        "title": "~と言っていました / ~と伝えていただけませんか",
+        "structure": "Câu trích dẫn + と言って/伝えて~",
+        "explanation": "Truyền đạt lại lời nhắn của ai đó / Nhờ truyền đạt lại lời nhắn cho ai đó.",
+        "examples": [
+            {
+                "jp": "田中さんは 明日 休むと 言っていました。",
+                "romaji": "Tanaka-san wa ashita yasumu to itte imashita.",
+                "vi": "Anh Tanaka nói là ngày mai sẽ nghỉ."
+            }
+        ]
+    }
+],
+  34: [
+    {
+        "title": "~とおりに",
+        "structure": "V1 (Từ điển/た) / Nの + とおりに、V2",
+        "explanation": "Làm V2 theo đúng như V1 / N.",
+        "examples": [
+            {
+                "jp": "私が 言ったとおりに、書いてください。",
+                "romaji": "Watashi ga itta toori ni, kaite kudasai.",
+                "vi": "Hãy viết theo đúng như những gì tôi nói."
+            }
+        ]
+    },
+    {
+        "title": "~あとで",
+        "structure": "Vた / Nの + あとで、~",
+        "explanation": "Sau khi làm việc này thì làm việc kia.",
+        "examples": [
+            {
+                "jp": "仕事のあとで、飲みに行きませんか。",
+                "romaji": "Shigoto no ato de, nomi ni ikimasen ka.",
+                "vi": "Sau khi làm việc xong, có đi uống không?"
+            }
+        ]
+    },
+    {
+        "title": "~て / ~ないで",
+        "structure": "V1て / V1ないで、V2",
+        "explanation": "Làm V2 trong trạng thái đi kèm V1 (có làm V1 / không làm V1). Hoặc chọn 1 trong 2 hành động.",
+        "examples": [
+            {
+                "jp": "しょうゆを つけて 食べます。",
+                "romaji": "Shouyu o tsukete tabemasu.",
+                "vi": "Chấm xì dầu rồi ăn."
+            },
+            {
+                "jp": "日曜日は どこも 行かないで、家で 休みます。",
+                "romaji": "Nichiyoubi wa doko mo ikanaide, uchi de yasumimasu.",
+                "vi": "Chủ nhật tôi không đi đâu cả mà nghỉ ở nhà."
+            }
+        ]
+    }
+],
+  35: [
+    {
+        "title": "Thể điều kiện (条件形)",
+        "structure": "Nhóm 1: [i]->[e]+ば\nNhóm 2: bỏ ます+れば\nNhóm 3: します->すれば, きます->くれば\nTính từ-i: bỏ い + ければ\nTính từ-na/N: なら",
+        "explanation": "Nếu... thì... (Điều kiện để một việc khác xảy ra).",
+        "examples": [
+            {
+                "jp": "春に なれば、桜が 咲きます。",
+                "romaji": "Haru ni nareba, sakura ga sakimasu.",
+                "vi": "Nếu mùa xuân đến, hoa anh đào sẽ nở."
+            }
+        ]
+    },
+    {
+        "title": "~なら",
+        "structure": "N + なら、~",
+        "explanation": "Nếu là N (tiếp nhận chủ đề từ người nói trước để đưa ra lời khuyên hoặc thông tin).",
+        "examples": [
+            {
+                "jp": "温泉なら、白馬がいいですよ。",
+                "romaji": "Onsen nara, Hakuba ga ii desu yo.",
+                "vi": "Nếu là suối nước nóng thì Hakuba là tốt đấy."
+            }
+        ]
+    }
+],
+  36: [
+    {
+        "title": "~ように、~",
+        "structure": "V (Khả năng/Từ điển) / Vない + ように、V2",
+        "explanation": "Để có thể... / Để không... (V2 là hành động có chủ ý nhằm đạt được mục đích V1, V1 không có chủ ý hoặc khả năng).",
+        "examples": [
+            {
+                "jp": "日本語が 話せるように、毎日 練習しています。",
+                "romaji": "Nihongo ga hanaseru you ni, mainichi renshuu shite imasu.",
+                "vi": "Để có thể nói được tiếng Nhật, tôi luyện tập mỗi ngày."
+            }
+        ]
+    },
+    {
+        "title": "~ようになります",
+        "structure": "V (Khả năng/Từ điển) + ようになります",
+        "explanation": "Trở nên có thể làm gì / Bắt đầu làm gì (Sự biến đổi trạng thái).",
+        "examples": [
+            {
+                "jp": "漢字が 読めるようになりました。",
+                "romaji": "Kanji ga yomeru you ni narimashita.",
+                "vi": "Tôi đã có thể đọc được Kanji (trước đây không đọc được)."
+            }
+        ]
+    },
+    {
+        "title": "~ようにしています / ようにしてください",
+        "structure": "V (Từ điển) / Vない + ようにしています / ようにしてください",
+        "explanation": "Cố gắng làm / không làm việc gì đó như một thói quen / Xin hãy cố gắng...",
+        "examples": [
+            {
+                "jp": "毎日 野菜を 食べるようにしています。",
+                "romaji": "Mainichi yasai o taberu you ni shite imasu.",
+                "vi": "Tôi đang cố gắng ăn rau mỗi ngày."
+            },
+            {
+                "jp": "絶対に パスポートを なくさないようにしてください。",
+                "romaji": "Zettai ni pasupooto o nakusanai you ni shite kudasai.",
+                "vi": "Xin hãy cố gắng tuyệt đối không làm mất hộ chiếu."
+            }
+        ]
+    }
+],
+  37: [
+    {
+        "title": "Thể bị động (受身形)",
+        "structure": "Nhóm 1: [i] -> [a] + れる\nNhóm 2: bỏ ます + られる\nNhóm 3: します -> される, きます -> こられる",
+        "explanation": "Dùng để diễn tả việc bị tác động, bị làm gì đó.",
+        "examples": [
+            {
+                "jp": "私は 先生に ほめられました。",
+                "romaji": "Watashi wa sensei ni homeraremashita.",
+                "vi": "Tôi được giáo viên khen."
+            }
+        ]
+    },
+    {
+        "title": "Bị động gián tiếp (Bị hại)",
+        "structure": "N1(người bị hại) は N2(người tác động) に N3(vật) を + V(bị động)",
+        "explanation": "Diễn tả sự phiền toái, thiệt hại do hành động của người khác gây ra.",
+        "examples": [
+            {
+                "jp": "私は 弟に パソコンを 壊されました。",
+                "romaji": "Watashi wa otouto ni pasokon o kowasaremashita.",
+                "vi": "Tôi bị em trai làm hỏng máy tính."
+            }
+        ]
+    },
+    {
+        "title": "Bị động với vật làm chủ ngữ",
+        "structure": "N (Vật / Việc) + が/は + V(bị động)",
+        "explanation": "Dùng khi nói về một sự kiện, sự việc được thực hiện mà không cần nhắc đến người thực hiện.",
+        "examples": [
+            {
+                "jp": "大阪で 展覧会が 開かれます。",
+                "romaji": "Oosaka de tenrankai ga hirakaremasu.",
+                "vi": "Triển lãm được tổ chức ở Osaka."
+            }
+        ]
+    }
+],
+  38: [
+    {
+        "title": "Danh từ hóa động từ (~のは / ~のが)",
+        "structure": "V (Từ điển) + のは / のが + Tính từ",
+        "explanation": "Biến động từ thành cụm danh từ để miêu tả tính chất (với は) hoặc sở thích, sở trường (với が).",
+        "examples": [
+            {
+                "jp": "音楽を 聞くのは 楽しいです。",
+                "romaji": "Ongaku o kiku no wa tanoshii desu.",
+                "vi": "Việc nghe nhạc rất vui."
+            },
+            {
+                "jp": "私は 絵を かくのが 好きです。",
+                "romaji": "Watashi wa e o kaku no ga suki desu.",
+                "vi": "Tôi thích việc vẽ tranh."
+            }
+        ]
+    },
+    {
+        "title": "~のを 忘れました / 知っていますか",
+        "structure": "V (Thể thông thường) + のを + 忘れました / 知っていますか",
+        "explanation": "Quên làm việc gì đó / Có biết việc gì đó không.",
+        "examples": [
+            {
+                "jp": "薬を 飲むのを 忘れました。",
+                "romaji": "Kusuri o nomu no o wasuremashita.",
+                "vi": "Tôi đã quên uống thuốc."
+            },
+            {
+                "jp": "鈴木さんが 結婚したのを 知っていますか。",
+                "romaji": "Suzuki-san ga kekkon shita no o shitte imasu ka.",
+                "vi": "Bạn có biết việc anh Suzuki đã kết hôn không?"
+            }
+        ]
+    }
+],
+  39: [
+    {
+        "title": "~て / ~で (Nguyên nhân, lý do)",
+        "structure": "Vて / Tính từ-i (bỏ い) + くて / Tính từ-na + で / N + で",
+        "explanation": "Chỉ nguyên nhân. Vế sau thường là chỉ cảm xúc, trạng thái, động từ khả năng (không dùng với ý chí, mệnh lệnh).",
+        "examples": [
+            {
+                "jp": "ニュースを 聞いて、びっくりしました。",
+                "romaji": "Nyuusu o kiite, bikkuri shimashita.",
+                "vi": "Nghe tin tức xong tôi đã giật mình."
+            },
+            {
+                "jp": "地震で ビルが 倒れました。",
+                "romaji": "Jishin de biru ga taoremashita.",
+                "vi": "Tòa nhà bị đổ do động đất."
+            }
+        ]
+    },
+    {
+        "title": "~ので",
+        "structure": "Thể thông thường (N/Na + な) + ので",
+        "explanation": "Bởi vì... (Diễn tả lý do một cách khách quan, nhẹ nhàng hơn から, thường dùng để xin phép, nhờ vả).",
+        "examples": [
+            {
+                "jp": "気分が 悪いので、帰っても いいですか。",
+                "romaji": "Kibun ga warui node, kaette mo ii desu ka.",
+                "vi": "Vì thấy trong người không khỏe, tôi về trước có được không?"
+            }
+        ]
+    }
+],
+  40: [
+    {
+        "title": "Câu hỏi lồng ghép (có từ để hỏi)",
+        "structure": "Từ để hỏi + Thể thông thường (N/Na bỏ だ) + か、~",
+        "explanation": "Lồng một câu hỏi có từ để hỏi vào trong câu lớn.",
+        "examples": [
+            {
+                "jp": "会議は 何時に 終わるか、わかりません。",
+                "romaji": "Kaigi wa nanji ni owaru ka, wakarimasen.",
+                "vi": "Tôi không biết cuộc họp sẽ kết thúc lúc mấy giờ."
+            }
+        ]
+    },
+    {
+        "title": "Câu hỏi lồng ghép (không có từ để hỏi - Yes/No)",
+        "structure": "Thể thông thường (N/Na bỏ だ) + かどうか、~",
+        "explanation": "Có... hay không (Lồng câu hỏi Yes/No vào câu lớn).",
+        "examples": [
+            {
+                "jp": "その 話は ほんとうか どうか、わかりません。",
+                "romaji": "Sono hanashi wa hontou ka dou ka, wakarimasen.",
+                "vi": "Câu chuyện đó có thật hay không thì tôi không biết."
+            }
+        ]
+    },
+    {
+        "title": "~てみます",
+        "structure": "Vて + みます",
+        "explanation": "Thử làm một việc gì đó.",
+        "examples": [
+            {
+                "jp": "この ズボンを はいてみても いいですか。",
+                "romaji": "Kono zubon o haite mite mo ii desu ka.",
+                "vi": "Tôi mặc thử chiếc quần này có được không?"
+            }
+        ]
+    }
+],
+  41: [
+    {
+        "title": "いただきます / くださいます / やります",
+        "structure": "N1(người nhận) は N2(người cho) に N3 を いただきます\nN1(người cho) は (私に) N3 を くださいます\nN1(tôi) は N2(người bề dưới/động vật) に N3 を やります",
+        "explanation": "Cách diễn đạt việc cho/nhận với người có địa vị cao hơn hoặc thấp hơn. いただきます: nhận từ người bề trên. くださいます: người bề trên cho mình. やります: cho người bề dưới, động vật, thực vật.",
+        "examples": [
+            {
+                "jp": "私は 社長に 時計を いただきました。",
+                "romaji": "Watashi wa shachou ni tokei o itadakimashita.",
+                "vi": "Tôi đã nhận được chiếc đồng hồ từ giám đốc."
+            },
+            {
+                "jp": "部長は 私に お土産を くださいました。",
+                "romaji": "Buchou wa watashi ni omiyage o kudasaimashita.",
+                "vi": "Trưởng phòng đã cho tôi quà lưu niệm."
+            },
+            {
+                "jp": "私は 犬に えさを やります。",
+                "romaji": "Watashi wa inu ni esa o yarimasu.",
+                "vi": "Tôi cho chó ăn (cho đồ ăn)."
+            }
+        ]
+    },
+    {
+        "title": "~ていただきます / ~てくださいます / ~てやります",
+        "structure": "Vて + いただきます / くださいます / やります",
+        "explanation": "Nhận được hành động giúp đỡ từ người bề trên / Người bề trên làm giúp cho mình / Mình làm giúp cho người bề dưới.",
+        "examples": [
+            {
+                "jp": "私は 先生に 漢字を 直していただきました。",
+                "romaji": "Watashi wa sensei ni kanji o naoshite itadakimashita.",
+                "vi": "Tôi được thầy giáo sửa chữ Kanji cho."
+            }
+        ]
+    }
+],
+  42: [
+    {
+        "title": "~ために (Mục đích)",
+        "structure": "V(Từ điển) / Nの + ために、~",
+        "explanation": "Để, vì (Mục đích). Hành động vế trước và vế sau phải do cùng một chủ thể có ý chí thực hiện.",
+        "examples": [
+            {
+                "jp": "自分の 店を 持つために、貯金しています。",
+                "romaji": "Jibun no mise o motsu tame ni, chokin shite imasu.",
+                "vi": "Tôi đang tiết kiệm tiền để mở cửa hàng riêng."
+            },
+            {
+                "jp": "家族のために、うちを 建てます。",
+                "romaji": "Kazoku no tame ni, uchi o tatemasu.",
+                "vi": "Tôi xây nhà vì gia đình."
+            }
+        ]
+    },
+    {
+        "title": "~のに (Mục đích, công dụng, tốn kém)",
+        "structure": "V(Từ điển) / N + のに + 使う / いい / 役に立つ / 時間がかかる",
+        "explanation": "Dùng cho việc gì / Có lợi cho việc gì / Tốn (thời gian, tiền bạc) cho việc gì.",
+        "examples": [
+            {
+                "jp": "この はさみは 花を 切るのに 使います。",
+                "romaji": "Kono hasami wa hana o kiru noni tsukaimasu.",
+                "vi": "Cái kéo này dùng để cắt hoa."
+            },
+            {
+                "jp": "駅へ 行くのに 2時間 かかります。",
+                "romaji": "Eki e iku noni nijikan kakarimasu.",
+                "vi": "Tốn 2 tiếng để đi đến nhà ga."
+            }
+        ]
+    }
+],
+  43: [
+    {
+        "title": "~そうです (Trông có vẻ)",
+        "structure": "V (bỏ ます) / Tính từ-i (bỏ い) / Tính từ-na (bỏ な) + そうです",
+        "explanation": "Trông có vẻ... (Sự phán đoán bằng mắt, cảm giác trực tiếp). Riêng いい -> よさそうです.",
+        "examples": [
+            {
+                "jp": "今にも 雨が 降りそうです。",
+                "romaji": "Ima nimo ame ga furisou desu.",
+                "vi": "Trời trông có vẻ sắp mưa đến nơi rồi."
+            },
+            {
+                "jp": "この 料理は 辛そうです。",
+                "romaji": "Kono ryouri wa karasou desu.",
+                "vi": "Món ăn này trông có vẻ cay."
+            }
+        ]
+    },
+    {
+        "title": "~てきます",
+        "structure": "Vて + きます",
+        "explanation": "Đi làm việc gì đó rồi quay lại (Hành động bao hàm sự di chuyển).",
+        "examples": [
+            {
+                "jp": "ちょっと たばこを 買ってきます。",
+                "romaji": "Chotto tabako o katte kimasu.",
+                "vi": "Tôi đi mua thuốc lá một chút (rồi sẽ quay lại)."
+            }
+        ]
+    }
+],
+  44: [
+    {
+        "title": "~すぎます",
+        "structure": "V (bỏ ます) / Tính từ-i (bỏ い) / Tính từ-na (bỏ な) + すぎます",
+        "explanation": "Quá... (Vượt quá mức độ thông thường, thường mang ý nghĩa tiêu cực).",
+        "examples": [
+            {
+                "jp": "昨日の夜 お酒を 飲みすぎました。",
+                "romaji": "Kinou no yoru osake o nomisugimashita.",
+                "vi": "Tối qua tôi đã uống quá nhiều rượu."
+            }
+        ]
+    },
+    {
+        "title": "~やすいです / ~にくいです",
+        "structure": "V (bỏ ます) + やすいです / にくいです",
+        "explanation": "Dễ làm gì / Khó làm gì.",
+        "examples": [
+            {
+                "jp": "この パソコンは 使いやすいです。",
+                "romaji": "Kono pasokon wa tsukaiyasui desu.",
+                "vi": "Cái máy tính này dễ sử dụng."
+            },
+            {
+                "jp": "東京は 住みにくいです。",
+                "romaji": "Toukyou wa suminikui desu.",
+                "vi": "Tokyo thì khó sống."
+            }
+        ]
+    },
+    {
+        "title": "~くします / ~にします",
+        "structure": "Tính từ-i (bỏ い) + く + します\nTính từ-na (bỏ な) / N + に + します",
+        "explanation": "Làm cho... trở nên (Chỉ sự biến đổi do tác động có chủ ý). Nに します còn có nghĩa là quyết định chọn N.",
+        "examples": [
+            {
+                "jp": "音を 大きくします。",
+                "romaji": "Oto o ookiku shimasu.",
+                "vi": "Làm cho âm thanh to lên."
+            },
+            {
+                "jp": "部屋を きれいに します。",
+                "romaji": "Heya o kirei ni shimasu.",
+                "vi": "Làm cho căn phòng sạch sẽ."
+            },
+            {
+                "jp": "私は カレーに します。",
+                "romaji": "Watashi wa karee ni shimasu.",
+                "vi": "Tôi chọn món cà ri (Quyết định)."
+            }
+        ]
+    }
+],
+  45: [
+    {
+        "title": "~場合は",
+        "structure": "V(Từ điển/た/ない) / Tính từ-i / Tính từ-na(な) / N(の) + 場合は",
+        "explanation": "Trong trường hợp... (Giả định một tình huống khó khăn, rắc rối xảy ra để đưa ra cách giải quyết).",
+        "examples": [
+            {
+                "jp": "パスポートを なくした場合は、どうしたらいいですか。",
+                "romaji": "Pasupooto o nakushita baai wa, dou shitara ii desu ka.",
+                "vi": "Trong trường hợp làm mất hộ chiếu thì tôi nên làm thế nào?"
+            }
+        ]
+    },
+    {
+        "title": "~のに",
+        "structure": "Thể thông thường (N/Na + な) + のに、~",
+        "explanation": "Mặc dù... vậy mà... (Diễn tả sự bất ngờ, thất vọng, không như mong đợi).",
+        "examples": [
+            {
+                "jp": "約束を したのに、彼女は 来ませんでした。",
+                "romaji": "Yakusoku o shita noni, kanojo wa kimasen deshita.",
+                "vi": "Mặc dù đã hẹn rồi vậy mà cô ấy không đến."
+            }
+        ]
+    }
+],
+  46: [
+    {
+        "title": "~ところです",
+        "structure": "V(Từ điển) / Vている / Vた + ところです",
+        "explanation": "V(Từ điển): Sắp sửa làm gì / Vている: Đang trong lúc làm gì / Vた: Vừa mới làm xong (về mặt thời gian vật lý).",
+        "examples": [
+            {
+                "jp": "今から ご飯を 食べる ところです。",
+                "romaji": "Ima kara gohan o taberu tokoro desu.",
+                "vi": "Tôi sắp sửa ăn cơm bây giờ."
+            },
+            {
+                "jp": "今 部屋を 片付けている ところです。",
+                "romaji": "Ima heya o katazukete iru tokoro desu.",
+                "vi": "Bây giờ tôi đang dọn phòng."
+            },
+            {
+                "jp": "たった今 バスが 出た ところです。",
+                "romaji": "Tatta ima basu ga deta tokoro desu.",
+                "vi": "Xe buýt vừa mới chạy xong."
+            }
+        ]
+    },
+    {
+        "title": "~たばかりです",
+        "structure": "Vた + ばかりです",
+        "explanation": "Vừa mới làm gì (mang tính cảm giác chủ quan của người nói, dù thời gian thực tế có thể đã lâu).",
+        "examples": [
+            {
+                "jp": "先月 日本へ 来たばかりです。",
+                "romaji": "Sengetsu Nihon e kita bakari desu.",
+                "vi": "Tôi vừa mới đến Nhật tháng trước."
+            }
+        ]
+    },
+    {
+        "title": "~はずです",
+        "structure": "Thể thông thường (Na な / N の) + はずです",
+        "explanation": "Chắc chắn là... (Suy đoán có căn cứ xác đáng).",
+        "examples": [
+            {
+                "jp": "田中さんは 今日 休むと 言っていましたから、いないはずです。",
+                "romaji": "Tanaka-san wa kyou yasumu to itte imashita kara, inai hazu desu.",
+                "vi": "Anh Tanaka nói hôm nay sẽ nghỉ nên chắc chắn là không có ở đây."
+            }
+        ]
+    }
+],
+  47: [
+    {
+        "title": "~そうです (Truyền đạt)",
+        "structure": "Thể thông thường + そうです",
+        "explanation": "Nghe nói là... (Truyền đạt lại thông tin nghe được từ nguồn khác).",
+        "examples": [
+            {
+                "jp": "天気予報によると、明日は 寒くなるそうです。",
+                "romaji": "Tenkiyohou ni yoru to, ashita wa samuku naru sou desu.",
+                "vi": "Theo dự báo thời tiết thì nghe nói ngày mai trời sẽ trở lạnh."
+            }
+        ]
+    },
+    {
+        "title": "~ようです",
+        "structure": "Thể thông thường (Na な / N の) + ようです",
+        "explanation": "Có vẻ như là, dường như là... (Sự suy đoán dựa trên giác quan, quan sát tình huống).",
+        "examples": [
+            {
+                "jp": "人が 大勢 集まっていますね。事故のようです。",
+                "romaji": "Hito ga oozei atsumatte imasu ne. Jiko no you desu.",
+                "vi": "Nhiều người tập trung nhỉ. Có vẻ như là tai nạn."
+            }
+        ]
+    }
+],
+  48: [
+    {
+        "title": "Thể sai khiến (使役形)",
+        "structure": "Nhóm 1: [i] -> [a] + せる\nNhóm 2: bỏ ます + させる\nNhóm 3: します -> させる, きます -> こさせる",
+        "explanation": "Bắt / Cho phép ai đó làm gì.",
+        "examples": [
+            {
+                "jp": "部長は 私を 大阪へ 出張させました。",
+                "romaji": "Buchou wa watashi o Oosaka e shucchou sasemashita.",
+                "vi": "Trưởng phòng đã bắt/cho tôi đi công tác ở Osaka."
+            },
+            {
+                "jp": "私は 娘に ピアノを 習わせます。",
+                "romaji": "Watashi wa musume ni piano o narawasemasu.",
+                "vi": "Tôi cho con gái học piano."
+            }
+        ]
+    },
+    {
+        "title": "~させていただけませんか",
+        "structure": "V (Sai khiến - て) + いただけませんか",
+        "explanation": "Xin phép ai đó cho mình làm việc gì một cách lịch sự.",
+        "examples": [
+            {
+                "jp": "すみません、明日 休ませていただけませんか。",
+                "romaji": "Sumimasen, ashita yasumasete itadakemasen ka.",
+                "vi": "Xin lỗi, cho phép tôi nghỉ ngày mai được không ạ?"
+            }
+        ]
+    }
+],
+  49: [
+    {
+        "title": "Tôn kính ngữ (尊敬語) - Động từ đặc biệt",
+        "structure": "行きます/来ます/います -> いらっしゃいます\n食べます/飲みます -> 召し上がります\n言います -> おっしゃいます\n知っています -> ご存じです\n見ます -> ご覧になります\nします -> なさいます\nくれます -> くださいます",
+        "explanation": "Dùng để nói về hành động của người bề trên, thể hiện sự kính trọng.",
+        "examples": [
+            {
+                "jp": "先生は もう お帰りに なりましたか。",
+                "romaji": "Sensei wa mou okaeri ni narimashita ka.",
+                "vi": "Thầy giáo đã về chưa ạ?"
+            }
+        ]
+    },
+    {
+        "title": "Tôn kính ngữ - Quy tắc chung",
+        "structure": "お + V(bỏ ます) + に なります",
+        "explanation": "Dùng cho các động từ nhóm 1 và 2 (không dùng cho động từ 1 âm tiết hoặc động từ đặc biệt).",
+        "examples": [
+            {
+                "jp": "社長は 新しい 車を お買いに なりました。",
+                "romaji": "Shachou wa atarashii kuruma o okai ni narimashita.",
+                "vi": "Giám đốc đã mua xe ô tô mới."
+            }
+        ]
+    },
+    {
+        "title": "Tôn kính ngữ - Yêu cầu lịch sự",
+        "structure": "お + V(bỏ ます) + ください / ご + Danh từ nhóm 3 + ください",
+        "explanation": "Yêu cầu người khác làm gì một cách lịch sự (Xin mời...).",
+        "examples": [
+            {
+                "jp": "あちらから お入りください。",
+                "romaji": "Achira kara ohairi kudasai.",
+                "vi": "Xin mời vào từ lối kia."
+            }
+        ]
+    }
+],
+  50: [
+    {
+        "title": "Khiêm nhường ngữ (謙譲語) - Động từ đặc biệt",
+        "structure": "行きます/来ます -> 参ります\nいます -> おります\n食べます/飲みます/もらいます -> いただきます\n言います -> 申します\n知っています -> 存じております\n見ます -> 拝見します\n聞きます/行きます(đến nhà) -> 伺います\n会います -> お目にかかります\nします -> いたします",
+        "explanation": "Dùng để hạ mình khi nói về hành động của bản thân nhằm tôn kính người nghe / người nhận hành động.",
+        "examples": [
+            {
+                "jp": "私は ミラーと 申します。",
+                "romaji": "Watashi wa Miraa to moushimasu.",
+                "vi": "Tôi tên là Miller."
+            },
+            {
+                "jp": "先生の 奥様に お目にかかりました。",
+                "romaji": "Sensei no okusama ni omenikakarimashita.",
+                "vi": "Tôi đã vinh hạnh được gặp vợ của thầy giáo."
+            }
+        ]
+    },
+    {
+        "title": "Khiêm nhường ngữ - Quy tắc chung",
+        "structure": "お + V(bỏ ます) + します / ご + Danh từ nhóm 3 + します",
+        "explanation": "Dùng để nói về hành động của bản thân liên quan đến người bề trên (giúp đỡ, phục vụ).",
+        "examples": [
+            {
+                "jp": "私が 荷物を お持ちします。",
+                "romaji": "Watashi ga nimotsu o omochi shimasu.",
+                "vi": "Để tôi mang hành lý giúp cho ạ."
+            },
+            {
+                "jp": "今日の 予定を ご説明します。",
+                "romaji": "Kyou no yotei o gosetsumei shimasu.",
+                "vi": "Tôi xin phép trình bày lịch trình ngày hôm nay."
+            }
+        ]
+    }
+]
 };

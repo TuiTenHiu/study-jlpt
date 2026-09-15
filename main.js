@@ -1364,11 +1364,3 @@ window.renderClTable = function() {
   tbody.innerHTML = html;
 };
 
-
-// Hide splash screen after a short delay
-window.addEventListener('load', () => {
-  setTimeout(() => {
-    const splash = document.getElementById('splash-screen');
-    if (splash) splash.classList.add('hidden');
-  }, 1200); // 1.2s delay for animation to be seen
-});

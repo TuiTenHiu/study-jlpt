@@ -1283,6 +1283,7 @@ window.clCurrentLevelFilter = 'all';
 window.clCurrentSearch = '';
 
 window.switchClTab = function(tab) {
+  localStorage.setItem('studyJlptClTab', tab);
   document.getElementById('cl-tab-lookup').classList.toggle('active', tab === 'lookup');
   document.getElementById('cl-tab-table').classList.toggle('active', tab === 'table');
   document.getElementById('cl-lookup-view').hidden = (tab !== 'lookup');
@@ -1364,3 +1365,16 @@ window.renderClTable = function() {
   tbody.innerHTML = html;
 };
 
+
+
+// Restore mode on load
+window.addEventListener('DOMContentLoaded', () => {
+  const savedMode = localStorage.getItem('studyJlptMode');
+  if (savedMode) {
+    switchMode(savedMode);
+  }
+  const savedClTab = localStorage.getItem('studyJlptClTab');
+  if (savedClTab) {
+    window.switchClTab(savedClTab);
+  }
+});

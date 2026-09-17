@@ -440,6 +440,7 @@ export const targetForms = [
   { id: 'ta', label: 'Thể た', labelJp: 'た形' },
   { id: 'nai', label: 'Thể ない', labelJp: 'ない形' },
   { id: 'dict', label: 'Thể từ điển', labelJp: '辞書形' },
+  { id: 'potential', label: 'Thể khả năng', labelJp: '可能形' },
 ];
 
 /**
@@ -454,6 +455,17 @@ const iToAKana = {
   'ひ': 'は', 'び': 'ば', 'ぴ': 'ぱ', // Note: no hi/pi in minna no nihongo min verbs, but good for completeness
   'み': 'ま',
   'り': 'ら'
+};
+
+const iToEKana = {
+  'い': 'え',
+  'き': 'け', 'ぎ': 'げ',
+  'し': 'せ',
+  'ち': 'て',
+  'に': 'ね',
+  'ひ': 'へ', 'び': 'べ', 'ぴ': 'ぺ',
+  'み': 'め',
+  'り': 'れ'
 };
 
 const iToUKana = {
@@ -500,6 +512,7 @@ export function generateSteps(verb, formId) {
       else if (formId === 'ta') finalAnswer = 'きた';
       else if (formId === 'nai') finalAnswer = 'こない';
       else if (formId === 'dict') finalAnswer = 'くる';
+      else if (formId === 'potential') finalAnswer = 'こられる';
 
       steps.push({
         id: 'irregular_transform',
@@ -517,6 +530,7 @@ export function generateSteps(verb, formId) {
       else if (formId === 'ta') suffix = 'した';
       else if (formId === 'nai') suffix = 'しない';
       else if (formId === 'dict') suffix = 'する';
+      else if (formId === 'potential') suffix = 'できる';
 
       finalAnswer = suruStem + suffix;
       steps.push({
@@ -543,7 +557,7 @@ export function generateSteps(verb, formId) {
       type: 'info',
     });
 
-    const suffix = formId === 'te' ? 'て' : (formId === 'ta' ? 'た' : (formId === 'nai' ? 'ない' : 'る'));
+    const suffix = formId === 'te' ? 'て' : (formId === 'ta' ? 'た' : (formId === 'nai' ? 'ない' : (formId === 'dict' ? 'る' : 'られる')));
     const finalAnswer = stem + suffix;
 
     steps.push({
@@ -638,6 +652,7 @@ export function generateSteps(verb, formId) {
       id: 'irregular_transform', instruction: `Ngoại lệ (kính ngữ): ${verb.masu} → ${finalAnswer}`, before: stem, after: finalAnswer, type: 'info', explain: `「${verb.masu}」 là ngoại lệ. Thể nai là 「${finalAnswer}」.`
     });
     return { steps, finalAnswer, verb, formId, group: 1 };
+
   }
   if (formId === 'dict' && verb.irregular_dict) {
     const finalAnswer = verb.irregular_dict;
@@ -646,6 +661,32 @@ export function generateSteps(verb, formId) {
     });
     steps.push({
       id: 'irregular_transform', instruction: `Ngoại lệ (kính ngữ): ${verb.masu} → ${finalAnswer}`, before: stem, after: finalAnswer, type: 'info', explain: `「${verb.masu}」 là ngoại lệ. Thể từ điển là 「${finalAnswer}」.`
+    });
+    return { steps, finalAnswer, verb, formId, group: 1 };
+  }
+
+  
+  // --- Potential form ---
+  if (formId === 'potential') {
+    const targetKana = iToEKana[tailKana];
+    const suffix = 'る';
+    const finalAnswer = stemWithoutTail + targetKana + suffix;
+    const ruleLabel = `${tailKana} → ${targetKana}`;
+    
+    steps.push({
+      id: 'remove_masu', instruction: 'Bỏ đuôi 「ます」', before: verb.masu, removed: 'ます', after: stem, type: 'info'
+    });
+    steps.push({
+      id: 'choose_rule',
+      instruction: `Biến đổi âm 「${tailKana}」 (cột i)`,
+      question: `Nhóm 1: Chuyển âm cuối từ cột i sang cột e rồi thêm "る":`,
+      before: stem,
+      correctAnswer: ruleLabel,
+      correctTransform: targetKana + suffix,
+      after: finalAnswer,
+      type: 'choose_rule',
+      options: generateKanaOptions(tailKana, formId),
+      explain: `Nhóm 1: Đổi âm cột i thành cột e rồi thêm "る".`
     });
     return { steps, finalAnswer, verb, formId, group: 1 };
   }
@@ -733,18 +774,31 @@ function generateRuleOptions(formId, tailKana, isIrregular) {
  * Generate options for i->a and i->u transformations (Nai/Dict forms).
  */
 function generateKanaOptions(tailKana, formId) {
-  const targetKana = formId === 'nai' ? iToAKana[tailKana] : iToUKana[tailKana];
+  let targetKana;
+  let pool;
+  if (formId === 'nai') {
+    targetKana = iToAKana[tailKana];
+    pool = Object.values(iToAKana);
+  } else if (formId === 'dict') {
+    targetKana = iToUKana[tailKana];
+    pool = Object.values(iToUKana);
+  } else if (formId === 'potential') {
+    targetKana = iToEKana[tailKana];
+    pool = Object.values(iToEKana);
+  } else {
+    targetKana = iToUKana[tailKana]; // fallback
+    pool = Object.values(iToUKana);
+  }
+
   const correctLabel = `${tailKana} → ${targetKana}`;
-  
   const options = [correctLabel];
   
   // Pick 3 random wrong target kanas from the same category
-  const pool = formId === 'nai' ? Object.values(iToAKana) : Object.values(iToUKana);
   const wrongPool = pool.filter(k => k !== targetKana);
   const shuffledWrong = shuffleArray(wrongPool);
   
   for (let i = 0; i < 3; i++) {
-    options.push(`${tailKana} → ${shuffledWrong[i]}`);
+      options.push(`${tailKana} → ${shuffledWrong[i]}`);
   }
   
   return shuffleArray(options);

@@ -1118,6 +1118,8 @@ function setConjugationForm(formId) {
   document.getElementById('cl-form-ta').classList.toggle('active', formId === 'ta');
   document.getElementById('cl-form-nai').classList.toggle('active', formId === 'nai');
   document.getElementById('cl-form-dict').classList.toggle('active', formId === 'dict');
+  const potBtn = document.getElementById('cl-form-potential');
+  if(potBtn) potBtn.classList.toggle('active', formId === 'potential');
 }
 
 // Initialize conjugation lab
@@ -1345,6 +1347,7 @@ window.renderClTable = function() {
     const ta = generateSteps(v, 'ta').finalAnswer;
     const nai = generateSteps(v, 'nai').finalAnswer;
     const dict = generateSteps(v, 'dict').finalAnswer;
+    const potential = generateSteps(v, 'potential').finalAnswer;
 
     html += '<tr style="border-bottom: 1px solid var(--border);">';
     html += '<td style="padding: 12px;">' + (v.lesson ? 'Bài ' + v.lesson : '-') + '</td>';
@@ -1355,11 +1358,12 @@ window.renderClTable = function() {
     html += '<td style="padding: 12px; color: var(--primary); font-weight: 500;">' + ta + '</td>';
     html += '<td style="padding: 12px; color: var(--primary); font-weight: 500;">' + nai + '</td>';
     html += '<td style="padding: 12px; color: var(--primary); font-weight: 500;">' + dict + '</td>';
+    html += '<td style="padding: 12px; color: var(--primary); font-weight: 500;">' + potential + '</td>';
     html += '</tr>';
   });
 
   if (verbs.length === 0) {
-    html = '<tr><td colspan="8" style="padding: 20px; text-align: center; color: var(--text-2);">Không tìm thấy kết quả phù hợp.</td></tr>';
+    html = '<tr><td colspan="9" style="padding: 20px; text-align: center; color: var(--text-2);">Không tìm thấy kết quả phù hợp.</td></tr>';
   }
 
   tbody.innerHTML = html;

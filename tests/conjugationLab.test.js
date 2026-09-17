@@ -353,7 +353,7 @@ describe("ConjugationLab class", () => {
       const ids = targetForms.map(f => f.id);
       expect(ids).toContain("te"); expect(ids).toContain("ta");
       expect(ids).toContain("nai"); expect(ids).toContain("dict");
-      expect(ids).toHaveLength(4);
+      expect(ids).toHaveLength(5);
     });
     it("Mỗi form có id, label, labelJp", () => {
       targetForms.forEach(f => {

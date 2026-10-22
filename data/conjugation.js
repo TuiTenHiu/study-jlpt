@@ -441,6 +441,7 @@ export const targetForms = [
   { id: 'nai', label: 'Thể ない', labelJp: 'ない形' },
   { id: 'dict', label: 'Thể từ điển', labelJp: '辞書形' },
   { id: 'potential', label: 'Thể khả năng', labelJp: '可能形' },
+  { id: 'volitional', label: 'Thể ý chí', labelJp: '意向形' },
 ];
 
 /**
@@ -479,6 +480,17 @@ const iToUKana = {
   'り': 'る'
 };
 
+const iToOKana = {
+  'い': 'お',
+  'き': 'こ', 'ぎ': 'ご',
+  'し': 'そ',
+  'ち': 'と',
+  'に': 'の',
+  'ひ': 'ほ', 'び': 'ぼ', 'ぴ': 'ぽ',
+  'み': 'も',
+  'り': 'ろ'
+};
+
 /**
  * Generate all the conjugation steps for a given verb + target form.
  *
@@ -495,7 +507,7 @@ export function generateSteps(verb, formId) {
   if (verb.group === 3) {
     // Group 3 verbs: します-type and きます
     const isSuru = verb.masu.endsWith('します');
-    const isKuru = verb.masu === 'きます';
+    const isKuru = verb.masu.endsWith('きます');
 
     steps.push({
       id: 'remove_masu',
@@ -508,19 +520,21 @@ export function generateSteps(verb, formId) {
 
     let finalAnswer;
     if (isKuru) {
-      if (formId === 'te') finalAnswer = 'きて';
-      else if (formId === 'ta') finalAnswer = 'きた';
-      else if (formId === 'nai') finalAnswer = 'こない';
-      else if (formId === 'dict') finalAnswer = 'くる';
-      else if (formId === 'potential') finalAnswer = 'こられる';
+      const kuruPrefix = verb.masu.slice(0, -3);
+      if (formId === 'te') finalAnswer = kuruPrefix + 'きて';
+      else if (formId === 'ta') finalAnswer = kuruPrefix + 'きた';
+      else if (formId === 'nai') finalAnswer = kuruPrefix + 'こない';
+      else if (formId === 'dict') finalAnswer = kuruPrefix + 'くる';
+      else if (formId === 'potential') finalAnswer = kuruPrefix + 'こられる';
+      else if (formId === 'volitional') finalAnswer = kuruPrefix + 'こよう';
 
       steps.push({
         id: 'irregular_transform',
-        instruction: `Động từ bất quy tắc: きます → ${finalAnswer}`,
+        instruction: verb.masu === 'きます' ? `Động từ bất quy tắc: きます → ${finalAnswer}` : `Động từ bất quy tắc (～きます): ${verb.masu} → ${finalAnswer}`,
         before: stem,
         after: finalAnswer,
         type: 'info',
-        explain: `きます là động từ bất quy tắc (Nhóm 3). Thể ${form.label} là「${finalAnswer}」`,
+        explain: `「${verb.masu}」là động từ bất quy tắc (Nhóm 3). Thể ${form.label} là「${finalAnswer}」`,
       });
     } else if (isSuru) {
       // For compound する verbs: べんきょうします → べんきょうして
@@ -531,6 +545,7 @@ export function generateSteps(verb, formId) {
       else if (formId === 'nai') suffix = 'しない';
       else if (formId === 'dict') suffix = 'する';
       else if (formId === 'potential') suffix = 'できる';
+      else if (formId === 'volitional') suffix = 'しよう';
 
       finalAnswer = suruStem + suffix;
       steps.push({
@@ -557,7 +572,7 @@ export function generateSteps(verb, formId) {
       type: 'info',
     });
 
-    const suffix = formId === 'te' ? 'て' : (formId === 'ta' ? 'た' : (formId === 'nai' ? 'ない' : (formId === 'dict' ? 'る' : 'られる')));
+    const suffix = formId === 'te' ? 'て' : (formId === 'ta' ? 'た' : (formId === 'nai' ? 'ない' : (formId === 'dict' ? 'る' : (formId === 'potential' ? 'られる' : 'よう'))));
     const finalAnswer = stem + suffix;
 
     steps.push({
@@ -691,6 +706,31 @@ export function generateSteps(verb, formId) {
     return { steps, finalAnswer, verb, formId, group: 1 };
   }
 
+  // --- Volitional form ---
+  if (formId === 'volitional') {
+    const targetKana = iToOKana[tailKana];
+    const suffix = 'う';
+    const finalAnswer = stemWithoutTail + targetKana + suffix;
+    const ruleLabel = `${tailKana} → ${targetKana}`;
+
+    steps.push({
+      id: 'remove_masu', instruction: 'Bỏ đuôi 「ます」', before: verb.masu, removed: 'ます', after: stem, type: 'info'
+    });
+    steps.push({
+      id: 'choose_rule',
+      instruction: `Biến đổi âm 「${tailKana}」 (cột i)`,
+      question: `Nhóm 1: Chuyển âm cuối từ cột i sang cột o rồi thêm "う":`,
+      before: stem,
+      correctAnswer: ruleLabel,
+      correctTransform: targetKana + suffix,
+      after: finalAnswer,
+      type: 'choose_rule',
+      options: generateKanaOptions(tailKana, formId),
+      explain: `Nhóm 1: Đổi âm cột i thành cột o rồi thêm "う".`
+    });
+    return { steps, finalAnswer, verb, formId, group: 1 };
+  }
+
   // --- Nai and Dict forms ---
   if (formId === 'nai' || formId === 'dict') {
     const targetKana = formId === 'nai' ? iToAKana[tailKana] : iToUKana[tailKana];
@@ -730,7 +770,7 @@ export function generateSteps(verb, formId) {
  * Generate multiple-choice options for suffix selection (Group 2).
  */
 function generateSuffixOptions(correct) {
-  const allOptions = ['て', 'た', 'ない', 'る', 'れる', 'ろ'];
+  const allOptions = ['て', 'た', 'ない', 'る', 'られる', 'よう'];
   const options = [correct];
   for (const opt of allOptions) {
     if (options.length >= 4) break;
@@ -785,6 +825,9 @@ function generateKanaOptions(tailKana, formId) {
   } else if (formId === 'potential') {
     targetKana = iToEKana[tailKana];
     pool = Object.values(iToEKana);
+  } else if (formId === 'volitional') {
+    targetKana = iToOKana[tailKana];
+    pool = Object.values(iToOKana);
   } else {
     targetKana = iToUKana[tailKana]; // fallback
     pool = Object.values(iToUKana);

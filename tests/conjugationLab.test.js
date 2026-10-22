@@ -21,6 +21,7 @@ describe("generateSteps()", () => {
     it("Thể た: たべます → たべた", () => { expect(generateSteps(verb, "ta").finalAnswer).toBe("たべた"); });
     it("Thể ない: たべます → たべない", () => { expect(generateSteps(verb, "nai").finalAnswer).toBe("たべない"); });
     it("Thể từ điển: たべます → たべる", () => { expect(generateSteps(verb, "dict").finalAnswer).toBe("たべる"); });
+    it("Thể ý chí: たべます → たべよう", () => { expect(generateSteps(verb, "volitional").finalAnswer).toBe("たべよう"); });
     it("Bước 1 phải là bỏ ます, bước 2 là thêm đuôi", () => {
       const result = generateSteps(verb, "te");
       expect(result.steps).toHaveLength(2);
@@ -43,6 +44,7 @@ describe("generateSteps()", () => {
     it("Thể た → みた", () => { expect(generateSteps(verb, "ta").finalAnswer).toBe("みた"); });
     it("Thể ない → みない", () => { expect(generateSteps(verb, "nai").finalAnswer).toBe("みない"); });
     it("Thể từ điển → みる", () => { expect(generateSteps(verb, "dict").finalAnswer).toBe("みる"); });
+    it("Thể ý chí → みよう", () => { expect(generateSteps(verb, "volitional").finalAnswer).toBe("みよう"); });
   });
 
   // Nhóm 1: のみます (み → んで)
@@ -52,6 +54,7 @@ describe("generateSteps()", () => {
     it("Thể た → のんだ", () => { expect(generateSteps(verb, "ta").finalAnswer).toBe("のんだ"); });
     it("Thể ない → のまない", () => { expect(generateSteps(verb, "nai").finalAnswer).toBe("のまない"); });
     it("Thể từ điển → のむ", () => { expect(generateSteps(verb, "dict").finalAnswer).toBe("のむ"); });
+    it("Thể ý chí → のもう", () => { expect(generateSteps(verb, "volitional").finalAnswer).toBe("のもう"); });
     it("Bước choose_rule phải có đáp án đúng", () => {
       const ruleStep = generateSteps(verb, "te").steps.find(s => s.type === "choose_rule");
       expect(ruleStep).toBeDefined();
@@ -67,6 +70,7 @@ describe("generateSteps()", () => {
     it("Thể た → はたらいた", () => { expect(generateSteps(verb, "ta").finalAnswer).toBe("はたらいた"); });
     it("Thể ない → はたらかない", () => { expect(generateSteps(verb, "nai").finalAnswer).toBe("はたらかない"); });
     it("Thể từ điển → はたらく", () => { expect(generateSteps(verb, "dict").finalAnswer).toBe("はたらく"); });
+    it("Thể ý chí → はたらこう", () => { expect(generateSteps(verb, "volitional").finalAnswer).toBe("はたらこう"); });
   });
 
   // Nhóm 1: かえります (り → って)
@@ -76,6 +80,7 @@ describe("generateSteps()", () => {
     it("Thể た → かえった", () => { expect(generateSteps(verb, "ta").finalAnswer).toBe("かえった"); });
     it("Thể ない → かえらない", () => { expect(generateSteps(verb, "nai").finalAnswer).toBe("かえらない"); });
     it("Thể từ điển → かえる", () => { expect(generateSteps(verb, "dict").finalAnswer).toBe("かえる"); });
+    it("Thể ý chí → かえろう", () => { expect(generateSteps(verb, "volitional").finalAnswer).toBe("かえろう"); });
   });
 
   // Nhóm 1: はなします (し → して)
@@ -85,6 +90,7 @@ describe("generateSteps()", () => {
     it("Thể た → はなした", () => { expect(generateSteps(verb, "ta").finalAnswer).toBe("はなした"); });
     it("Thể ない → はなさない", () => { expect(generateSteps(verb, "nai").finalAnswer).toBe("はなさない"); });
     it("Thể từ điển → はなす", () => { expect(generateSteps(verb, "dict").finalAnswer).toBe("はなす"); });
+    it("Thể ý chí → はなそう", () => { expect(generateSteps(verb, "volitional").finalAnswer).toBe("はなそう"); });
   });
 
   // Nhóm 1: およぎます (ぎ → いで)
@@ -94,6 +100,7 @@ describe("generateSteps()", () => {
     it("Thể た → およいだ", () => { expect(generateSteps(verb, "ta").finalAnswer).toBe("およいだ"); });
     it("Thể ない → およがない", () => { expect(generateSteps(verb, "nai").finalAnswer).toBe("およがない"); });
     it("Thể từ điển → およぐ", () => { expect(generateSteps(verb, "dict").finalAnswer).toBe("およぐ"); });
+    it("Thể ý chí → およごう", () => { expect(generateSteps(verb, "volitional").finalAnswer).toBe("およごう"); });
   });
 
   // Ngoại lệ いきます
@@ -103,6 +110,7 @@ describe("generateSteps()", () => {
     it("Thể た → いった", () => { expect(generateSteps(verb, "ta").finalAnswer).toBe("いった"); });
     it("Thể ない → いかない", () => { expect(generateSteps(verb, "nai").finalAnswer).toBe("いかない"); });
     it("Thể từ điển → いく", () => { expect(generateSteps(verb, "dict").finalAnswer).toBe("いく"); });
+    it("Thể ý chí → いこう", () => { expect(generateSteps(verb, "volitional").finalAnswer).toBe("いこう"); });
     it("choose_rule có đáp án là dạng ngoại lệ", () => {
       const ruleStep = generateSteps(verb, "te").steps.find(s => s.type === "choose_rule");
       expect(ruleStep).toBeDefined();
@@ -117,6 +125,7 @@ describe("generateSteps()", () => {
     it("Thể た → べんきょうした", () => { expect(generateSteps(verb, "ta").finalAnswer).toBe("べんきょうした"); });
     it("Thể ない → べんきょうしない", () => { expect(generateSteps(verb, "nai").finalAnswer).toBe("べんきょうしない"); });
     it("Thể từ điển → べんきょうする", () => { expect(generateSteps(verb, "dict").finalAnswer).toBe("べんきょうする"); });
+    it("Thể ý chí → べんきょうしよう", () => { expect(generateSteps(verb, "volitional").finalAnswer).toBe("べんきょうしよう"); });
     it("Phải có 2 bước: remove_masu + irregular_transform", () => {
       const result = generateSteps(verb, "te");
       expect(result.steps).toHaveLength(2);
@@ -132,6 +141,17 @@ describe("generateSteps()", () => {
     it("Thể た → きた", () => { expect(generateSteps(verb, "ta").finalAnswer).toBe("きた"); });
     it("Thể ない → こない", () => { expect(generateSteps(verb, "nai").finalAnswer).toBe("こない"); });
     it("Thể từ điển → くる", () => { expect(generateSteps(verb, "dict").finalAnswer).toBe("くる"); });
+    it("Thể ý chí → こよう", () => { expect(generateSteps(verb, "volitional").finalAnswer).toBe("こよう"); });
+  });
+
+  // Nhóm 3: かえってきます
+  describe("Nhóm 3 — かえってきます (động từ ghép với きます)", () => {
+    const verb = { masu: "かえってきます", group: 3, vi: "về tới" };
+    it("Thể て → かえってきて", () => { expect(generateSteps(verb, "te").finalAnswer).toBe("かえってきて"); });
+    it("Thể た → かえってきた", () => { expect(generateSteps(verb, "ta").finalAnswer).toBe("かえってきた"); });
+    it("Thể ない → かえってこない", () => { expect(generateSteps(verb, "nai").finalAnswer).toBe("かえってこない"); });
+    it("Thể từ điển → かえってくる", () => { expect(generateSteps(verb, "dict").finalAnswer).toBe("かえってくる"); });
+    it("Thể ý chí → かえってこよう", () => { expect(generateSteps(verb, "volitional").finalAnswer).toBe("かえってこよう"); });
   });
 
   // Cấu trúc kết quả
@@ -306,6 +326,12 @@ describe("ConjugationLab class", () => {
       ["いきます",         "ta",   "いった"],
       ["きます",           "nai",  "こない"],
       ["きます",           "dict", "くる"],
+      ["たべます",         "volitional", "たべよう"],
+      ["のみます",         "volitional", "のもう"],
+      ["いきます",         "volitional", "いこう"],
+      ["きます",           "volitional", "こよう"],
+      ["べんきょうします", "volitional", "べんきょうしよう"],
+      ["かえってきます",   "volitional", "かえってこよう"],
     ];
     cases.forEach(([masu, form, expected]) => {
       it(`${masu} [${form}] → ${expected}`, () => {
@@ -348,12 +374,13 @@ describe("ConjugationLab class", () => {
   });
 
   // targetForms
-  describe("targetForms — cấu hình 4 thể", () => {
-    it("Phải có đúng 4 thể: te, ta, nai, dict", () => {
+  describe("targetForms — cấu hình các thể", () => {
+    it("Phải có đủ 6 thể: te, ta, nai, dict, potential, volitional", () => {
       const ids = targetForms.map(f => f.id);
       expect(ids).toContain("te"); expect(ids).toContain("ta");
       expect(ids).toContain("nai"); expect(ids).toContain("dict");
-      expect(ids).toHaveLength(5);
+      expect(ids).toContain("potential"); expect(ids).toContain("volitional");
+      expect(ids).toHaveLength(6);
     });
     it("Mỗi form có id, label, labelJp", () => {
       targetForms.forEach(f => {

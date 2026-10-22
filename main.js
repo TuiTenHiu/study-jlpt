@@ -1120,6 +1120,8 @@ function setConjugationForm(formId) {
   document.getElementById('cl-form-dict').classList.toggle('active', formId === 'dict');
   const potBtn = document.getElementById('cl-form-potential');
   if(potBtn) potBtn.classList.toggle('active', formId === 'potential');
+  const volBtn = document.getElementById('cl-form-volitional');
+  if(volBtn) volBtn.classList.toggle('active', formId === 'volitional');
 }
 
 // Initialize conjugation lab
@@ -1288,8 +1290,13 @@ window.switchClTab = function(tab) {
   localStorage.setItem('studyJlptClTab', tab);
   document.getElementById('cl-tab-lookup').classList.toggle('active', tab === 'lookup');
   document.getElementById('cl-tab-table').classList.toggle('active', tab === 'table');
+  const rulesTabBtn = document.getElementById('cl-tab-rules');
+  if (rulesTabBtn) rulesTabBtn.classList.toggle('active', tab === 'rules');
+
   document.getElementById('cl-lookup-view').hidden = (tab !== 'lookup');
   document.getElementById('cl-table-view').hidden = (tab !== 'table');
+  const rulesView = document.getElementById('cl-rules-view');
+  if (rulesView) rulesView.hidden = (tab !== 'rules');
 
   if (tab === 'table') {
     renderClTable();
@@ -1348,6 +1355,7 @@ window.renderClTable = function() {
     const nai = generateSteps(v, 'nai').finalAnswer;
     const dict = generateSteps(v, 'dict').finalAnswer;
     const potential = generateSteps(v, 'potential').finalAnswer;
+    const volitional = generateSteps(v, 'volitional').finalAnswer;
 
     html += '<tr style="border-bottom: 1px solid var(--border);">';
     html += '<td style="padding: 12px;">' + (v.lesson ? 'Bài ' + v.lesson : '-') + '</td>';
@@ -1359,11 +1367,12 @@ window.renderClTable = function() {
     html += '<td style="padding: 12px; color: var(--primary); font-weight: 500;">' + nai + '</td>';
     html += '<td style="padding: 12px; color: var(--primary); font-weight: 500;">' + dict + '</td>';
     html += '<td style="padding: 12px; color: var(--primary); font-weight: 500;">' + potential + '</td>';
+    html += '<td style="padding: 12px; color: var(--primary); font-weight: 500;">' + volitional + '</td>';
     html += '</tr>';
   });
 
   if (verbs.length === 0) {
-    html = '<tr><td colspan="9" style="padding: 20px; text-align: center; color: var(--text-2);">Không tìm thấy kết quả phù hợp.</td></tr>';
+    html = '<tr><td colspan="10" style="padding: 20px; text-align: center; color: var(--text-2);">Không tìm thấy kết quả phù hợp.</td></tr>';
   }
 
   tbody.innerHTML = html;

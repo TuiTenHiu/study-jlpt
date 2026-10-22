@@ -488,17 +488,19 @@
       <div class="cl-tabs">
         <button class="pq-toggle-btn active" id="cl-tab-lookup" onclick="switchClTab('lookup')">🔍 Tra cứu động từ</button>
         <button class="pq-toggle-btn" id="cl-tab-table" onclick="switchClTab('table')">📋 Bảng động từ</button>
+        <button class="pq-toggle-btn" id="cl-tab-rules" onclick="switchClTab('rules')">📖 Quy tắc chia thể</button>
       </div>
 
       <!-- LOOKUP VIEW -->
       <div id="cl-lookup-view">
-        <!-- Form toggle: て / た / ない / 辞書 -->
+        <!-- Form toggle: て / た / ない / 辞書 / 可能 / 意向 -->
         <div class="cl-form-bar">
           <button id="cl-form-te" class="cl-form-btn active" onclick="setConjugationForm('te')">て形 Thể て</button>
           <button id="cl-form-ta" class="cl-form-btn" onclick="setConjugationForm('ta')">た形 Thể た</button>
           <button id="cl-form-nai" class="cl-form-btn" onclick="setConjugationForm('nai')">ない形 Thể ない</button>
           <button id="cl-form-dict" class="cl-form-btn" onclick="setConjugationForm('dict')">辞書形 Thể từ điển</button>
           <button id="cl-form-potential" class="cl-form-btn" onclick="setConjugationForm('potential')">可能形 Khả năng</button>
+          <button id="cl-form-volitional" class="cl-form-btn" onclick="setConjugationForm('volitional')">意向形 Ý chí</button>
         </div>
 
         <div class="cl-input-section" style="padding: 20px; text-align: center;">
@@ -573,6 +575,7 @@
                 <th style="padding: 12px; font-weight: 600; white-space: nowrap; color: var(--primary);">ない</th>
                 <th style="padding: 12px; font-weight: 600; white-space: nowrap; color: var(--primary);">辞書</th>
                 <th style="padding: 12px; font-weight: 600; white-space: nowrap; color: var(--primary);">Khả năng</th>
+                <th style="padding: 12px; font-weight: 600; white-space: nowrap; color: var(--primary);">Ý chí</th>
               </tr>
             </thead>
             <tbody id="cl-table-body">
@@ -581,6 +584,468 @@
           </table>
         </div>
       </div><!-- /cl-table-view -->
+
+      <!-- RULES VIEW -->
+      <div id="cl-rules-view" hidden>
+        <div class="cl-rules-container">
+
+          <!-- Hero header -->
+          <div class="cl-rules-hero">
+            <h2>📖 Cẩm Nang Quy Tắc Chia Thể Động Từ (N5 - N4)</h2>
+            <p>Tổng hợp chi tiết lý thuyết phân loại 3 nhóm động từ, bảng tra cứu đối chiếu nhanh và hướng dẫn cách chia các thể: て, た, ない, Từ điển, Khả năng, Ý chí kèm ví dụ & mẫu câu ứng dụng.</p>
+          </div>
+
+          <!-- Section 1: Phân loại 3 nhóm -->
+          <div class="cl-rules-section">
+            <div class="cl-rules-section-title">
+              <span>🎯</span>
+              <span>1. Cách nhận biết & phân biệt 3 nhóm động từ (từ thể ます)</span>
+            </div>
+
+            <div class="cl-groups-grid">
+              <!-- Group 1 -->
+              <div class="cl-group-box">
+                <div class="cl-group-box-title">
+                  <h4>Nhóm 1 (五段 - Ngũ đoạn)</h4>
+                  <span class="cl-group-badge cl-group-1">Nhóm 1</span>
+                </div>
+                <div class="cl-group-box-content">
+                  <p>Âm liền trước <strong>ます</strong> thuộc <strong>cột [i]</strong> (い, き, ぎ, し, ち, に, び, み, り).</p>
+                  <ul>
+                    <li>か<strong class="cl-highlight">い</strong>ます (mua)</li>
+                    <li>か<strong class="cl-highlight">き</strong>ます (viết)</li>
+                    <li>いそ<strong class="cl-highlight">ぎ</strong>ます (vội)</li>
+                    <li>はな<strong class="cl-highlight">し</strong>ます (nói chuyện)</li>
+                    <li>ま<strong class="cl-highlight">ち</strong>ます (đợi)</li>
+                    <li>し<strong class="cl-highlight">に</strong>ます (chết)</li>
+                    <li>あそ<strong class="cl-highlight">び</strong>ます (chơi)</li>
+                    <li>の<strong class="cl-highlight">み</strong>ます (uống)</li>
+                    <li>かえ<strong class="cl-highlight">り</strong>ます (về)</li>
+                  </ul>
+                  <div class="cl-alert-box">
+                    ⚠️ <strong>Đặc biệt (Nhóm 1 ngoại lệ):</strong> Một số động từ có âm trước ます thuộc cột [e] hoặc [i] nhưng lại là Nhóm 1: <em>かえります (về), はしります (chạy), はいります (vào), きります (cắt), しります (biết), へります (giảm)...</em>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Group 2 -->
+              <div class="cl-group-box">
+                <div class="cl-group-box-title">
+                  <h4>Nhóm 2 (一段 - Nhất đoạn)</h4>
+                  <span class="cl-group-badge cl-group-2">Nhóm 2</span>
+                </div>
+                <div class="cl-group-box-content">
+                  <p>Phần lớn âm liền trước <strong>ます</strong> thuộc <strong>cột [e]</strong>.</p>
+                  <ul>
+                    <li>た<strong class="cl-highlight">べ</strong>ます (ăn)</li>
+                    <li>み<strong class="cl-highlight">せ</strong>ます (cho xem)</li>
+                    <li>あ<strong class="cl-highlight">け</strong>ます (mở)</li>
+                    <li>し<strong class="cl-highlight">め</strong>ます (đóng)</li>
+                    <li>お<strong class="cl-highlight">し</strong>えます (dạy)</li>
+                  </ul>
+                  <div class="cl-alert-box">
+                    ⚠️ <strong>Đặc biệt (Cột [i] nhưng thuộc Nhóm 2):</strong><br>
+                    <em>みます (xem), おきます (thức dậy), おります (xuống xe), あびます (tắm), かります (mượn), できます (có thể), います (ở, có)...</em>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Group 3 -->
+              <div class="cl-group-box">
+                <div class="cl-group-box-title">
+                  <h4>Nhóm 3 (不規則 - Bất quy tắc)</h4>
+                  <span class="cl-group-badge cl-group-3">Nhóm 3</span>
+                </div>
+                <div class="cl-group-box-content">
+                  <p>Chỉ bao gồm 2 động từ cơ bản và các động từ ghép của chúng:</p>
+                  <ul>
+                    <li><strong class="cl-highlight">します</strong> (làm) & các danh động từ: <em>べんきょうします (học), さんぽします (đi dạo), かいものします (mua sắm)...</em></li>
+                    <li><strong class="cl-highlight">きます</strong> (đến) & động từ ghép: <em>かえってきます (về tới), つれてきます (dẫn đến)...</em></li>
+                  </ul>
+                  <p style="margin-top: 10px; color: var(--text-muted);">Đây là nhóm bất quy tắc nên cách biến đổi qua từng thể cần học thuộc lòng.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Section 2: Bảng tra cứu đối chiếu nhanh -->
+          <div class="cl-rules-section">
+            <div class="cl-rules-section-title">
+              <span>📋</span>
+              <span>2. Bảng tổng hợp đối chiếu nhanh các thể (Cheat Sheet)</span>
+            </div>
+
+            <div class="cl-cheat-table-wrapper">
+              <table class="cl-cheat-table">
+                <thead>
+                  <tr>
+                    <th>Thể động từ</th>
+                    <th>Nhóm 1 (五段)</th>
+                    <th>Nhóm 2 (一段)</th>
+                    <th>Nhóm 3 (不規則)</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><strong>Thể ます</strong> (Lịch sự)</td>
+                    <td>- [i] + ます<br><small>VD: かきます, のみます</small></td>
+                    <td>- [e/i] + ます<br><small>VD: たべます, みます</small></td>
+                    <td>します / きます<br><small>VD: べんきょうします</small></td>
+                  </tr>
+                  <tr>
+                    <td><strong style="color: var(--primary);">Thể て</strong> (て形)</td>
+                    <td>
+                      い, ち, り → <strong>って</strong> (かって)<br>
+                      み, び, に → <strong>んで</strong> (のんで)<br>
+                      き → <strong>いて</strong> (かいて) <em>[いく→いって]</em><br>
+                      ぎ → <strong>いで</strong> (およいで)<br>
+                      し → <strong>して</strong> (はなして)
+                    </td>
+                    <td>Bỏ ます + <strong>て</strong><br><small>たべます → たべて<br>みます → みて</small></td>
+                    <td>
+                      します → <strong>して</strong><br>
+                      きます → <strong>きて</strong>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><strong style="color: var(--primary);">Thể た</strong> (た形)</td>
+                    <td>
+                      い, ち, り → <strong>った</strong> (かった)<br>
+                      み, び, に → <strong>んだ</strong> (のんだ)<br>
+                      き → <strong>いた</strong> (かいた) <em>[いく→いった]</em><br>
+                      ぎ → <strong>いだ</strong> (およいだ)<br>
+                      し → <strong>した</strong> (はなした)
+                    </td>
+                    <td>Bỏ ます + <strong>た</strong><br><small>たべます → たべた<br>みます → みた</small></td>
+                    <td>
+                      します → <strong>した</strong><br>
+                      きます → <strong>きた</strong>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><strong style="color: var(--primary);">Thể ない</strong> (ない形)</td>
+                    <td>
+                      Đổi âm cột [i] → <strong>cột [a] + ない</strong><br>
+                      <small><em>Lưu ý: い → わ (かわない)</em><br>
+                      かきます → かかない<br>
+                      のみます → のまない</small>
+                    </td>
+                    <td>Bỏ ます + <strong>ない</strong><br><small>たべます → たべない<br>みます → みない</small></td>
+                    <td>
+                      します → <strong>しない</strong><br>
+                      きます → <strong>こない</strong><br>
+                      <em>(あります → ない)</em>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><strong style="color: var(--primary);">Thể Từ điển</strong> (辞書形)</td>
+                    <td>
+                      Đổi âm cột [i] → <strong>cột [u]</strong><br>
+                      <small>かいます → かう<br>
+                      かきます → かく<br>
+                      のみます → のむ<br>
+                      かえります → かえる</small>
+                    </td>
+                    <td>Bỏ ます + <strong>る</strong><br><small>たべます → たべる<br>みます → みる</small></td>
+                    <td>
+                      します → <strong>する</strong><br>
+                      きます → <strong>くる</strong>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><strong style="color: var(--primary);">Thể Khả năng</strong> (可能形)</td>
+                    <td>
+                      Đổi âm cột [i] → <strong>cột [e] + る</strong><br>
+                      <small>かいます → かえる<br>
+                      いきます → いける<br>
+                      のみます → のめる<br>
+                      はなします → はなせる</small>
+                    </td>
+                    <td>Bỏ ます + <strong>られる</strong><br><small>たべます → たべられる<br>みます → みられる</small></td>
+                    <td>
+                      します → <strong>できる</strong><br>
+                      きます → <strong>こられる</strong>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><strong style="color: #ec4899;">Thể Ý chí</strong> (意向形)</td>
+                    <td>
+                      Đổi âm cột [i] → <strong>cột [o] + う</strong><br>
+                      <small>かいます → かおう<br>
+                      いきます → いこう<br>
+                      のみます → のもう<br>
+                      はなします → はなそう<br>
+                      かえります → かえろう</small>
+                    </td>
+                    <td>Bỏ ます + <strong>よう</strong><br><small>たべます → たべよう<br>みます → みよう<br>おきます → おきよう</small></td>
+                    <td>
+                      します → <strong>しよう</strong><br>
+                      きます → <strong>こよう</strong>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Section 3: Chi tiết từng thể -->
+          <div class="cl-rules-section">
+            <div class="cl-rules-section-title">
+              <span>🔍</span>
+              <span>3. Chi tiết quy tắc chia & cấu trúc ngữ pháp ứng dụng</span>
+            </div>
+
+            <div class="cl-detail-cards">
+
+              <!-- Card 1: Thể て và Thể た -->
+              <div class="cl-detail-card">
+                <div class="cl-detail-card-header">
+                  <span>1. Thể て (て形) & Thể た (た形)</span>
+                  <span style="font-size: 0.85rem; font-weight: normal; opacity: 0.85;">Bài 14, 19 N5</span>
+                </div>
+                <div class="cl-detail-card-body">
+                  <p>Thể て dùng để nối câu, sai khiến, đề nghị lịch sự; Thể た là thể ngắn quá khứ của động từ.</p>
+                  
+                  <div class="cl-formula-row">
+                    <span class="cl-formula-label">Nhóm 1 (Quy tắc âm đuôi):</span>
+                    <div class="cl-formula-text">
+                      • Đuôi <strong>い, ち, り</strong> → <strong>って / った</strong> (かいます → かって / かった; まちます → まって / まった; とります → とって / とった)<br>
+                      • Đuôi <strong>み, び, に</strong> → <strong>んで / んだ</strong> (のみます → のんで / のんだ; あそびます → あそんで / あそんだ; しにます → しんで / しんだ)<br>
+                      • Đuôi <strong>き</strong> → <strong>いて / いた</strong> (かきます → かいて / かいた). <em>⚠️ Ngoại lệ: いきます → いって / いった</em><br>
+                      • Đuôi <strong>ぎ</strong> → <strong>いで / いだ</strong> (およぎます → およいで / およいだ)<br>
+                      • Đuôi <strong>し</strong> → <strong>して / した</strong> (はなします → はなして / はなした)
+                    </div>
+                  </div>
+
+                  <div class="cl-formula-row">
+                    <span class="cl-formula-label">Nhóm 2: Bỏ ます thêm て / た</span>
+                    <div class="cl-formula-text">たべます → たべて / たべた; みます → みて / みた; おきます → おきて / おきた</div>
+                  </div>
+
+                  <div class="cl-formula-row">
+                    <span class="cl-formula-label">Nhóm 3: Biến đổi bất quy tắc</span>
+                    <div class="cl-formula-text">します → して / した; きます → きて / きた (べんきょうします → べんきょうして / べんきょうした)</div>
+                  </div>
+
+                  <div class="cl-usage-list">
+                    <h5>Mẫu câu ứng dụng tiêu biểu:</h5>
+                    <ul>
+                      <li><strong>Vて + ください:</strong> Xin hãy làm gì (VD: ちょっと待ってください - Xin hãy đợi một chút).</li>
+                      <li><strong>Vて + います:</strong> Đang làm gì (VD: 今ご飯を食べています - Bây giờ tôi đang ăn cơm).</li>
+                      <li><strong>Vて + もいいです:</strong> Được phép làm gì (VD: 写真を撮ってもいいです - Chụp ảnh cũng được).</li>
+                      <li><strong>Vた + ことがあります:</strong> Đã từng làm gì (VD: 日本へ行ったことがあります - Tôi đã từng đi Nhật).</li>
+                      <li><strong>V1た + り, V2た + りします:</strong> Liệt kê hành động (VD: 日曜日は本を読んだり、映画を見たりします).</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Card 2: Thể ない -->
+              <div class="cl-detail-card">
+                <div class="cl-detail-card-header">
+                  <span>2. Thể ない (ない形 - Thể phủ định ngắn)</span>
+                  <span style="font-size: 0.85rem; font-weight: normal; opacity: 0.85;">Bài 17 N5</span>
+                </div>
+                <div class="cl-detail-card-body">
+                  <p>Thể ない là dạng phủ định thông thường (thể ngắn) của động từ (tương đương với ~ません).</p>
+
+                  <div class="cl-formula-row">
+                    <span class="cl-formula-label">Nhóm 1: Chuyển âm cột [i] sang cột [a] rồi thêm ない</span>
+                    <div class="cl-formula-text">
+                      • <strong>い → わ:</strong> かいます → か<strong>わ</strong>ない (Lưu ý quan trọng: い đổi thành わ, không phải あ)<br>
+                      • <strong>き → か:</strong> かきます → か<strong>か</strong>ない<br>
+                      • <strong>ぎ → が:</strong> いそぎます → いそ<strong>が</strong>ない<br>
+                      • <strong>し → さ:</strong> はなします → はな<strong>さ</strong>ない<br>
+                      • <strong>ち → た:</strong> まちます → ま<strong>た</strong>ない<br>
+                      • <strong>に → な:</strong> しにます → し<strong>な</strong>ない<br>
+                      • <strong>び → ば:</strong> あそびます → あそ<strong>ば</strong>ない<br>
+                      • <strong>み → ま:</strong> のみます → の<strong>ま</strong>ない<br>
+                      • <strong>り → ら:</strong> とります → と<strong>ら</strong>ない, かえります → かえ<strong>ら</strong>ない
+                    </div>
+                  </div>
+
+                  <div class="cl-formula-row">
+                    <span class="cl-formula-label">Nhóm 2: Bỏ ます thêm ない</span>
+                    <div class="cl-formula-text">たべます → たべない; みます → みない; ねます → ねない</div>
+                  </div>
+
+                  <div class="cl-formula-row">
+                    <span class="cl-formula-label">Nhóm 3:</span>
+                    <div class="cl-formula-text">
+                      • <strong>します → しない</strong> (べんきょうします → べんきょうしない)<br>
+                      • <strong>きます → こない</strong> (phát âm là <em>konai</em>)<br>
+                      • <em>Đặc biệt: Động từ あります (có) phủ định thể ngắn là <strong>ない</strong></em>
+                    </div>
+                  </div>
+
+                  <div class="cl-usage-list">
+                    <h5>Mẫu câu ứng dụng tiêu biểu:</h5>
+                    <ul>
+                      <li><strong>Vない + でください:</strong> Xin đừng làm gì (VD: ここでタバコを吸わないでください - Xin đừng hút thuốc ở đây).</li>
+                      <li><strong>V(bỏ ない) + なければなりません:</strong> Phải làm gì (VD: 薬を飲まなければなりません - Phải uống thuốc).</li>
+                      <li><strong>V(bỏ ない) + なくてもいいです:</strong> Không làm cũng được (VD: 明日は来なくてもいいです - Ngày mai không đến cũng được).</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Card 3: Thể Từ điển -->
+              <div class="cl-detail-card">
+                <div class="cl-detail-card-header">
+                  <span>3. Thể Từ điển (辞書形 - Thể nguyên mẫu)</span>
+                  <span style="font-size: 0.85rem; font-weight: normal; opacity: 0.85;">Bài 18 N5</span>
+                </div>
+                <div class="cl-detail-card-body">
+                  <p>Thể nguyên mẫu của động từ khi tra cứu trong từ điển, cũng chính là dạng khẳng định hiện tại/tương lai của thể ngắn.</p>
+
+                  <div class="cl-formula-row">
+                    <span class="cl-formula-label">Nhóm 1: Chuyển âm cột [i] sang cột [u]</span>
+                    <div class="cl-formula-text">
+                      • い → う (かいます → か<strong>う</strong>)<br>
+                      • き → く (かきます → か<strong>く</strong>, いきます → い<strong>く</strong>)<br>
+                      • ぎ → ぐ (およぎます → およ<strong>ぐ</strong>)<br>
+                      • し → す (はなします → はな<strong>す</strong>)<br>
+                      • ち → つ (まちます → ま<strong>つ</strong>)<br>
+                      • に → ぬ (しにます → し<strong>ぬ</strong>)<br>
+                      • び → ぶ (あそびます → あそ<strong>ぶ</strong>)<br>
+                      • み → む (のみます → の<strong>む</strong>)<br>
+                      • り → る (かえります → かえ<strong>る</strong>, とります → と<strong>る</strong>)
+                    </div>
+                  </div>
+
+                  <div class="cl-formula-row">
+                    <span class="cl-formula-label">Nhóm 2: Bỏ ます thêm る</span>
+                    <div class="cl-formula-text">たべます → たべ<strong>る</strong>; みます → み<strong>る</strong>; おきます → おき<strong>る</strong></div>
+                  </div>
+
+                  <div class="cl-formula-row">
+                    <span class="cl-formula-label">Nhóm 3:</span>
+                    <div class="cl-formula-text">
+                      • <strong>します → する</strong> (べんきょうします → べんきょう<strong>する</strong>)<br>
+                      • <strong>きます → くる</strong> (phát âm là <em>kuru</em>)
+                    </div>
+                  </div>
+
+                  <div class="cl-usage-list">
+                    <h5>Mẫu câu ứng dụng tiêu biểu:</h5>
+                    <ul>
+                      <li><strong>V(từ điển) + ことができます:</strong> Có thể làm gì (VD: 漢字を読むことができます - Tôi có thể đọc chữ Hán).</li>
+                      <li><strong>V(từ điển) + 前に:</strong> Trước khi làm gì (VD: 寝る前に本を読みます - Trước khi ngủ tôi đọc sách).</li>
+                      <li><strong>V(từ điển) + つもりです:</strong> Dự định làm gì (VD: 来年日本へ行寺つもりです - Năm sau tôi định đi Nhật).</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Card 4: Thể Khả năng -->
+              <div class="cl-detail-card">
+                <div class="cl-detail-card-header">
+                  <span>4. Thể Khả năng (可能形 - Potential Form)</span>
+                  <span style="font-size: 0.85rem; font-weight: normal; opacity: 0.85;">Bài 27 N4</span>
+                </div>
+                <div class="cl-detail-card-body">
+                  <p>Diễn tả khả năng, năng lực của con người hoặc điều kiện hoàn cảnh cho phép thực hiện hành động.</p>
+
+                  <div class="cl-formula-row">
+                    <span class="cl-formula-label">Nhóm 1: Chuyển âm cột [i] sang cột [e] rồi thêm る</span>
+                    <div class="cl-formula-text">
+                      • い → える (かいます → か<strong>える</strong> - có thể mua)<br>
+                      • き → ける (いきます → い<strong>ける</strong> - có thể đi; かきます → か<strong>ける</strong>)<br>
+                      • ぎ → げる (およぎます → およ<strong>げる</strong> - có thể bơi)<br>
+                      • し → せる (はなします → はな<strong>せる</strong> - có thể nói)<br>
+                      • ち → てる (まちます → ま<strong>てる</strong> - có thể đợi)<br>
+                      • び → べる (あそびます → あそ<strong>べる</strong> - có thể chơi)<br>
+                      • み → める (のみます → の<strong>める</strong> - có thể uống)<br>
+                      • り → れる (とります → と<strong>れる</strong> - có thể lấy)
+                    </div>
+                  </div>
+
+                  <div class="cl-formula-row">
+                    <span class="cl-formula-label">Nhóm 2: Bỏ ます thêm られる</span>
+                    <div class="cl-formula-text">たべます → たべ<strong>られる</strong>; みます → み<strong>られる</strong> (trong văn nói thân mật có thể lược bỏ ら: <em>たべれる</em>)</div>
+                  </div>
+
+                  <div class="cl-formula-row">
+                    <span class="cl-formula-label">Nhóm 3:</span>
+                    <div class="cl-formula-text">
+                      • <strong>します → できる</strong> (べんきょうします → べんきょう<strong>できる</strong>)<br>
+                      • <strong>きます → こられる</strong> (phát âm là <em>korareru</em>)
+                    </div>
+                  </div>
+
+                  <div class="cl-usage-list">
+                    <h5>Lưu ý ngữ pháp quan trọng:</h5>
+                    <ul>
+                      <li>Tân ngữ đi với động từ khả năng thường chuyển trợ từ <strong>を → が</strong> (VD: 日本語<strong>を</strong>話します → 日本語<strong>が</strong>話せます).</li>
+                      <li>Tất cả động từ sau khi chia sang thể khả năng đều biến thành động từ <strong>Nhóm 2</strong> (chia tiếp て/た/ない như nhóm 2: 話せる → 話せて → 話せない).</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Card 5: Thể Ý chí -->
+              <div class="cl-detail-card" style="border-color: #ec4899;">
+                <div class="cl-detail-card-header" style="background: linear-gradient(135deg, #ec4899, #f43f5e); color: #fff;">
+                  <span>5. Thể Ý chí (意向形 - Volitional Form)</span>
+                  <span style="font-size: 0.85rem; font-weight: normal; opacity: 0.9;">Bài 31 N4</span>
+                </div>
+                <div class="cl-detail-card-body">
+                  <p>Thể ý chí (ý định) là dạng thông thường (thể ngắn) của <strong>~ましょう</strong>. Dùng trong văn nói thân mật để rủ rê, đề xuất hoặc thể hiện quyết tâm, ý định của bản thân.</p>
+
+                  <div class="cl-formula-row" style="border-left-color: #ec4899;">
+                    <span class="cl-formula-label" style="color: #ec4899;">Nhóm 1: Chuyển âm cột [i] sang cột [o] rồi thêm う (trường âm cột o)</span>
+                    <div class="cl-formula-text">
+                      • <strong>い → おう:</strong> かいます → か<strong>おう</strong> (hãy cùng mua / định mua)<br>
+                      • <strong>き → こう:</strong> いきます → い<strong>こう</strong> (đi thôi!); かきます → か<strong>こう</strong><br>
+                      • <strong>ぎ → ごう:</strong> およぎます → およ<strong>ごう</strong> (bơi nào!)<br>
+                      • <strong>し → そう:</strong> はなします → はな<strong>そう</strong> (hãy nói chuyện)<br>
+                      • <strong>ち → とう:</strong> まちます → ま<strong>とう</strong> (hãy đợi nào)<br>
+                      • <strong>に → のう:</strong> しにます → し<strong>のう</strong><br>
+                      • <strong>び → ぼう:</strong> あそびます → あそ<strong>ぼう</strong> (chơi thôi!)<br>
+                      • <strong>み → もう:</strong> のみます → の<strong>もう</strong> (uống đi!)<br>
+                      • <strong>り → ろう:</strong> かえります → かえ<strong>ろう</strong> (về thôi!); とります → と<strong>ろう</strong>
+                    </div>
+                  </div>
+
+                  <div class="cl-formula-row" style="border-left-color: #ec4899;">
+                    <span class="cl-formula-label" style="color: #ec4899;">Nhóm 2: Bỏ ます thêm よう</span>
+                    <div class="cl-formula-text">
+                      • たべます → たべ<strong>よう</strong> (ăn thôi nào!)<br>
+                      • みます → み<strong>よう</strong> (xem nào!)<br>
+                      • ねます → ね<strong>よう</strong> (ngủ thôi!)<br>
+                      • おきます → おき<strong>よう</strong>
+                    </div>
+                  </div>
+
+                  <div class="cl-formula-row" style="border-left-color: #ec4899;">
+                    <span class="cl-formula-label" style="color: #ec4899;">Nhóm 3:</span>
+                    <div class="cl-formula-text">
+                      • <strong>します → しよう</strong> (べんきょうします → べんきょう<strong>しよう</strong>; さんぽ<strong>しよう</strong>)<br>
+                      • <strong>きます → こよう</strong> (phát âm là <em>koyou</em>)
+                    </div>
+                  </div>
+
+                  <div class="cl-usage-list" style="border-color: #ec4899; background: rgba(236, 72, 153, 0.05);">
+                    <h5 style="color: #ec4899;">Mẫu câu ứng dụng tiêu biểu:</h5>
+                    <ul>
+                      <li><strong>Rủ rê, đề xuất thân mật (~ましょう):</strong><br>
+                        • 少し休もう (Sukoshi yasumou) - Nghỉ một chút đi nào!<br>
+                        • 一緒にご飯を食べよう (Issho ni gohan o tabeyou) - Cùng ăn cơm đi!
+                      </li>
+                      <li><strong>V(ý chí) + と思っています:</strong> Đang dự định làm gì (đã có từ trước và vẫn duy trì)<br>
+                        • 週末は海へ行こうと思っています (Shuumatsu wa umi e ikou to omotte imasu) - Cuối tuần tôi định đi biển.<br>
+                        • 日本語を勉強しようと思っています - Tôi đang dự định học tiếng Nhật.
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+      </div><!-- /cl-rules-view -->
 
     </div><!-- /conjugation-panel -->
 
